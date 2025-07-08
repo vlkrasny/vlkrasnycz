@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Básně – Vladislav Krásný</title>
+    <style>
+        :root {
+            --primary: #ffbb00;
+            --secondary: #313a43;
+            --bg: linear-gradient(135deg, #f7fafc 0%, #f5e9d7 100%);
+            --radius: 22px;
+            --shadow: 0 8px 30px rgba(31, 41, 55, 0.08);
+        }
+        html, body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--secondary);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 420px;
+            margin: 36px auto;
+            background: #fff;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 28px 20px 36px 20px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 0.5em;
+            color: var(--primary);
+            letter-spacing: 1px;
+        }
+        .poem {
+            background: #fff9e6;
+            border-radius: 18px;
+            padding: 24px 18px;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            font-size: 1.11em;
+            line-height: 1.7;
+            box-shadow: 0 4px 18px rgba(31,41,55,0.04);
+            color: #403010;
+            font-style: italic;
+        }
+        .poem-title {
+            text-align: center;
+            font-size: 1.1em;
+            color: #d97706;
+            font-style: normal;
+            margin-bottom: 8px;
+            margin-top: 0;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 14px;
+            text-decoration: none;
+            color: var(--secondary);
+            font-size: 1em;
+            font-weight: 500;
+            border-radius: 12px;
+            padding: 6px 13px;
+            transition: background 0.14s;
+        }
+        .back-link:hover {
+            background: #fff9e6;
+            color: #d97706;
+        }
+        @media (max-width: 600px) {
+            .container {
+                margin: 12px 0;
+                border-radius: 0;
+                max-width: 100%;
+                box-shadow: none;
+                padding: 15px 2vw 24px 2vw;
+            }
+            h1 {
+                font-size: 1.3em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-link">&larr; Zpět na hlavní stránku</a>
+        <h1>Básně</h1>
+
+        <div class="poem">
+            <div class="poem-title">Ó, krásko</div>
+            Ó, krásko, tvá dálka mě sžírá jak stín,<br>
+            však hvězdy v tvých očích jsou světlem mé noci.<br>
+            Já bez tvých úsměvů bloudím svým dnem lín,<br>
+            jak básník, co v srdci ukrývá loučení v moci.<br><br>
+            Mé rty jsou němé – jen šepot tvého jména<br>
+            mi rozechvívá prázdné pokoje a spánek.<br>
+            Ó, kdybych mohl být tvůj stín či aspoň věta<br>
+            v dopise, co šeptáš si, když ti schází ranní snídaně.<br><br>
+            Jsem Cyrano bez tvé vůně, tvé tváře blízké,<br>
+            můj svět je prázdný, tvé teplo mi mizí v dálce.<br>
+            Tvé doteky mi chybí, jak tulipánům slunce.<br><br>
+            A přece den co den se za tebou v myšlenkách vracím –<br>
+            a v srdci, kde sídlí touha, tiše, potají,<br>
+            stavím z hvězd i slz svůj most zpět k tobě, má jediná.
+        </div>
+
+        <div class="poem">
+            <div class="poem-title">Noc bez tebe</div>
+            Noc bez tebe je dlouhá, plná neklidných snů,<br>
+            měsíc se ptá, proč tvé ruce necítím už v dlaních.<br>
+            Touha je vítr, co bloudí ulicí prázdnou a tmavou,<br>
+            stíny si šeptají tvé jméno v tichých ranních hodinách.<br><br>
+            Chybíš mi jako ráno slunci, jako ticho slovům,<br>
+            v kapkách deště slyším tvůj smích, co zní mi v paměti.<br>
+            V básních, které nepíšu, jsi skrytá v každém rýmu,<br>
+            jsi pramen, co nemohu najít, a přesto ho v srdci nosím.<br><br>
+            Z okna hledím k hvězdám, posílám ti myšlenky,<br>
+            možná jednou uslyšíš můj hlas v šepotu větru.<br>
+            Ve tmě, kde jsi daleko, kreslím tvůj úsměv prstem na sklo.
+        </div>
+
+        <div class="poem">
+            <div class="poem-title">Stopy v dešti</div>
+            Po ulicích kráčím sám, stopy mizí v dešti,<br>
+            v kapkách hledám tvou vůni, tichou a něžnou.<br>
+            V očích mám tvůj obraz, co nelze vymazat,<br>
+            a srdce je papír, kam píšu tvé jméno stokrát.<br><br>
+            Slova jsou zbytečná, když mlčíš na druhém konci světa,<br>
+            jen vzpomínky zpívají svou píseň bez konce.<br>
+            Jsi mým snem, co neumírá, i když se ráno rozplyne,<br>
+            tvá blízkost je most, který přejdu jen v myšlenkách.<br><br>
+            Ve večerech bez tebe svíčka tiše dohořívá,<br>
+            přesto vím, že zítra opět vyjdu do deště –<br>
+            a v každé kapce tě znovu najdu.
+        </div>
+
+    </div>
+</body>
+</html>
