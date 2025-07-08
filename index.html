@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vladislav Krasný – Osobní stránka</title>
+    <style>
+        :root {
+            --primary: #ffbb00;
+            --secondary: #313a43;
+            --bg: linear-gradient(135deg, #f7fafc 0%, #f5e9d7 100%);
+            --radius: 22px;
+            --shadow: 0 8px 30px rgba(31, 41, 55, 0.08);
+        }
+        html, body {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--secondary);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 420px;
+            margin: 36px auto;
+            background: #fff;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 28px 20px 36px 20px;
+        }
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--primary);
+            margin: 0 auto 22px auto;
+            display: block;
+        }
+        h1 {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 0.2em;
+            color: var(--secondary);
+        }
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 18px;
+            font-size: 1.1em;
+        }
+        .section {
+            margin-bottom: 26px;
+        }
+        h2 {
+            font-size: 1.17em;
+            color: var(--primary);
+            margin-bottom: 8px;
+            margin-top: 0;
+        }
+        ul {
+            padding-left: 18px;
+            margin: 0 0 6px 0;
+        }
+        li {
+            margin-bottom: 4px;
+            font-size: 1em;
+        }
+        .contact {
+            text-align: center;
+        }
+        .contact a {
+            background: var(--primary);
+            color: #fff;
+            padding: 9px 23px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1em;
+            transition: background 0.18s;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .contact a:hover {
+            background: #d97706;
+        }
+        .quote {
+            margin-top: 32px;
+            text-align: center;
+            color: #757575;
+            font-style: italic;
+            font-size: 1em;
+            padding: 0 8px;
+        }
+        @media (max-width: 600px) {
+            .container {
+                margin: 12px 0;
+                border-radius: 0;
+                max-width: 100%;
+                box-shadow: none;
+                padding: 15px 2vw 24px 2vw;
+            }
+            .profile-pic {
+                width: 90px;
+                height: 90px;
+            }
+            h1 {
+                font-size: 1.35em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="moje-fotka.jpeg" alt="Vladislav Krasný" class="profile-pic">
+        <h1>Vladislav Krasný</h1>
+        <div class="subtitle">Programátor & nadšenec do buddhismu</div>
+        
+        <div class="section">
+            <h2>O mně</h2>
+            <p>
+                Tichý pozorovatel digitálních toků,<br />
+                srdcem však poutník po stezkách Dharmy.<br />
+                Mezi řádky kódu a verši hledám klid,<br />
+                v prostých chvílích, v šálku kávy,<br />
+                v dechu rána nad Plzní.<br />
+<br />
+                Svět prožívám jako otevřenou báseň,<br />
+                kde každý den je nový list.<br />
+                Spojuji proměnlivost mysli<br />
+                se stabilitou databází –<br />
+                s úsměvem, který zůstává.<br />
+            </p>
+        </div>
+        
+        <div class="section">
+            <h2>Co mě baví</h2>
+            <ul>
+                <li>Buddhismus diamantové cesty</li>
+                <li>Programování (Visual Basic, SQL)</li>
+                <li>Psaní básní</li>
+                <li>Hledání rovnováhy v životě</li>
+            </ul>
+        </div>
+        
+        <div class="section">
+            <h2>Kontakt</h2>
+            <div class="contact">
+                <a href="mailto:vlkrasny@gmail.com">Napiš mi e-mail</a>
+            </div>
+        </div>
+        
+        <div class="quote">
+            "Štěstí není vnější okolnost, ale způsob, jak vidíme svět."
+        </div>
+    </div>
+</body>
+</html>
