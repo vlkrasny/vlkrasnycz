@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Básně – Vladislav Krásný</title>
     <style>
-        :root {
-            --primary: #ffbb00;
-            --secondary: #313a43;
-            --bg: linear-gradient(135deg, #f7fafc 0%, #f5e9d7 100%);
-            --radius: 22px;
-            --shadow: 0 8px 30px rgba(31, 41, 55, 0.08);
-        }
+    :root {
+        --primary: #6b7b8c;
+        --secondary: #2c3e50;
+        --bg: linear-gradient(135deg, #e5ecf1 0%, #cfd8dc 100%);
+        --radius: 22px;
+        --shadow: 0 8px 30px rgba(31, 41, 55, 0.08);
+    }
         html, body {
             margin: 0;
             padding: 0;
@@ -37,7 +37,7 @@
             letter-spacing: 1px;
         }
         .poem {
-            background: #fff9e6;
+            background: #f1f4f7;
             border-radius: 18px;
             padding: 24px 18px;
             margin-top: 20px;
@@ -45,13 +45,13 @@
             font-size: 1.11em;
             line-height: 1.7;
             box-shadow: 0 4px 18px rgba(31,41,55,0.04);
-            color: #403010;
+            color: #2f3e4d;
             font-style: italic;
         }
         .poem-title {
             text-align: center;
             font-size: 1.1em;
-            color: #d97706;
+            color: var(--primary);
             font-style: normal;
             margin-bottom: 8px;
             margin-top: 0;
@@ -68,8 +68,8 @@
             transition: background 0.14s;
         }
         .back-link:hover {
-            background: #fff9e6;
-            color: #d97706;
+            background: #e3e9ef;
+            color: var(--primary);
         }
         @media (max-width: 600px) {
             .container {
