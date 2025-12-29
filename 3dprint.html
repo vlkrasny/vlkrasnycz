@@ -1,0 +1,696 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>3D tisk – Vladislav Krasný</title>
+  <meta name="description" content="3D tisk: modely, tipy, profily a poznámky." />
+  <style>
+    :root{
+      --bg: #faf7f1;
+      --card: rgba(255,255,255,.72);
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: rgba(31,41,55,.10);
+      --accent: #b45309;
+      --accent2:#0f766e;
+      --shadow: 0 18px 50px rgba(17,24,39,.10);
+      --radius: 22px;
+      --max: 1040px;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg: #0b1220;
+        --card: rgba(17,24,39,.72);
+        --text: #e5e7eb;
+        --muted: #9ca3af;
+        --line: rgba(229,231,235,.10);
+        --shadow: 0 18px 60px rgba(0,0,0,.35);
+      }
+    }
+
+    *{ box-sizing: border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      background:
+        radial-gradient(900px 520px at 20% 10%, rgba(180,83,9,.14), transparent 60%),
+        radial-gradient(760px 520px at 85% 30%, rgba(15,118,110,.12), transparent 62%),
+        linear-gradient(180deg, var(--bg), var(--bg));
+      line-height: 1.6;
+    }
+
+    a{ color: inherit; text-decoration: none; }
+    a:hover{ text-decoration: underline; text-decoration-color: rgba(180,83,9,.65); }
+
+    .wrap{ max-width: var(--max); margin: 0 auto; padding: 28px 18px 58px; }
+
+    /* icons */
+    .ico{ width: 18px; height: 18px; display:inline-block; flex:0 0 auto; }
+    .ico svg{ width:100%; height:100%; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+    header{
+      display:flex; justify-content: space-between; align-items: center;
+      gap: 16px; flex-wrap: wrap; padding: 10px 6px 18px;
+    }
+
+    .brand{ display:flex; align-items:center; gap: 12px; min-width: 0; }
+    .avatar{
+      width: 44px; height: 44px; border-radius: 999px; overflow: hidden;
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 24px rgba(0,0,0,.10);
+      background: rgba(255,255,255,.22);
+      flex: 0 0 auto;
+    }
+    .avatar img{ width:100%; height:100%; object-fit: cover; display:block; }
+    .brand h1{ margin:0; font-size: 1.05rem; letter-spacing: .2px; white-space: nowrap; overflow:hidden; text-overflow: ellipsis; }
+    .brand .tag{ margin: 0; font-size: .92rem; color: var(--muted); white-space: nowrap; overflow:hidden; text-overflow: ellipsis; }
+
+    nav{ display:flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+    .pill{
+      display:inline-flex; align-items:center; gap: 8px;
+      padding: 8px 12px; border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.10);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      font-size: .95rem;
+    }
+    .pill:hover{ text-decoration:none; border-color: rgba(180,83,9,.35); }
+
+    .hero{
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .hero-inner{ padding: 22px 22px 18px; }
+
+    .title-row{
+      display:flex; align-items: baseline; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap;
+    }
+    .title-row h2{
+      margin:0;
+      font-size: clamp(1.55rem, 2vw + 1rem, 2.15rem);
+      letter-spacing: .2px;
+      line-height: 1.25;
+    }
+    .subtitle{ margin: 10px 0 0; color: var(--muted); max-width: 75ch; }
+
+    .cta-row{ display:flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap: 10px;
+      padding: 10px 14px; border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.12);
+      font-weight: 650; font-size: .98rem;
+      text-decoration:none;
+    }
+    .btn:hover{ text-decoration:none; border-color: rgba(180,83,9,.35); }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(180,83,9,.95), rgba(217,119,6,.92));
+      color:#fff; border-color: rgba(180,83,9,.35);
+      box-shadow: 0 12px 28px rgba(180,83,9,.18);
+    }
+
+    .card{
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 14px 42px rgba(17,24,39,.10);
+      padding: 18px 18px 16px;
+      margin-top: 18px;
+    }
+    .card h3{ margin:0 0 8px; font-size: 1.05rem; letter-spacing: .2px; }
+    .card p{ margin:0; color: var(--muted); }
+
+    /* Filter bar */
+    .filterbar{
+      margin-top: 12px;
+      border: 1px dashed var(--line);
+      border-radius: 16px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,.06);
+      display:grid;
+      gap: 12px;
+    }
+    .filter-top{
+      display:flex; align-items:center; justify-content: space-between;
+      gap: 10px; flex-wrap: wrap;
+      color: var(--muted); font-size: .95rem;
+    }
+    .filter-controls{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+    @media (max-width: 720px){
+      .filter-controls{ grid-template-columns: 1fr; }
+    }
+
+    .input, .select{
+      width:100%;
+      display:flex; align-items:center; gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.10);
+    }
+    .input input{
+      width:100%;
+      border:none; outline:none;
+      background: transparent;
+      color: var(--text);
+      font-size: 1rem;
+    }
+    .input input::placeholder{ color: var(--muted); }
+
+    .select select{
+      width:100%;
+      border:none; outline:none;
+      background: transparent;
+      color: var(--text);
+      font-size: 1rem;
+      appearance:none;
+      -webkit-appearance:none;
+      -moz-appearance:none;
+    }
+
+    .mini{
+      display:inline-flex; align-items:center; gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.10);
+      font-weight: 650;
+      cursor: pointer;
+      user-select: none;
+      white-space: nowrap;
+    }
+    .mini:hover{ border-color: rgba(180,83,9,.35); }
+
+    .chips{ display:flex; flex-wrap: wrap; gap: 8px; }
+    .chip{
+      display:inline-flex; align-items:center; gap: 8px;
+      padding: 8px 10px; border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.08);
+      color: var(--muted);
+      font-size: .92rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .chip:hover{ border-color: rgba(180,83,9,.30); }
+    .chip[data-active="true"]{
+      color: var(--text);
+      border-color: rgba(180,83,9,.35);
+      box-shadow: 0 10px 22px rgba(180,83,9,.10);
+    }
+
+    .count{ color: var(--muted); font-size: .92rem; }
+
+    /* Items */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 14px;
+    }
+    @media (max-width: 980px){ .grid{ grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 640px){ .grid{ grid-template-columns: 1fr; } }
+
+    .item{
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.08);
+      padding: 14px 14px 12px;
+      transition: transform .15s ease, border-color .15s ease;
+    }
+    .item:hover{ transform: translateY(-2px); border-color: rgba(180,83,9,.30); }
+    .item[hidden]{ display:none !important; }
+
+    .item-top{ display:flex; align-items:flex-start; justify-content: space-between; gap: 10px; }
+    .item-title{
+      margin:0;
+      font-size: 1.02rem;
+      letter-spacing: .15px;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+    }
+
+    .badge{
+      display:inline-flex; align-items:center; gap: 6px;
+      padding: 6px 8px; border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      font-size: .90rem;
+      white-space: nowrap;
+    }
+
+    .item-actions{
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+
+    .linkbtn{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      font-size: .90rem;
+      white-space: nowrap;
+    }
+    .linkbtn:hover{ text-decoration:none; border-color: rgba(180,83,9,.30); }
+
+    .item p{ margin: 10px 0 0; color: var(--muted); }
+
+    .meta{ display:flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+
+    .empty{
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      display:none;
+    }
+    .empty strong{ color: var(--text); }
+
+    footer{
+      margin-top: 18px;
+      padding: 14px 6px 0;
+      color: var(--muted);
+      font-size: .92rem;
+      display:flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="avatar" aria-hidden="true">
+          <img src="moje-fotka.jpeg" alt="Vladislav Krasný" />
+        </div>
+        <div style="min-width:0">
+          <h1>Vladislav Krasný</h1>
+          <p class="tag">3D tisk • modely • nastavení</p>
+        </div>
+      </div>
+
+      <nav aria-label="Navigace">
+        <a class="pill" href="index.html">
+          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></span>
+          Domů
+        </a>
+        <a class="pill" href="projekty.html">
+          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 3h6l1 2h4v6H4V5h4l1-2Z"/><path d="M4 11v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/></svg></span>
+          Projekty
+        </a>
+        <a class="pill" href="basne.html">
+          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19a2 2 0 0 1 2-2h14"/><path d="M6 17V5a2 2 0 0 1 2-2h12v16"/></svg></span>
+          Básně
+        </a>
+        <a class="pill" href="mailto:vlkrasny@gmail.com">
+          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg></span>
+          Kontakt
+        </a>
+      </nav>
+    </header>
+
+    <section class="hero" aria-label="Úvod">
+      <div class="hero-inner">
+        <div class="title-row">
+          <h2>3D tisk</h2>
+          <div class="count"><span id="countVisible">0</span> / <span id="countAll">0</span></div>
+        </div>
+        <p class="subtitle">
+          Místo, kam si dávám modely, nastavení a malé poznámky k tisku. Postupně z toho bude moje „kuchařka“:
+          co tisknu, z čeho, jak a proč.
+        </p>
+
+        <div class="cta-row">
+          <a class="btn primary" href="#katalog">
+            <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg></span>
+            Jít na katalog
+          </a>
+          <a class="btn" href="mailto:vlkrasny@gmail.com?subject=3D%20tisk%20n%C3%A1pad">
+            <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg></span>
+            Poslat nápad
+          </a>
+        </div>
+
+        <div class="filterbar" aria-label="Filtrování katalogu">
+          <div class="filter-top">
+            <div>Hledej a filtruj. Stav se zapisuje do URL (bez knihoven).</div>
+            <div class="count">Sdílej třeba: <span style="user-select:all">?tag=prusament&q=profile</span></div>
+          </div>
+
+          <div class="filter-controls">
+            <label class="input" aria-label="Vyhledávání">
+              <span class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M21 21l-4.3-4.3"/><path d="M10.8 18.2a7.4 7.4 0 1 1 0-14.8 7.4 7.4 0 0 1 0 14.8Z"/></svg>
+              </span>
+              <input id="q" type="search" placeholder="Hledej… (např. PLA, profile, podpěry, tolerance)" autocomplete="off" />
+            </label>
+
+            <label class="select" aria-label="Štítek">
+              <span class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M20 10l-8 10L4 10l8-8 8 8Z"/></svg>
+              </span>
+              <select id="tagSelect">
+                <option value="all">Všechny štítky</option>
+              </select>
+            </label>
+
+            <button class="mini" id="resetBtn" type="button" aria-label="Reset filtrů">
+              <span class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3v6h6"/></svg>
+              </span>
+              Reset
+            </button>
+          </div>
+
+          <div class="chips" id="chips" aria-label="Rychlé štítky"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="katalog" class="card" aria-label="Katalog">
+      <h3 style="margin-top:0">Katalog</h3>
+      <p style="margin:0;color:var(--muted)">
+        Každá položka je „model / tip / profil / materiál“. Přidáváš jen další <code>.item</code> bloky.
+      </p>
+
+      <div id="empty" class="empty">
+        <strong>Nic nenalezeno.</strong> Zkus jiný štítek nebo zkrať vyhledávání.
+      </div>
+
+      <div class="grid" id="grid">
+        <!-- Modely -->
+        <!--<article id="stl-organizer" class="item" data-tags="model stl organizer pla" data-title="Organizer / držák (STL)">
+          <div class="item-top">
+            <h4 class="item-title">
+              <span class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M3 7h18"/><path d="M3 12h18"/><path d="M3 17h18"/><path d="M7 7v10"/><path d="M17 7v10"/></svg>
+              </span>
+              Organizer / držák (STL)
+            </h4>
+            <div class="item-actions">
+              <span class="badge">model</span>
+              <a class="linkbtn" href="#stl-organizer" aria-label="Odkaz">
+                <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M10 14a5 5 0 0 1 0-7l1-1a5 5 0 0 1 7 7l-1 1"/><path d="M14 10a5 5 0 0 1 0 7l-1 1a5 5 0 0 1-7-7l1-1"/></svg></span>
+                link
+              </a>
+            </div>
+          </div>
+          <p>Sem si dáš odkaz na STL nebo poznámku, odkud je. Přidej i „tiskové poznámky“.</p>
+          <div class="meta">
+            <span class="badge">stl</span><span class="badge">organizer</span><span class="badge">pla</span>
+          </div>
+        </article>-->
+
+        <!-- Profily -->
+        <!--<article id="prusaslicer-profile-pla" class="item" data-tags="profile prusaslicer pla prusament" data-title="PrusaSlicer profil – PLA">
+          <div class="item-top">
+            <h4 class="item-title">
+              <span class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 2v6"/><path d="M8 4h8"/><path d="M7 10h10"/><path d="M9 10v11h6V10"/></svg>
+              </span>
+              PrusaSlicer profil – PLA
+            </h4>
+            <div class="item-actions">
+              <span class="badge">profile</span>
+              <a class="linkbtn" href="#prusaslicer-profile-pla" aria-label="Odkaz">
+                <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M10 14a5 5 0 0 1 0-7l1-1a5 5 0 0 1 7 7l-1 1"/><path d="M14 10a5 5 0 0 1 0 7l-1 1a5 5 0 0 1-7-7l1-1"/></svg></span>
+                link
+              </a>
+            </div>
+          </div>
+          <p>Základní profil: rychlost / teplota / chlazení. Později sem můžeš vložit i text nastavení.</p>
+          <div class="meta">
+            <span class="badge">prusaslicer</span><span class="badge">pla</span><span class="badge">prusament</span>
+          </div>
+        </article>-->
+
+        <!-- Tipy -->
+        <!--<article id="supports-tip" class="item" data-tags="tip supports bridging" data-title="Podpěry a bridging tipy">
+          <div class="item-top">
+            <h4 class="item-title">
+              <span class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M4 20h16"/><path d="M6 20V8l6-4 6 4v12"/><path d="M9 20v-6h6v6"/></svg>
+              </span>
+              Podpěry a bridging tipy
+            </h4>
+            <div class="item-actions">
+              <span class="badge">tip</span>
+              <a class="linkbtn" href="#supports-tip" aria-label="Odkaz">
+                <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M10 14a5 5 0 0 1 0-7l1-1a5 5 0 0 1 7 7l-1 1"/><path d="M14 10a5 5 0 0 1 0 7l-1 1a5 5 0 0 1-7-7l1-1"/></svg></span>
+                link
+              </a>
+            </div>
+          </div>
+          <p>Krátké poznámky: kdy použít podpěry, jak zlepšit bridging, a co nedělat.</p>
+          <div class="meta">
+            <span class="badge">supports</span><span class="badge">bridging</span>
+          </div>
+        </article>-->
+
+        <!-- Materiály -->
+        <!-- <article id="material-petg" class="item" data-tags="material petg temperature stringing" data-title="PETG poznámky">
+          <div class="item-top">
+            <h4 class="item-title">
+              <span class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 2s4 6 4 10a4 4 0 1 1-8 0c0-4 4-10 4-10Z"/><path d="M8 22h8"/></svg>
+              </span>
+              PETG poznámky
+            </h4>
+            <div class="item-actions">
+              <span class="badge">material</span>
+              <a class="linkbtn" href="#material-petg" aria-label="Odkaz">
+                <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M10 14a5 5 0 0 1 0-7l1-1a5 5 0 0 1 7 7l-1 1"/><path d="M14 10a5 5 0 0 1 0 7l-1 1a5 5 0 0 1-7-7l1-1"/></svg></span>
+                link
+              </a>
+            </div>
+          </div>
+          <p>Teploty, stringing, retraction, adheze. Co se osvědčilo / co ne.</p>
+          <div class="meta">
+            <span class="badge">petg</span><span class="badge">temperature</span><span class="badge">stringing</span>
+          </div>
+        </article>-->
+
+        <!-- Kalibrace -->
+        <!--<article id="calibration-flow" class="item" data-tags="calibration flow first-layer" data-title="Kalibrace: flow + první vrstva">
+          <div class="item-top">
+            <h4 class="item-title">
+              <span class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M4 17l6-6 4 4 6-6"/><path d="M4 7h16"/></svg>
+              </span>
+              Kalibrace: flow + první vrstva
+            </h4>
+            <div class="item-actions">
+              <span class="badge">calibration</span>
+              <a class="linkbtn" href="#calibration-flow" aria-label="Odkaz">
+                <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M10 14a5 5 0 0 1 0-7l1-1a5 5 0 0 1 7 7l-1 1"/><path d="M14 10a5 5 0 0 1 0 7l-1 1a5 5 0 0 1-7-7l1-1"/></svg></span>
+                link
+              </a>
+            </div>
+          </div>
+          <p>Jak rychle doladit flow a první vrstvu. Ideálně sem přidat i fotky testů (později).</p>
+          <div class="meta">
+            <span class="badge">flow</span><span class="badge">first-layer</span>
+          </div>
+        </article>-->
+
+        <!-- Údržba -->
+        <!-- <article id="maintenance-nozzle" class="item" data-tags="maintenance nozzle clog" data-title="Údržba: tryska a ucpání">
+          <div class="item-top">
+            <h4 class="item-title">
+              <span class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M12 2v6"/><path d="M9 8h6"/><path d="M10 8v8l2 2 2-2V8"/><path d="M6 22h12"/></svg>
+              </span>
+              Údržba: tryska a ucpání
+            </h4>
+            <div class="item-actions">
+              <span class="badge">maintenance</span>
+              <a class="linkbtn" href="#maintenance-nozzle" aria-label="Odkaz">
+                <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M10 14a5 5 0 0 1 0-7l1-1a5 5 0 0 1 7 7l-1 1"/><path d="M14 10a5 5 0 0 1 0 7l-1 1a5 5 0 0 1-7-7l1-1"/></svg></span>
+                link
+              </a>
+            </div>
+          </div>
+          <p>Co dělat při ucpání, jak čistit, kdy měnit trysku, a co si pohlídat.</p>
+          <div class="meta">
+            <span class="badge">nozzle</span>
+            <span class="badge">text sem</span>
+          </div>
+        </article>-->
+      </div>
+    </section>
+
+    <footer>
+      <div>© <span id="y"></span> Vladislav Krasný</div>
+      <div>3D tisk • pokusy • poznámky</div>
+    </footer>
+  </div>
+
+  <script>
+    const norm = (s) => (s || "").toString().toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
+    const uniq = (arr) => [...new Set(arr)];
+
+    const items = [...document.querySelectorAll(".item")];
+    const q = document.getElementById("q");
+    const tagSelect = document.getElementById("tagSelect");
+    const chipsWrap = document.getElementById("chips");
+    const resetBtn = document.getElementById("resetBtn");
+    const empty = document.getElementById("empty");
+    const countVisible = document.getElementById("countVisible");
+    const countAll = document.getElementById("countAll");
+
+    document.getElementById("y").textContent = new Date().getFullYear();
+    countAll.textContent = items.length;
+
+    const allTags = uniq(
+      items.flatMap(el => (el.dataset.tags || "")
+        .split(/\s+/)
+        .map(t => t.trim())
+        .filter(Boolean)
+      )
+    ).sort((a,b) => a.localeCompare(b, "cs"));
+
+    for (const t of allTags){
+      const opt = document.createElement("option");
+      opt.value = t;
+      opt.textContent = t;
+      tagSelect.appendChild(opt);
+    }
+
+    function setActiveChip(tag){
+      [...chipsWrap.querySelectorAll(".chip")].forEach(c => {
+        c.dataset.active = (c.dataset.tag === tag) ? "true" : "false";
+      });
+    }
+
+    function makeChip(t){
+      const chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "chip";
+      chip.textContent = t;
+      chip.dataset.tag = t;
+      chip.dataset.active = "false";
+      chip.addEventListener("click", () => {
+        const isActive = chip.dataset.active === "true";
+        const next = isActive ? "all" : t;
+        setActiveChip(next);
+        tagSelect.value = next;
+        apply();
+      });
+      return chip;
+    }
+
+    const allChip = document.createElement("button");
+    allChip.type = "button";
+    allChip.className = "chip";
+    allChip.textContent = "vše";
+    allChip.dataset.tag = "all";
+    allChip.dataset.active = "true";
+    allChip.addEventListener("click", () => {
+      setActiveChip("all");
+      tagSelect.value = "all";
+      apply();
+    });
+    chipsWrap.appendChild(allChip);
+    allTags.forEach(t => chipsWrap.appendChild(makeChip(t)));
+
+    function readStateFromUrl(){
+      const params = new URLSearchParams(location.search);
+      const tag = params.get("tag");
+      const query = params.get("q");
+
+      if (query !== null) q.value = query;
+
+      if (tag && (tag === "all" || allTags.includes(tag))){
+        tagSelect.value = tag;
+        setActiveChip(tag);
+      } else {
+        tagSelect.value = "all";
+        setActiveChip("all");
+      }
+    }
+
+    function writeStateToUrl(){
+      const params = new URLSearchParams();
+      const tag = tagSelect.value;
+      const query = q.value.trim();
+
+      if (tag && tag !== "all") params.set("tag", tag);
+      if (query) params.set("q", query);
+
+      const qs = params.toString();
+      const newUrl = qs ? `${location.pathname}?${qs}` : location.pathname;
+      history.replaceState(null, "", newUrl);
+    }
+
+    function apply(){
+      const query = norm(q.value.trim());
+      const tag = tagSelect.value;
+
+      let visible = 0;
+
+      for (const el of items){
+        const tags = (el.dataset.tags || "").split(/\s+/).filter(Boolean);
+        const hay = norm(el.innerText);
+
+        const tagOk = (tag === "all") ? true : tags.includes(tag);
+        const qOk = query ? hay.includes(query) : true;
+
+        const show = tagOk && qOk;
+        el.hidden = !show;
+        if (show) visible++;
+      }
+
+      countVisible.textContent = visible;
+      empty.style.display = visible === 0 ? "block" : "none";
+      writeStateToUrl();
+    }
+
+    q.addEventListener("input", apply);
+    tagSelect.addEventListener("change", () => {
+      setActiveChip(tagSelect.value);
+      apply();
+    });
+    resetBtn.addEventListener("click", () => {
+      q.value = "";
+      tagSelect.value = "all";
+      setActiveChip("all");
+      apply();
+      q.focus();
+    });
+
+    readStateFromUrl();
+    apply();
+  </script>
+</body>
+</html>

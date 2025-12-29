@@ -1,160 +1,519 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="cs">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vladislav Krasný – Osobní stránka</title>
-    <style>
-        :root {
-            --primary: #6b7b8c;
-            --secondary: #2c3e50;
-            --bg: linear-gradient(135deg, #e5ecf1 0%, #cfd8dc 100%);
-            --radius: 22px;
-            --shadow: 0 8px 30px rgba(31, 41, 55, 0.08);
-        }
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vladislav Krasný</title>
+  <meta name="description" content="Osobní stránka Vladislava Krasného – programátor, básník, buddhismus diamantové cesty." />
+  <style>
+    :root{
+      --bg: #faf7f1;
+      --card: rgba(255,255,255,.72);
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: rgba(31,41,55,.10);
+      --accent: #b45309;   /* tlumená jantarová */
+      --accent2:#0f766e;   /* jemná teal */
+      --shadow: 0 18px 50px rgba(17,24,39,.10);
+      --radius: 22px;
+      --max: 1040px;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg: #0b1220;
+        --card: rgba(17,24,39,.72);
+        --text: #e5e7eb;
+        --muted: #9ca3af;
+        --line: rgba(229,231,235,.10);
+        --shadow: 0 18px 60px rgba(0,0,0,.35);
+      }
+    }
 
-        html, body {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: var(--bg);
-            color: var(--secondary);
-            min-height: 100vh;
-        }
-        .container {
-            max-width: 420px;
-            margin: 36px auto;
-            background: #fff;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 28px 20px 36px 20px;
-        }
-        .profile-pic {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid var(--primary);
-            margin: 0 auto 22px auto;
-            display: block;
-        }
-        h1 {
-            text-align: center;
-            font-size: 2em;
-            margin-bottom: 0.2em;
-            color: var(--secondary);
-        }
-        .subtitle {
-            text-align: center;
-            color: #888;
-            margin-bottom: 18px;
-            font-size: 1.1em;
-        }
-        .section {
-            margin-bottom: 26px;
-        }
-        h2 {
-            font-size: 1.17em;
-            color: var(--primary);
-            margin-bottom: 8px;
-            margin-top: 0;
-        }
-        ul {
-            padding-left: 18px;
-            margin: 0 0 6px 0;
-        }
-        li {
-            margin-bottom: 4px;
-            font-size: 1em;
-        }
-        .contact {
-            text-align: center;
-        }
-        .contact a {
-            background: var(--primary);
-            color: #fff;
-            padding: 9px 23px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1em;
-            transition: background 0.18s;
-            display: inline-block;
-            margin-top: 10px;
-        }
-        .contact a:hover {
-            background: #4a5a6a;
-        }
-        .quote {
-            margin-top: 32px;
-            text-align: center;
-            color: #757575;
-            font-style: italic;
-            font-size: 1em;
-            padding: 0 8px;
-        }
-        @media (max-width: 600px) {
-            .container {
-                margin: 12px 0;
-                border-radius: 0;
-                max-width: 100%;
-                box-shadow: none;
-                padding: 15px 2vw 24px 2vw;
-            }
-            .profile-pic {
-                width: 90px;
-                height: 90px;
-            }
-            h1 {
-                font-size: 1.35em;
-            }
-        }
-    </style>
+    *{ box-sizing: border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      background:
+        radial-gradient(900px 520px at 20% 10%, rgba(180,83,9,.14), transparent 60%),
+        radial-gradient(760px 520px at 85% 30%, rgba(15,118,110,.12), transparent 62%),
+        linear-gradient(180deg, var(--bg), var(--bg));
+      line-height: 1.6;
+    }
+
+    a{ color: inherit; text-decoration: none; }
+    a:hover{ text-decoration: underline; text-decoration-color: rgba(180,83,9,.65); }
+    .wrap{ max-width: var(--max); margin: 0 auto; padding: 28px 18px 58px; }
+
+    /* --- ikonky (inline SVG) --- */
+    .ico{ width: 18px; height: 18px; display:inline-block; flex:0 0 auto; }
+    .ico svg{ width:100%; height:100%; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .ico.fill svg{ fill: currentColor; stroke: none; }
+    .muted{ color: var(--muted); }
+
+    header{
+      display:flex; justify-content: space-between; align-items: center;
+      gap: 16px; padding: 10px 6px 22px;
+    }
+    .brand{ display:flex; align-items:center; gap: 12px; min-width: 0; }
+    .avatar{
+      width: 44px; height: 44px; border-radius: 999px; overflow: hidden;
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 24px rgba(0,0,0,.10);
+      background: rgba(255,255,255,.22);
+      flex: 0 0 auto;
+    }
+    .avatar img{ width:100%; height:100%; object-fit: cover; display:block; }
+    .brand h1{ margin:0; font-size: 1.05rem; letter-spacing: .2px; white-space: nowrap; overflow:hidden; text-overflow: ellipsis; }
+    .brand .tag{ margin: 0; font-size: .92rem; color: var(--muted); white-space: nowrap; overflow:hidden; text-overflow: ellipsis; }
+
+    nav{ display:flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+    .pill{
+      display:inline-flex; align-items:center; gap: 8px;
+      padding: 8px 12px; border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.10);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      font-size: .95rem;
+    }
+    .pill:hover{ text-decoration:none; border-color: rgba(180,83,9,.35); }
+
+    .hero{
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .hero-inner{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 18px;
+      padding: 26px;
+    }
+    @media (max-width: 900px){ .hero-inner{ grid-template-columns: 1fr; } }
+
+    .headline{
+      margin:0;
+      font-size: clamp(1.65rem, 2.2vw + 1rem, 2.45rem);
+      line-height: 1.22;
+      letter-spacing: .2px;
+    }
+    .underline{ position: relative; display: inline-block; }
+    .underline::after{
+      content:""; position:absolute; left: 0; bottom: -10px; width: 100%; height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(180,83,9,.0), rgba(180,83,9,.75), rgba(15,118,110,.45), rgba(180,83,9,.0));
+      opacity: .9;
+    }
+
+    .subline{ margin: 10px 0 0; color: var(--muted); font-size: 1.05rem; max-width: 64ch; }
+
+    .cta-row{ display:flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap: 10px;
+      padding: 10px 14px; border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.12);
+      font-weight: 650; font-size: .98rem;
+      text-decoration:none;
+    }
+    .btn:hover{ text-decoration:none; border-color: rgba(180,83,9,.35); }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(180,83,9,.95), rgba(217,119,6,.92));
+      color:#fff; border-color: rgba(180,83,9,.35);
+      box-shadow: 0 12px 28px rgba(180,83,9,.18);
+    }
+    .btn.primary:hover{ filter: brightness(1.02); }
+
+    .panel{
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+      background: rgba(255,255,255,.08);
+    }
+    .panel h3{ margin: 0 0 10px; font-size: 1rem; letter-spacing: .2px; }
+    .list{ margin: 0; padding: 0; list-style: none; display:grid; gap: 10px; }
+    .list li{ display:flex; gap: 10px; align-items:flex-start; color: var(--muted); font-size: .98rem; }
+    .dot{
+      margin-top: .55rem; width: 7px; height: 7px; border-radius: 999px;
+      background: rgba(180,83,9,.85);
+      box-shadow: 0 0 0 4px rgba(180,83,9,.12);
+      flex: 0 0 auto;
+    }
+
+    .chips{ display:flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .chip{
+      display:inline-flex; align-items:center; gap: 8px;
+      padding: 8px 10px; border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.08);
+      color: var(--muted);
+      font-size: .92rem;
+    }
+    .chip strong{ color: var(--text); font-weight: 650; }
+
+    .quote{
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.08);
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+    @media (max-width: 900px){ .grid{ grid-template-columns: 1fr; } }
+
+    .card{
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 14px 42px rgba(17,24,39,.10);
+      padding: 18px 18px 16px;
+    }
+    .card h2{ margin: 0 0 10px; font-size: 1.05rem; letter-spacing: .2px; }
+    .card p{ margin: 0; color: var(--muted); }
+
+    /* Projekty */
+    .projects{ margin-top: 18px; }
+    .projects-head{
+      display:flex; align-items: baseline; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap; margin-bottom: 10px;
+    }
+    .projects-head .hint{ color: var(--muted); font-size: .95rem; }
+    .proj-grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 980px){ .proj-grid{ grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 640px){ .proj-grid{ grid-template-columns: 1fr; } }
+
+    .proj{
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.08);
+      padding: 14px 14px 12px;
+      transition: transform .15s ease, border-color .15s ease;
+    }
+    .proj:hover{ transform: translateY(-2px); border-color: rgba(180,83,9,.30); text-decoration:none; }
+    .proj-top{ display:flex; align-items:flex-start; justify-content: space-between; gap: 10px; }
+    .proj-title{
+      margin:0; font-size: 1.02rem; letter-spacing: .15px;
+      display:flex; align-items:center; gap: 10px;
+    }
+    .proj-meta{
+      display:flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;
+      color: var(--muted); font-size: .90rem;
+    }
+    .badge{
+      display:inline-flex; align-items:center; gap: 6px;
+      padding: 6px 8px; border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.06);
+    }
+    .proj p{ margin: 10px 0 0; color: var(--muted); }
+
+    /* Poem preview */
+    .poem-preview{
+      margin-top: 12px;
+      border-top: 1px dashed var(--line);
+      padding-top: 12px;
+      color: var(--text);
+      font-style: italic;
+      opacity: .92;
+    }
+    .poem-preview small{
+      display:block;
+      color: var(--muted);
+      font-style: normal;
+      margin-bottom: 8px;
+    }
+
+    footer{
+      margin-top: 22px;
+      padding: 14px 6px 0;
+      color: var(--muted);
+      font-size: .92rem;
+      display:flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <img src="moje-fotka.jpeg" alt="Vladislav Krasný" class="profile-pic">
-        <h1>Vladislav Krasný</h1>
-        <div class="subtitle">Programátor & nadšenec do buddhismu</div>
-        
-        <div class="section">
-            <h2>O mně</h2>
-            <p>
-                Tichý pozorovatel digitálních toků,<br />
-                srdcem však poutník po stezkách Dharmy.<br />
-                Mezi řádky kódu a verši hledám klid,<br />
-                v prostých chvílích, v šálku kávy,<br />
-                v dechu rána nad Plzní.<br />
-<br />
-                Svět prožívám jako otevřenou báseň,<br />
-                kde každý den je nový list.<br />
-                Spojuji proměnlivost mysli<br />
-                se stabilitou databází –<br />
-                s úsměvem, který zůstává.<br />
-            </p>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="avatar" aria-hidden="true">
+          <img src="moje-fotka.jpeg" alt="Vladislav Krasný" />
         </div>
-        
-        <div class="section">
-            <h2>Co mě baví</h2>
-            <ul>
-                <li>Buddhismus diamantové cesty</li>
-                <li>Programování (Visual Basic, SQL)</li>
-                <li><a href="basne.html" style="color:#4a5a6a; text-decoration:none; font-weight:500;">Psaní básní</a></li>
-                <li>Hledání rovnováhy v životě</li>
-            </ul>
+        <div style="min-width:0">
+          <h1>Vladislav Krasný</h1>
+          <p class="tag">Programátor • básník • buddhismus diamantové cesty</p>
         </div>
-        
-        <div class="section">
-            <h2>Kontakt</h2>
-            <div class="contact">
-                <a href="mailto:vlkrasny@gmail.com">Napiš mi e-mail</a>
-            </div>
+      </div>
+
+      <nav aria-label="Navigace">
+        <a class="pill" href="#o-mne">
+          <span class="ico">
+            <svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Z"/><path d="M4 20a8 8 0 0 1 16 0"/></svg>
+          </span>
+          O mně
+        </a>
+        <a class="pill" href="projekty.html">
+          <span class="ico">
+            <svg viewBox="0 0 24 24"><path d="M9 3h6l1 2h4v6H4V5h4l1-2Z"/><path d="M4 11v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/></svg>
+          </span>
+          Projekty
+        </a>
+        <a class="pill" href="basne.html">
+          <span class="ico">
+            <svg viewBox="0 0 24 24"><path d="M4 19a2 2 0 0 1 2-2h14"/><path d="M6 17V5a2 2 0 0 1 2-2h12v16"/></svg>
+          </span>
+          Básně
+        </a>
+        <a class="pill" href="#kontakt">
+          <span class="ico">
+            <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg>
+          </span>
+          Kontakt
+        </a>
+      </nav>
+    </header>
+
+    <section class="hero" aria-label="Úvod">
+      <div class="hero-inner">
+        <div>
+          <h2 class="headline">
+            <span class="underline">Mezi kódem a veršem</span> hledám klid a přesnost.
+          </h2>
+          <p class="subline">
+            Dělám věci, které drží pohromadě: databáze, logiku, slova. A občas i sebe.
+            Mám rád jednoduchost, co není prázdná — jen tichá.
+          </p>
+
+          <div class="cta-row">
+            <a class="btn primary" href="mailto:vlkrasny@gmail.com">
+              <span class="ico">
+                <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg>
+              </span>
+              Napiš mi
+            </a>
+            <a class="btn" href="basne.html">
+              <span class="ico">
+                <svg viewBox="0 0 24 24"><path d="M4 19a2 2 0 0 1 2-2h14"/><path d="M6 17V5a2 2 0 0 1 2-2h12v16"/></svg>
+              </span>
+              Číst básně
+            </a>
+            <a class="btn" href="projekty.html">
+              <span class="ico">
+                <svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
+              </span>
+              Projekty
+            </a>
+          </div>
+
+          <div class="quote">
+            „Štěstí není vnější okolnost, ale způsob, jak vidíme svět.“
+          </div>
         </div>
-        
-        <div class="quote">
-            "Štěstí není vnější okolnost, ale způsob, jak vidíme svět."
+
+        <aside class="panel" aria-label="Rychle o mně">
+          <h3>Rychle</h3>
+          <ul class="list">
+            <li><span class="dot"></span><span>Programuju hlavně ve <strong>Visual Basic</strong> a <strong>SQL</strong>.</span></li>
+            <li><span class="dot"></span><span>Mám rád, když věci dávají smysl — v kódu i v hlavě.</span></li>
+            <li><span class="dot"></span><span>Buddhismus diamantové cesty jako kotva, poezie jako dech.</span></li>
+          </ul>
+
+          <div class="chips" aria-label="Štítky">
+            <span class="chip">
+              <span class="ico">
+                <svg viewBox="0 0 24 24"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10"/><path d="M7 4v6a5 5 0 0 0 10 0V4"/></svg>
+              </span>
+              <strong>SQL</strong> dotazy
+            </span>
+            <span class="chip">
+              <span class="ico">
+                <svg viewBox="0 0 24 24"><path d="M16 18a4 4 0 0 0 0-8H7a4 4 0 0 0 0 8"/><path d="M12 14v7"/><path d="M9 18l3 3 3-3"/></svg>
+              </span>
+              <strong>Data</strong> & pořádek
+            </span>
+            <span class="chip">
+              <span class="ico">
+                <svg viewBox="0 0 24 24"><path d="M12 21s-7-4.4-7-11a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 6.6-7 11-7 11Z"/></svg>
+              </span>
+              <strong>Slova</strong> & ticho
+            </span>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article id="o-mne" class="card">
+        <h2>O mně</h2>
+        <p>
+          Svět prožívám jako otevřenou báseň, kde každý den je nový list.
+          Mezi řádky kódu a verši hledám klid — a když to jde, tak i jednoduchost.
+        </p>
+      </article>
+
+      <article class="card">
+        <h2>Co mě baví</h2>
+        <p>
+          Buddhismus, programování, psaní a takové ty malé okamžiky, kdy se věci srovnají.
+        </p>
+        <div class="poem-preview" aria-label="Náhled básní">
+          <small><strong>Náhledy z básní</strong> (celé na stránce Básně)</small>
+          Ó, krásko, tvá dálka mě sžírá jak stín,<br />
+          však hvězdy v tvých očích jsou světlem mé noci…
+          <br /><br />
+          Noc bez tebe je dlouhá, plná neklidných snů,<br />
+          měsíc se ptá, proč tvé ruce necítím už v dlaních…
         </div>
-    </div>
+      </article>
+    </section>
+
+    <section id="projekty" class="card projects" aria-label="Projekty">
+      <div class="projects-head">
+        <h2 style="margin:0">Projekty</h2>
+        <div class="hint">Krátké ukázky věcí, co dělám (klidně je pak přepíšeš na real data).</div>
+      </div>
+
+      <div class="proj-grid">
+        <a class="proj" href="projekty.html?tag=mssql" aria-label="Projekt: SQL nástroje">
+          <div class="proj-top">
+            <h3 class="proj-title">
+              <span class="ico">
+                <svg viewBox="0 0 24 24"><path d="M7 7c0-2 10-2 10 0s-10 2-10 0Z"/><path d="M7 7v5c0 2 10 2 10 0V7"/><path d="M7 12v5c0 2 10 2 10 0v-5"/></svg>
+              </span>
+              SQL nástroje & údržba
+            </h3>
+            <span class="badge">
+              <span class="ico muted"><svg viewBox="0 0 24 24"><path d="M12 6v6l4 2"/></svg></span>
+              MSSQL
+            </span>
+          </div>
+          <p>
+            Třídění, reporty, procedury, výkon. Věci, co drží systém v chodu a šetří lidem čas.
+          </p>
+          <div class="proj-meta">
+            <span class="badge">
+              <span class="ico muted"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M8 8h8"/><path d="M8 12h8"/><path d="M8 16h5"/></svg></span>
+              Stored procedures
+            </span>
+            <span class="badge">
+              <span class="ico muted"><svg viewBox="0 0 24 24"><path d="M20 7l-8 10L4 7"/></svg></span>
+              Čitelnost
+            </span>
+          </div>
+        </a>
+
+        <a class="proj" href="3dprint.html" aria-label="3D Tisk">
+          <div class="proj-top">
+            <h3 class="proj-title">
+              <span class="ico">
+                <svg viewBox="0 0 24 24"><path d="M12 2v6"/><path d="M8 4h8"/><path d="M6 10a6 6 0 1 0 12 0"/><path d="M12 10v4l3 2"/></svg>
+              </span>
+              Tipy na 3D Tisk
+            </h3>
+            <span class="badge">
+              <span class="ico muted"><svg viewBox="0 0 24 24"><path d="M8 6h13"/><path d="M8 12h13"/><path d="M8 18h13"/><path d="M3 6h.01"/><path d="M3 12h.01"/><path d="M3 18h.01"/></svg></span>
+              Skripty
+            </span>
+          </div>
+          <p>
+            Tipy na 3D Tisk
+          </p>
+          <div class="proj-meta">
+            <span class="badge">
+              <span class="ico muted"><svg viewBox="0 0 24 24"><path d="M4 12h16"/><path d="M12 4v16"/></svg></span>
+              Co tisknout
+            </span>
+            <span class="badge">
+              <span class="ico muted"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></span>
+              Jak
+            </span>
+          </div>
+        </a>
+
+        <a class="proj" href="basne.html" aria-label="Projekt: Básně">
+          <div class="proj-top">
+            <h3 class="proj-title">
+              <span class="ico">
+                <svg viewBox="0 0 24 24"><path d="M4 19a2 2 0 0 1 2-2h14"/><path d="M6 17V5a2 2 0 0 1 2-2h12v16"/></svg>
+              </span>
+              Básně (živý sešit)
+            </h3>
+            <span class="badge">
+              <span class="ico muted"><svg viewBox="0 0 24 24"><path d="M12 21s-7-4.4-7-11a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 6.6-7 11-7 11Z"/></svg></span>
+              Poezie
+            </span>
+          </div>
+          <p>
+            Texty, kde se věci nemusí dokazovat. Stačí, že jsou pravdivé v tom okamžiku.
+          </p>
+          <div class="proj-meta">
+            <span class="badge">
+              <span class="ico muted"><svg viewBox="0 0 24 24"><path d="M4 6h16"/><path d="M4 12h10"/><path d="M4 18h16"/></svg></span>
+              Krátké i dlouhé
+            </span>
+            <span class="badge">
+              <span class="ico muted"><svg viewBox="0 0 24 24"><path d="M12 2v20"/><path d="M2 12h20"/></svg></span>
+              Jednoduše
+            </span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section class="grid">
+      <article id="kontakt" class="card">
+        <h2>Kontakt</h2>
+        <p>Nejrychlejší je e-mail. Odpovídám normálně jako člověk. 🙂</p>
+        <div class="cta-row" style="margin-top:14px">
+          <a class="btn primary" href="mailto:vlkrasny@gmail.com">
+            <span class="ico">
+              <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg>
+            </span>
+            vlkrasny@gmail.com
+          </a>
+          <!--<a class="btn" href="basne.html">
+            <span class="ico">
+              <svg viewBox="0 0 24 24"><path d="M4 19a2 2 0 0 1 2-2h14"/><path d="M6 17V5a2 2 0 0 1 2-2h12v16"/></svg>
+            </span>
+            Básně
+          </a>-->
+        </div>
+      </article>
+
+    </section>
+
+    <footer>
+      <div>© <span id="y"></span> Vladislav Krasný</div>
+      <div>vlkrasny • jednoduchost • klid</div>
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>

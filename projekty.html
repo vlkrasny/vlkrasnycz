@@ -1,0 +1,790 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Projekty – Vladislav Krasný</title>
+  <meta name="description" content="Projekty a užitečné utility (hlavně pro SQL) od Vladislava Krasného." />
+  <style>
+    :root{
+      --bg: #faf7f1;
+      --card: rgba(255,255,255,.72);
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: rgba(31,41,55,.10);
+      --accent: #b45309;
+      --accent2:#0f766e;
+      --shadow: 0 18px 50px rgba(17,24,39,.10);
+      --radius: 22px;
+      --max: 1040px;
+    }
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg: #0b1220;
+        --card: rgba(17,24,39,.72);
+        --text: #e5e7eb;
+        --muted: #9ca3af;
+        --line: rgba(229,231,235,.10);
+        --shadow: 0 18px 60px rgba(0,0,0,.35);
+      }
+    }
+
+    *{ box-sizing: border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      background:
+        radial-gradient(900px 520px at 20% 10%, rgba(180,83,9,.14), transparent 60%),
+        radial-gradient(760px 520px at 85% 30%, rgba(15,118,110,.12), transparent 62%),
+        linear-gradient(180deg, var(--bg), var(--bg));
+      line-height: 1.6;
+    }
+
+    a{ color: inherit; text-decoration: none; }
+    a:hover{ text-decoration: underline; text-decoration-color: rgba(180,83,9,.65); }
+
+    .wrap{ max-width: var(--max); margin: 0 auto; padding: 28px 18px 58px; }
+
+    /* icons */
+    .ico{ width: 18px; height: 18px; display:inline-block; flex:0 0 auto; }
+    .ico svg{ width:100%; height:100%; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+    header{
+      display:flex; justify-content: space-between; align-items: center;
+      gap: 16px; flex-wrap: wrap; padding: 10px 6px 18px;
+    }
+
+    .brand{ display:flex; align-items:center; gap: 12px; min-width: 0; }
+    .avatar{
+      width: 44px; height: 44px; border-radius: 999px; overflow: hidden;
+      border: 1px solid var(--line);
+      box-shadow: 0 10px 24px rgba(0,0,0,.10);
+      background: rgba(255,255,255,.22);
+      flex: 0 0 auto;
+    }
+    .avatar img{ width:100%; height:100%; object-fit: cover; display:block; }
+    .brand h1{ margin:0; font-size: 1.05rem; letter-spacing: .2px; white-space: nowrap; overflow:hidden; text-overflow: ellipsis; }
+    .brand .tag{ margin: 0; font-size: .92rem; color: var(--muted); white-space: nowrap; overflow:hidden; text-overflow: ellipsis; }
+
+    nav{ display:flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+    .pill{
+      display:inline-flex; align-items:center; gap: 8px;
+      padding: 8px 12px; border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.10);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      font-size: .95rem;
+    }
+    .pill:hover{ text-decoration:none; border-color: rgba(180,83,9,.35); }
+
+    .hero{
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .hero-inner{ padding: 22px 22px 18px; }
+
+    .title-row{
+      display:flex; align-items: baseline; justify-content: space-between;
+      gap: 12px; flex-wrap: wrap;
+    }
+    .title-row h2{
+      margin:0;
+      font-size: clamp(1.55rem, 2vw + 1rem, 2.15rem);
+      letter-spacing: .2px;
+      line-height: 1.25;
+    }
+    .subtitle{ margin: 10px 0 0; color: var(--muted); max-width: 70ch; }
+
+    .cta-row{ display:flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap: 10px;
+      padding: 10px 14px; border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.12);
+      font-weight: 650; font-size: .98rem;
+      text-decoration:none;
+    }
+    .btn:hover{ text-decoration:none; border-color: rgba(180,83,9,.35); }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(180,83,9,.95), rgba(217,119,6,.92));
+      color:#fff; border-color: rgba(180,83,9,.35);
+      box-shadow: 0 12px 28px rgba(180,83,9,.18);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+    @media (max-width: 900px){ .grid{ grid-template-columns: 1fr; } }
+
+    .card{
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 14px 42px rgba(17,24,39,.10);
+      padding: 18px 18px 16px;
+    }
+    .card h3{ margin:0 0 8px; font-size: 1.05rem; letter-spacing: .2px; }
+    .card p{ margin:0; color: var(--muted); }
+
+    /* Filter bar */
+    .filterbar{
+      margin-top: 12px;
+      border: 1px dashed var(--line);
+      border-radius: 16px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,.06);
+      display:grid;
+      gap: 12px;
+    }
+    .filter-top{
+      display:flex; align-items:center; justify-content: space-between;
+      gap: 10px; flex-wrap: wrap;
+      color: var(--muted); font-size: .95rem;
+    }
+    .filter-controls{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+    @media (max-width: 720px){
+      .filter-controls{ grid-template-columns: 1fr; }
+    }
+
+    .input, .select{
+      width:100%;
+      display:flex; align-items:center; gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.10);
+    }
+    .input input{
+      width:100%;
+      border:none; outline:none;
+      background: transparent;
+      color: var(--text);
+      font-size: 1rem;
+    }
+    .input input::placeholder{ color: var(--muted); }
+
+    .select select{
+      width:100%;
+      border:none; outline:none;
+      background: transparent;
+      color: var(--text);
+      font-size: 1rem;
+      appearance:none;
+      -webkit-appearance:none;
+      -moz-appearance:none;
+    }
+
+    .mini{
+      display:inline-flex; align-items:center; gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.10);
+      font-weight: 650;
+      cursor: pointer;
+      user-select: none;
+    }
+    .mini:hover{ border-color: rgba(180,83,9,.35); }
+
+    .chips{ display:flex; flex-wrap: wrap; gap: 8px; }
+    .chip{
+      display:inline-flex; align-items:center; gap: 8px;
+      padding: 8px 10px; border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.08);
+      color: var(--muted);
+      font-size: .92rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .chip:hover{ border-color: rgba(180,83,9,.30); }
+    .chip[data-active="true"]{
+      color: var(--text);
+      border-color: rgba(180,83,9,.35);
+      box-shadow: 0 10px 22px rgba(180,83,9,.10);
+    }
+
+    .count{ color: var(--muted); font-size: .92rem; }
+
+    /* Util cards */
+    .util-grid{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 14px;
+    }
+    @media (max-width: 980px){ .util-grid{ grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 640px){ .util-grid{ grid-template-columns: 1fr; } }
+
+    .util{
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.08);
+      padding: 14px 14px 12px;
+      transition: transform .15s ease, border-color .15s ease;
+    }
+    .util:hover{ transform: translateY(-2px); border-color: rgba(180,83,9,.30); }
+    .util[hidden]{ display:none !important; }
+
+    .util-top{ display:flex; align-items:flex-start; justify-content: space-between; gap: 10px; }
+    .util-title{
+      margin:0;
+      font-size: 1.02rem;
+      letter-spacing: .15px;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+    }
+    .badge{
+      display:inline-flex; align-items:center; gap: 6px;
+      padding: 6px 8px; border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      font-size: .90rem;
+      white-space: nowrap;
+    }
+    .util p{ margin: 10px 0 0; color: var(--muted); }
+
+    .util-meta{ display:flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+
+    .empty{
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      display:none;
+    }
+    .empty strong{ color: var(--text); }
+
+    footer{
+      margin-top: 18px;
+      padding: 14px 6px 0;
+      color: var(--muted);
+      font-size: .92rem;
+      display:flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* --- Code blocks --- */
+.codebox{
+  margin-top: 12px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(255,255,255,.08);
+  overflow: hidden;
+}
+
+.codebar{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: .92rem;
+}
+
+.codebar .left{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  min-width: 0;
+}
+.kbd{
+  padding: 2px 8px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.06);
+  color: var(--muted);
+  font-size: .86rem;
+  white-space: nowrap;
+}
+
+.copybtn, .togglebtn{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.10);
+  color: var(--text);
+  font-weight: 650;
+  cursor: pointer;
+  user-select: none;
+}
+.copybtn:hover, .togglebtn:hover{ border-color: rgba(180,83,9,.35); }
+
+pre{
+  margin: 0;
+  padding: 12px;
+  overflow: auto;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: .92rem;
+  line-height: 1.55;
+  tab-size: 2;
+  white-space: pre;
+}
+
+code{ color: inherit; }
+
+.util{ position: relative; }
+.util-actions{
+  display:flex;
+  align-items:center;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.util .anchor{
+  position: static;
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.06);
+  color: var(--muted);
+  font-size: .90rem;
+  white-space: nowrap;
+}
+.util .anchor:hover{
+  text-decoration:none;
+  border-color: rgba(180,83,9,.30);
+}
+
+
+details.code-details{
+  margin-top: 12px;
+}
+details.code-details > summary{
+  list-style: none;
+  cursor: pointer;
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.08);
+  user-select:none;
+  font-weight: 650;
+}
+details.code-details > summary::-webkit-details-marker{ display:none; }
+details.code-details[open] > summary{ border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+
+details.code-details .codebox{
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  margin-top: 0;
+}
+
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="avatar" aria-hidden="true">
+          <img src="moje-fotka.jpeg" alt="Vladislav Krasný" />
+        </div>
+        <div style="min-width:0">
+          <h1>Vladislav Krasný</h1>
+          <p class="tag">Projekty • utility • SQL</p>
+        </div>
+      </div>
+
+      <nav aria-label="Navigace">
+        <a class="pill" href="index.html">
+          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></span>
+          Domů
+        </a>
+        <a class="pill" href="basne.html">
+          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 19a2 2 0 0 1 2-2h14"/><path d="M6 17V5a2 2 0 0 1 2-2h12v16"/></svg></span>
+          Básně
+        </a>
+        <a class="pill" href="#utility">
+          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 7c0-2 10-2 10 0s-10 2-10 0Z"/><path d="M7 7v5c0 2 10 2 10 0V7"/><path d="M7 12v5c0 2 10 2 10 0v-5"/></svg></span>
+          Utility
+        </a>
+        <a class="pill" href="mailto:vlkrasny@gmail.com">
+          <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg></span>
+          Kontakt
+        </a>
+      </nav>
+    </header>
+
+    <section class="hero" aria-label="Úvod">
+      <div class="hero-inner">
+        <div class="title-row">
+          <h2>Projekty a malé utility</h2>
+          <div class="count"><span id="countVisible">0</span> / <span id="countAll">0</span></div>
+        </div>
+        <p class="subtitle">
+          Tohle je moje „dílna“. Chci sem postupně dávat malé praktické věci pro SQL (a časem i další),
+          aby byly rychle po ruce a daly se sdílet odkazem.
+        </p>
+
+        <div class="cta-row">
+          <a class="btn primary" href="#utility">
+            <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg></span>
+            Jít na utility
+          </a>
+          <a class="btn" href="mailto:vlkrasny@gmail.com?subject=SQL%20utility%20n%C3%A1pad">
+            <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg></span>
+            Poslat nápad
+          </a>
+        </div>
+
+        <div class="filterbar" aria-label="Filtrování utilit">
+          <div class="filter-top">
+            <div>Hledej a filtruj. Stav se zapisuje do URL (bez knihoven).</div>
+            <div class="count">Sdílej třeba: <span style="user-select:all">?tag=mssql&q=folder</span></div>
+          </div>
+
+          <div class="filter-controls">
+            <label class="input" aria-label="Vyhledávání">
+              <span class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M21 21l-4.3-4.3"/><path d="M10.8 18.2a7.4 7.4 0 1 1 0-14.8 7.4 7.4 0 0 1 0 14.8Z"/></svg>
+              </span>
+              <input id="q" type="search" placeholder="Hledej… (např. index, performance, folder, split)" autocomplete="off" />
+            </label>
+
+            <label class="select" aria-label="Štítek">
+              <span class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M20 10l-8 10L4 10l8-8 8 8Z"/></svg>
+              </span>
+              <select id="tagSelect">
+                <option value="all">Všechny štítky</option>
+              </select>
+            </label>
+
+            <button class="mini" id="resetBtn" type="button" aria-label="Reset filtrů">
+              <span class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3v6h6"/></svg>
+              </span>
+              Reset
+            </button>
+          </div>
+
+          <div class="chips" id="chips" aria-label="Rychlé štítky"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="utility" class="card" aria-label="Utility">
+      <h3 style="margin-top:0">SQL utility</h3>
+      <p style="margin:0;color:var(--muted)">
+        Každá utilita má název, krátký popis a štítky. Zatím jsou to placeholdery – kdykoliv je přepíšeš na reálné.
+      </p>
+
+      <div id="empty" class="empty">
+        <strong>Nic nenalezeno.</strong> Zkus jiný štítek nebo zkrať vyhledávání.
+      </div>
+
+      <div class="util-grid" id="utilGrid">
+        <!-- Přidávání: kopíruj blok .util a uprav data-tags + texty -->
+
+        <article id="index-check-quickview" class="util" data-tags="mssql performance index" data-title="Index check quickview">
+          <!--<div class="util-top">
+            <h4 class="util-title">
+              <span class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M7 7c0-2 10-2 10 0s-10 2-10 0Z"/><path d="M7 7v5c0 2 10 2 10 0V7"/><path d="M7 12v5c0 2 10 2 10 0v-5"/></svg>
+              </span>
+              Index check quickview
+            </h4>
+            <span class="badge">mssql</span>
+          </div>
+          <p>Rychlý přehled indexů, velikostí a případných „bolestí“ (fragmentace, usage, duplicitní indexy).</p>
+          <div class="util-meta">
+            <span class="badge">performance</span>
+            <span class="badge">index</span>
+          </div>
+          <a class="anchor" href="#index-check-quickview" aria-label="Odkaz na utilitu">
+  <span class="ico" aria-hidden="true">
+    <svg viewBox="0 0 24 24"><path d="M10 14a5 5 0 0 1 0-7l1-1a5 5 0 0 1 7 7l-1 1"/><path d="M14 10a5 5 0 0 1 0 7l-1 1a5 5 0 0 1-7-7l1-1"/></svg>
+  </span>link </a>-->
+
+  <div class="util-top">
+  <h4 class="util-title">
+    <span class="ico" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M7 7c0-2 10-2 10 0s-10 2-10 0Z"/><path d="M7 7v5c0 2 10 2 10 0V7"/><path d="M7 12v5c0 2 10 2 10 0v-5"/></svg>
+    </span>
+              Index check quickview
+    </h4>
+
+  <div class="util-actions">
+    <span class="badge">mssql</span>
+    <a class="anchor" href="#index-check-quickview" aria-label="Odkaz na utilitu">
+      <span class="ico" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M10 14a5 5 0 0 1 0-7l1-1a5 5 0 0 1 7 7l-1 1"/><path d="M14 10a5 5 0 0 1 0 7l-1 1a5 5 0 0 1-7-7l1-1"/></svg>
+      </span>
+      link
+    </a>
+  </div>
+</div>
+
+
+<details class="code-details">
+  <summary>
+    <span class="ico" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+    </span>
+    Zobrazit kód
+  </summary>
+
+  <div class="codebox">
+    <div class="codebar">
+      <div class="left">
+        <span class="kbd">T-SQL</span>
+        <span class="muted">Zkopíruj jedním klikem</span>
+      </div>
+      <button class="copybtn" type="button">
+        <span class="ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M9 9h11v11H9z"/><path d="M4 4h11v11H4z"/></svg>
+        </span>
+        Kopírovat
+      </button>
+    </div>
+    <pre><code>declare @schema_name sysname = 'dbo';
+declare @table_name  sysname = 'TvojeTabulka';
+
+select
+    db_name() as database_name,
+    s.name        as schema_name,
+    t.name        as table_name,
+    i.name        as index_name,
+    i.type_desc   as index_type,
+    ips.page_count,
+    ips.record_count,
+    ips.avg_fragmentation_in_percent,
+    us.user_seeks,
+    us.user_scans,
+    us.user_lookups,
+    us.user_updates
+from sys.indexes i
+join sys.objects t
+    on i.object_id = t.object_id
+join sys.schemas s
+    on t.schema_id = s.schema_id
+outer apply sys.dm_db_index_physical_stats(
+    db_id(), t.object_id, i.index_id, null, 'LIMITED'
+) ips
+left join sys.dm_db_index_usage_stats us
+    on us.database_id = db_id()
+   and us.object_id = i.object_id
+   and us.index_id = i.index_id
+where t.type = 'U'
+  and i.index_id > 0
+  and s.name = @schema_name
+  and t.name = @table_name
+order by
+    ips.avg_fragmentation_in_percent desc,
+    (isnull(us.user_seeks,0)+isnull(us.user_scans,0)) desc;
+</code></pre>
+  </div>
+</details>
+        </article>
+      </div>
+    </section>
+
+    <footer>
+      <div>© <span id="y"></span> Vladislav Krasný</div>
+      <div>Projekty • utility • pořádek</div>
+    </footer>
+  </div>
+
+  <script>
+    // helpers
+    const norm = (s) => (s || "").toString().toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
+    const uniq = (arr) => [...new Set(arr)];
+
+    const items = [...document.querySelectorAll(".util")];
+    const q = document.getElementById("q");
+    const tagSelect = document.getElementById("tagSelect");
+    const chipsWrap = document.getElementById("chips");
+    const resetBtn = document.getElementById("resetBtn");
+    const empty = document.getElementById("empty");
+    const countVisible = document.getElementById("countVisible");
+    const countAll = document.getElementById("countAll");
+
+    document.getElementById("y").textContent = new Date().getFullYear();
+    countAll.textContent = items.length;
+
+    // tags
+    const allTags = uniq(
+      items.flatMap(el => (el.dataset.tags || "")
+        .split(/\s+/)
+        .map(t => t.trim())
+        .filter(Boolean)
+      )
+    ).sort((a,b) => a.localeCompare(b, "cs"));
+
+    for (const t of allTags){
+      const opt = document.createElement("option");
+      opt.value = t;
+      opt.textContent = t;
+      tagSelect.appendChild(opt);
+    }
+
+    // chips
+    function setActiveChip(tag){
+      [...chipsWrap.querySelectorAll(".chip")].forEach(c => {
+        c.dataset.active = (c.dataset.tag === tag) ? "true" : "false";
+      });
+    }
+
+    function makeChip(t){
+      const chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "chip";
+      chip.textContent = t;
+      chip.dataset.tag = t;
+      chip.dataset.active = "false";
+      chip.addEventListener("click", () => {
+        const isActive = chip.dataset.active === "true";
+        const next = isActive ? "all" : t;
+        setActiveChip(next);
+        tagSelect.value = next;
+        apply();
+      });
+      return chip;
+    }
+
+    const allChip = document.createElement("button");
+    allChip.type = "button";
+    allChip.className = "chip";
+    allChip.textContent = "vše";
+    allChip.dataset.tag = "all";
+    allChip.dataset.active = "true";
+    allChip.addEventListener("click", () => {
+      setActiveChip("all");
+      tagSelect.value = "all";
+      apply();
+    });
+    chipsWrap.appendChild(allChip);
+    allTags.forEach(t => chipsWrap.appendChild(makeChip(t)));
+
+    // URL state
+    function readStateFromUrl(){
+      const params = new URLSearchParams(location.search);
+      const tag = params.get("tag");
+      const query = params.get("q");
+      if (query !== null) q.value = query;
+
+      if (tag && (tag === "all" || allTags.includes(tag))){
+        tagSelect.value = tag;
+        setActiveChip(tag);
+      } else {
+        tagSelect.value = "all";
+        setActiveChip("all");
+      }
+    }
+
+    function writeStateToUrl(){
+      const params = new URLSearchParams();
+      const tag = tagSelect.value;
+      const query = q.value.trim();
+
+      if (tag && tag !== "all") params.set("tag", tag);
+      if (query) params.set("q", query);
+
+      const qs = params.toString();
+      const newUrl = qs ? `${location.pathname}?${qs}` : location.pathname;
+      history.replaceState(null, "", newUrl);
+    }
+
+    function apply(){
+      const query = norm(q.value.trim());
+      const tag = tagSelect.value;
+      let visible = 0;
+
+      for (const el of items){
+        const tags = (el.dataset.tags || "").split(/\s+/).filter(Boolean);
+        const hay = norm(el.innerText);
+
+        const tagOk = (tag === "all") ? true : tags.includes(tag);
+        const qOk = query ? hay.includes(query) : true;
+
+        const show = tagOk && qOk;
+        el.hidden = !show;
+        if (show) visible++;
+      }
+
+      countVisible.textContent = visible;
+      empty.style.display = visible === 0 ? "block" : "none";
+      writeStateToUrl();
+    }
+
+    // events
+    q.addEventListener("input", apply);
+    tagSelect.addEventListener("change", () => {
+      setActiveChip(tagSelect.value);
+      apply();
+    });
+    resetBtn.addEventListener("click", () => {
+      q.value = "";
+      tagSelect.value = "all";
+      setActiveChip("all");
+      apply();
+      q.focus();
+    });
+
+    // init
+    readStateFromUrl();
+    apply();
+
+    // Copy-to-clipboard pro všechny codeboxy
+document.addEventListener("click", async (e) => {
+  const btn = e.target.closest(".copybtn");
+  if (!btn) return;
+
+  const box = btn.closest(".codebox");
+  const code = box?.querySelector("pre code")?.innerText || "";
+  if (!code) return;
+
+  try{
+    await navigator.clipboard.writeText(code);
+    const old = btn.textContent.trim();
+    btn.textContent = "Zkopírováno ✓";
+    setTimeout(() => { btn.textContent = old || "Kopírovat"; }, 1200);
+  }catch{
+    // fallback: vyber text
+    const range = document.createRange();
+    range.selectNodeContents(box.querySelector("pre"));
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    alert("Nepovedlo se zkopírovat automaticky. Text jsem označil – dej Ctrl+C.");
+  }
+});
+
+  </script>
+</body>
+</html>

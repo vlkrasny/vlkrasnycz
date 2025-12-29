@@ -1,143 +1,569 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="cs">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Básně – Vladislav Krásný</title>
-    <style>
-    :root {
-        --primary: #6b7b8c;
-        --secondary: #2c3e50;
-        --bg: linear-gradient(135deg, #e5ecf1 0%, #cfd8dc 100%);
-        --radius: 22px;
-        --shadow: 0 8px 30px rgba(31, 41, 55, 0.08);
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Básně – Vladislav Krasný</title>
+  <meta name="description" content="Básně Vladislava Krasného." />
+  <style>
+    :root{
+      --bg: #faf7f1;
+      --card: rgba(255,255,255,.72);
+      --text: #1f2937;
+      --muted: #6b7280;
+      --line: rgba(31,41,55,.10);
+      --accent: #b45309;
+      --accent2:#0f766e;
+      --shadow: 0 18px 50px rgba(17,24,39,.10);
+      --radius: 22px;
+      --max: 920px;
     }
-        html, body {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: var(--bg);
-            color: var(--secondary);
-            min-height: 100vh;
-        }
-        .container {
-            max-width: 420px;
-            margin: 36px auto;
-            background: #fff;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 28px 20px 36px 20px;
-        }
-        h1 {
-            text-align: center;
-            font-size: 2em;
-            margin-bottom: 0.5em;
-            color: var(--primary);
-            letter-spacing: 1px;
-        }
-        .poem {
-            background: #f1f4f7;
-            border-radius: 18px;
-            padding: 24px 18px;
-            margin-top: 20px;
-            margin-bottom: 30px;
-            font-size: 1.11em;
-            line-height: 1.7;
-            box-shadow: 0 4px 18px rgba(31,41,55,0.04);
-            color: #2f3e4d;
-            font-style: italic;
-        }
-        .poem-title {
-            text-align: center;
-            font-size: 1.1em;
-            color: var(--primary);
-            font-style: normal;
-            margin-bottom: 8px;
-            margin-top: 0;
-        }
-        .back-link {
-            display: inline-block;
-            margin-bottom: 14px;
-            text-decoration: none;
-            color: var(--secondary);
-            font-size: 1em;
-            font-weight: 500;
-            border-radius: 12px;
-            padding: 6px 13px;
-            transition: background 0.14s;
-        }
-        .back-link:hover {
-            background: #e3e9ef;
-            color: var(--primary);
-        }
-        @media (max-width: 600px) {
-            .container {
-                margin: 12px 0;
-                border-radius: 0;
-                max-width: 100%;
-                box-shadow: none;
-                padding: 15px 2vw 24px 2vw;
-            }
-            h1 {
-                font-size: 1.3em;
-            }
-        }
-    </style>
+    @media (prefers-color-scheme: dark){
+      :root{
+        --bg: #0b1220;
+        --card: rgba(17,24,39,.72);
+        --text: #e5e7eb;
+        --muted: #9ca3af;
+        --line: rgba(229,231,235,.10);
+        --shadow: 0 18px 60px rgba(0,0,0,.35);
+      }
+    }
+
+    *{ box-sizing: border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji";
+      color: var(--text);
+      background:
+        radial-gradient(900px 520px at 20% 10%, rgba(180,83,9,.14), transparent 60%),
+        radial-gradient(760px 520px at 85% 30%, rgba(15,118,110,.12), transparent 62%),
+        linear-gradient(180deg, var(--bg), var(--bg));
+      line-height: 1.7;
+    }
+
+    a{ color: inherit; text-decoration: none; }
+    a:hover{ text-decoration: underline; text-decoration-color: rgba(180,83,9,.65); }
+
+    .wrap{ max-width: var(--max); margin: 0 auto; padding: 28px 18px 58px; }
+
+    /* ikonky (inline SVG) */
+    .ico{ width: 18px; height: 18px; display:inline-block; flex:0 0 auto; }
+    .ico svg{ width:100%; height:100%; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+    header{
+      display:flex; justify-content: space-between; align-items: center;
+      gap: 14px; flex-wrap: wrap; padding: 10px 6px 18px;
+    }
+    .title{ display:flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+    h1{ margin:0; font-size: clamp(1.5rem, 2.2vw + 1rem, 2.2rem); letter-spacing: .2px; }
+    .sub{ margin:0; color: var(--muted); font-size: .98rem; }
+
+    .actions{ display:flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap: 10px;
+      padding: 10px 14px; border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.12);
+      font-weight: 650; font-size: .98rem;
+      text-decoration:none;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .btn:hover{ text-decoration:none; border-color: rgba(180,83,9,.35); }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(180,83,9,.95), rgba(217,119,6,.92));
+      color:#fff; border-color: rgba(180,83,9,.35);
+      box-shadow: 0 12px 28px rgba(180,83,9,.18);
+      backdrop-filter: none;
+    }
+    .btn.primary:hover{ filter: brightness(1.02); }
+
+    .card{
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--card);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: var(--shadow);
+      padding: 18px 18px 16px;
+    }
+
+    /* --- Filter bar --- */
+    .filterbar{
+      margin-top: 12px;
+      border: 1px dashed var(--line);
+      border-radius: 16px;
+      padding: 12px 14px;
+      background: rgba(255,255,255,.06);
+      display:grid;
+      gap: 12px;
+    }
+    .filter-top{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+    .filter-controls{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr auto;
+      gap: 10px;
+      align-items: center;
+    }
+    @media (max-width: 720px){
+      .filter-controls{ grid-template-columns: 1fr; }
+    }
+
+    .input{
+      width:100%;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.10);
+    }
+    .input input{
+      width:100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 1rem;
+    }
+    .input input::placeholder{ color: var(--muted); }
+
+    .select{
+      width:100%;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.10);
+    }
+    .select select{
+      width:100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 1rem;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+    }
+
+    .mini{
+      display:inline-flex;
+      align-items:center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.10);
+      font-weight: 650;
+      cursor: pointer;
+      user-select: none;
+    }
+    .mini:hover{ border-color: rgba(180,83,9,.35); }
+
+    .chips{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.08);
+      color: var(--muted);
+      font-size: .92rem;
+      cursor: pointer;
+      user-select: none;
+    }
+    .chip:hover{ border-color: rgba(180,83,9,.30); }
+    .chip[data-active="true"]{
+      color: var(--text);
+      border-color: rgba(180,83,9,.35);
+      box-shadow: 0 10px 22px rgba(180,83,9,.10);
+    }
+
+    .count{
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    /* poems */
+    .poem{
+      margin-top: 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.08);
+      padding: 16px 16px 14px;
+      transition: transform .15s ease, border-color .15s ease;
+    }
+    .poem:hover{ transform: translateY(-2px); border-color: rgba(180,83,9,.30); }
+
+    .poem[hidden]{ display:none !important; }
+
+    .poem-head{
+      display:flex; align-items: baseline; justify-content: space-between;
+      gap: 10px; flex-wrap: wrap; margin-bottom: 8px;
+    }
+    .poem h2{ margin:0; font-size: 1.08rem; color: var(--accent); letter-spacing: .2px; }
+
+    .badge{
+      display:inline-flex; align-items:center; gap: 8px;
+      padding: 6px 10px; border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    .text{
+      font-style: italic;
+      color: rgba(31,41,55,.92);
+    }
+    @media (prefers-color-scheme: dark){
+      .text{ color: rgba(229,231,235,.92); }
+    }
+
+    /* no results */
+    .empty{
+      margin-top: 14px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      display:none;
+    }
+    .empty strong{ color: var(--text); }
+
+    footer{
+      margin-top: 18px;
+      padding: 14px 6px 0;
+      color: var(--muted);
+      font-size: .92rem;
+      display:flex;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <a href="index.html" class="back-link">&larr; Zpět na hlavní stránku</a>
+  <div class="wrap">
+    <header>
+      <div class="title">
         <h1>Básně</h1>
+        <p class="sub">Některé věci se líp řeknou šeptem než definicí.</p>
+      </div>
 
-        <div class="poem">
-            <div class="poem-title">Ó, krásko</div>
-            Ó, krásko, tvá dálka mě sžírá jak stín,<br>
-            však hvězdy v tvých očích jsou světlem mé noci.<br>
-            Já bez tvých úsměvů bloudím svým dnem lín,<br>
-            jak básník, co v srdci ukrývá loučení v moci.<br><br>
-            Mé rty jsou němé – jen šepot tvého jména<br>
-            mi rozechvívá prázdné pokoje a spánek.<br>
-            Ó, kdybych mohl být tvůj stín či aspoň věta<br>
-            v dopise, co šeptáš si, když ti schází ranní snídaně.<br><br>
-            Jsem Cyrano bez tvé vůně, tvé tváře blízké,<br>
-            můj svět je prázdný, tvé teplo mi mizí v dálce.<br>
-            Tvé doteky mi chybí, jak tulipánům slunce.<br><br>
-            A přece den co den se za tebou v myšlenkách vracím –<br>
-            a v srdci, kde sídlí touha, tiše, potají,<br>
-            stavím z hvězd i slz svůj most zpět k tobě, má jediná.
+      <div class="actions" aria-label="Akce">
+        <a class="btn" href="index.html">
+          <span class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+          </span>
+          Zpět
+        </a>
+        <a class="btn primary" href="mailto:vlkrasny@gmail.com">
+          <span class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg>
+          </span>
+          Napiš mi
+        </a>
+      </div>
+    </header>
+
+    <section class="card">
+      <!-- Filter UI -->
+      <div class="filterbar" aria-label="Filtrování básní">
+        <div class="filter-top">
+          <div>Filtruj podle štítku a hledej v textu (bez knihoven).</div>
+          <div class="count"><span id="countVisible">0</span> / <span id="countAll">0</span></div>
         </div>
 
-        <div class="poem">
-            <div class="poem-title">Noc bez tebe</div>
-            Noc bez tebe je dlouhá, plná neklidných snů,<br>
-            měsíc se ptá, proč tvé ruce necítím už v dlaních.<br>
-            Touha je vítr, co bloudí ulicí prázdnou a tmavou,<br>
-            stíny si šeptají tvé jméno v tichých ranních hodinách.<br><br>
-            Chybíš mi jako ráno slunci, jako ticho slovům,<br>
-            v kapkách deště slyším tvůj smích, co zní mi v paměti.<br>
-            V básních, které nepíšu, jsi skrytá v každém rýmu,<br>
-            jsi pramen, co nemohu najít, a přesto ho v srdci nosím.<br><br>
-            Z okna hledím k hvězdám, posílám ti myšlenky,<br>
-            možná jednou uslyšíš můj hlas v šepotu větru.<br>
-            Ve tmě, kde jsi daleko, kreslím tvůj úsměv prstem na sklo.
+        <div class="filter-controls">
+          <label class="input" aria-label="Vyhledávání">
+            <span class="ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M21 21l-4.3-4.3"/><path d="M10.8 18.2a7.4 7.4 0 1 1 0-14.8 7.4 7.4 0 0 1 0 14.8Z"/></svg>
+            </span>
+            <input id="q" type="search" placeholder="Hledej slovo nebo frázi… (např. noc, déšť, hvězdy)" autocomplete="off" />
+          </label>
+
+          <label class="select" aria-label="Štítek">
+            <span class="ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M20 10l-8 10L4 10l8-8 8 8Z"/></svg>
+            </span>
+            <select id="tagSelect">
+              <option value="all">Všechny štítky</option>
+            </select>
+          </label>
+
+          <button class="mini" id="resetBtn" type="button" aria-label="Reset filtrů">
+            <span class="ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 3v6h6"/></svg>
+            </span>
+            Reset
+          </button>
         </div>
 
-        <div class="poem">
-            <div class="poem-title">Stopy v dešti</div>
-            Po ulicích kráčím sám, stopy mizí v dešti,<br>
-            v kapkách hledám tvou vůni, tichou a něžnou.<br>
-            V očích mám tvůj obraz, co nelze vymazat,<br>
-            a srdce je papír, kam píšu tvé jméno stokrát.<br><br>
-            Slova jsou zbytečná, když mlčíš na druhém konci světa,<br>
-            jen vzpomínky zpívají svou píseň bez konce.<br>
-            Jsi mým snem, co neumírá, i když se ráno rozplyne,<br>
-            tvá blízkost je most, který přejdu jen v myšlenkách.<br><br>
-            Ve večerech bez tebe svíčka tiše dohořívá,<br>
-            přesto vím, že zítra opět vyjdu do deště –<br>
-            a v každé kapce tě znovu najdu.
-        </div>
+        <div class="chips" id="chips" aria-label="Rychlé štítky"></div>
+      </div>
 
-    </div>
+      <div id="empty" class="empty">
+        <strong>Nic nenalezeno.</strong> Zkus jiný štítek nebo zkrať vyhledávání.
+      </div>
+
+      <!-- Poems -->
+      <article class="poem" data-tags="poezie laska" data-title="Ó, krásko">
+        <div class="poem-head">
+          <h2>Ó, krásko</h2>
+          <span class="badge">
+            <span class="ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 21s-7-4.4-7-11a4 4 0 0 1 7-2 4 4 0 0 1 7 2c0 6.6-7 11-7 11Z"/></svg>
+            </span>
+            poezie • láska
+          </span>
+        </div>
+        <div class="text">
+          Ó, krásko, tvá dálka mě sžírá jak stín,<br>
+          však hvězdy v tvých očích jsou světlem mé noci.<br>
+          Já bez tvých úsměvů bloudím svým dnem lín,<br>
+          jak básník, co v srdci ukrývá loučení v moci.<br><br>
+          Mé rty jsou němé – jen šepot tvého jména<br>
+          mi rozechvívá prázdné pokoje a spánek.<br>
+          Ó, kdybych mohl být tvůj stín či aspoň věta<br>
+          v dopise, co šeptáš si, když ti schází ranní snídaně.<br><br>
+          Jsem Cyrano bez tvé vůně, tvé tváře blízké,<br>
+          můj svět je prázdný, tvé teplo mi mizí v dálce.<br>
+          Tvé doteky mi chybí, jak tulipánům slunce.<br><br>
+          A přece den co den se za tebou v myšlenkách vracím –<br>
+          a v srdci, kde sídlí touha, tiše, potají,<br>
+          stavím z hvězd i slz svůj most zpět k tobě, má jediná.
+        </div>
+      </article>
+
+      <article class="poem" data-tags="noc" data-title="Noc bez tebe">
+        <div class="poem-head">
+          <h2>Noc bez tebe</h2>
+          <span class="badge">
+            <span class="ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M21 12.7A8.5 8.5 0 1 1 11.3 3 6.5 6.5 0 0 0 21 12.7Z"/></svg>
+            </span>
+            noc
+          </span>
+        </div>
+        <div class="text">
+          Noc bez tebe je dlouhá, plná neklidných snů,<br>
+          měsíc se ptá, proč tvé ruce necítím už v dlaních.<br>
+          Touha je vítr, co bloudí ulicí prázdnou a tmavou,<br>
+          stíny si šeptají tvé jméno v tichých ranních hodinách.<br><br>
+          Chybíš mi jako ráno slunci, jako ticho slovům,<br>
+          v kapkách deště slyším tvůj smích, co zní mi v paměti.<br>
+          V básních, které nepíšu, jsi skrytá v každém rýmu,<br>
+          jsi pramen, co nemohu najít, a přesto ho v srdci nosím.<br><br>
+          Z okna hledím k hvězdám, posílám ti myšlenky,<br>
+          možná jednou uslyšíš můj hlas v šepotu větru.<br>
+          Ve tmě, kde jsi daleko, kreslím tvůj úsměv prstem na sklo.
+        </div>
+      </article>
+
+      <article class="poem" data-tags="dest noc mesto" data-title="Stopy v dešti">
+        <div class="poem-head">
+          <h2>Stopy v dešti</h2>
+          <span class="badge">
+            <span class="ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M12 2s4 6 4 10a4 4 0 1 1-8 0c0-4 4-10 4-10Z"/></svg>
+            </span>
+            déšť • noc • město
+          </span>
+        </div>
+        <div class="text">
+          Po ulicích kráčím sám, stopy mizí v dešti,<br>
+          v kapkách hledám tvou vůni, tichou a něžnou.<br>
+          V očích mám tvůj obraz, co nelze vymazat,<br>
+          a srdce je papír, kam píšu tvé jméno stokrát.<br><br>
+          Slova jsou zbytečná, když mlčíš na druhém konci světa,<br>
+          jen vzpomínky zpívají svou píseň bez konce.<br>
+          Jsi mým snem, co neumírá, i když se ráno rozplyne,<br>
+          tvá blízkost je most, který přejdu jen v myšlenkách.<br><br>
+          Ve večerech bez tebe svíčka tiše dohořívá,<br>
+          přesto vím, že zítra opět vyjdu do deště –<br>
+          a v každé kapce tě znovu najdu.
+        </div>
+      </article>
+    </section>
+
+    <footer>
+      <div>© <span id="y"></span> Vladislav Krasný</div>
+      <div>Básně • jednoduchost • klid</div>
+    </footer>
+  </div>
+
+  <script>
+    // --- helpers ---
+    const norm = (s) => (s || "").toString().toLowerCase().normalize("NFD").replace(/\p{Diacritic}/gu, "");
+    const uniq = (arr) => [...new Set(arr)];
+
+    const poems = [...document.querySelectorAll(".poem")];
+    const q = document.getElementById("q");
+    const tagSelect = document.getElementById("tagSelect");
+    const chipsWrap = document.getElementById("chips");
+    const resetBtn = document.getElementById("resetBtn");
+    const empty = document.getElementById("empty");
+    const countVisible = document.getElementById("countVisible");
+    const countAll = document.getElementById("countAll");
+
+    document.getElementById("y").textContent = new Date().getFullYear();
+    countAll.textContent = poems.length;
+
+    // collect tags from poems
+    const allTags = uniq(
+      poems.flatMap(p => (p.dataset.tags || "")
+        .split(/\s+/)
+        .map(t => t.trim())
+        .filter(Boolean)
+      )
+    ).sort((a,b) => a.localeCompare(b, "cs"));
+
+    // fill select
+    for (const t of allTags){
+      const opt = document.createElement("option");
+      opt.value = t;
+      opt.textContent = t;
+      tagSelect.appendChild(opt);
+    }
+
+    // chips (quick tags)
+    const makeChip = (t) => {
+      const chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = "chip";
+      chip.textContent = t;
+      chip.dataset.tag = t;
+      chip.dataset.active = "false";
+      chip.addEventListener("click", () => {
+        const isActive = chip.dataset.active === "true";
+        // single-select chip behavior: clicking active = back to all
+        setActiveChip(isActive ? "all" : t);
+        tagSelect.value = isActive ? "all" : t;
+        apply();
+      });
+      return chip;
+    };
+
+    const allChip = document.createElement("button");
+    allChip.type = "button";
+    allChip.className = "chip";
+    allChip.textContent = "vše";
+    allChip.dataset.tag = "all";
+    allChip.dataset.active = "true";
+    allChip.addEventListener("click", () => {
+      setActiveChip("all");
+      tagSelect.value = "all";
+      apply();
+    });
+    chipsWrap.appendChild(allChip);
+    allTags.forEach(t => chipsWrap.appendChild(makeChip(t)));
+
+    function setActiveChip(tag){
+      [...chipsWrap.querySelectorAll(".chip")].forEach(c => {
+        c.dataset.active = (c.dataset.tag === tag) ? "true" : "false";
+      });
+    }
+
+    function apply(){
+      const query = norm(q.value.trim());
+      const tag = tagSelect.value;
+
+      let visible = 0;
+
+      for (const p of poems){
+        const tags = (p.dataset.tags || "").split(/\s+/).filter(Boolean);
+        const hay = norm(p.innerText);
+
+        const tagOk = (tag === "all") ? true : tags.includes(tag);
+        const qOk = query ? hay.includes(query) : true;
+
+        const show = tagOk && qOk;
+        p.hidden = !show;
+        if (show) visible++;
+      }
+
+      countVisible.textContent = visible;
+      empty.style.display = visible === 0 ? "block" : "none";
+    }
+
+    // events
+    q.addEventListener("input", apply);
+    tagSelect.addEventListener("change", () => {
+      setActiveChip(tagSelect.value);
+      apply();
+    });
+
+    resetBtn.addEventListener("click", () => {
+      q.value = "";
+      tagSelect.value = "all";
+      setActiveChip("all");
+      apply();
+      q.focus();
+    });
+
+function readStateFromUrl(){
+  const params = new URLSearchParams(location.search);
+  const tag = params.get("tag");
+  const query = params.get("q");
+
+  if (query !== null) q.value = query;
+  if (tag && (tag === "all" || allTags.includes(tag))) {
+    tagSelect.value = tag;
+    setActiveChip(tag);
+  } else {
+    tagSelect.value = "all";
+    setActiveChip("all");
+  }
+}
+
+function writeStateToUrl(){
+  const params = new URLSearchParams();
+
+  const tag = tagSelect.value;
+  const query = q.value.trim();
+
+  if (tag && tag !== "all") params.set("tag", tag);
+  if (query) params.set("q", query);
+
+  const qs = params.toString();
+  const newUrl = qs ? `${location.pathname}?${qs}` : location.pathname;
+
+  history.replaceState(null, "", newUrl);
+}
+
+// Uprav apply() tak, aby zapisovalo stav do URL:
+const _apply = apply;
+apply = function(){
+  _apply();
+  writeStateToUrl();
+};
+
+// initial: nejdřív načíst URL, pak filtrovat
+readStateFromUrl();
+apply();
+  </script>
 </body>
 </html>
