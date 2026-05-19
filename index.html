@@ -1,836 +1,348 @@
 <!DOCTYPE html>
-<html lang="cs">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vladislav Krásný | IT analýza, poezie a 3D tisk</title>
-  <meta name="description" content="IT analytik se zaměřením na SQL a integrační logiku. Pomáhám firmám převést chaotické požadavky do čitelných řešení" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --surface: #f8fafa;
-      --surface-lowest: #ffffff;
-      --surface-low: #f2f4f4;
-      --surface-high: #e6e8e8;
-      --surface-highest: #e1e3e3;
-      --text: #191c1d;
-      --muted: #3f484a;
-      --outline: #bfc8c9;
-      --outline-strong: #6f797a;
-      --primary: #004349;
-      --primary-2: #0d5c63;
-      --primary-light: #8fd1d9;
-      --secondary: #a53c18;
-      --secondary-soft: #ffdbd0;
-      --secondary-bright: #ff7d55;
-      --tertiary: #28422d;
-      --tertiary-soft: #cceace;
-      --shadow: 5px 5px 0 rgba(0, 67, 73, .18);
-      --radius: 8px;
-      --max: 1180px;
-      --side: 232px;
-      --gutter: clamp(18px, 3vw, 36px);
-    }
 
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-    body {
-      margin: 0;
-      font-family: "Space Grotesk", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--surface);
-      color: var(--text);
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
-    a { color: inherit; text-decoration: none; }
-    img { max-width: 100%; display: block; }
-
-    .topbar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 50;
-      height: 68px;
-      background: rgba(248, 250, 250, .84);
-      backdrop-filter: blur(18px);
-      border-bottom: 1px solid var(--outline);
-    }
-    .topbar__inner {
-      height: 100%;
-      max-width: calc(var(--max) + var(--side));
-      margin: 0 auto;
-      padding: 0 var(--gutter);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-    }
-    .brand {
-      font-weight: 700;
-      letter-spacing: -.03em;
-      color: var(--primary);
-      font-size: clamp(18px, 2.2vw, 25px);
-      white-space: nowrap;
-    }
-    .topnav {
-      display: flex;
-      gap: clamp(16px, 3vw, 34px);
-      align-items: center;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: .11em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-    .topnav a { position: relative; }
-    .topnav a::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -8px;
-      height: 2px;
-      background: var(--secondary);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform .25s ease;
-    }
-    .topnav a:hover::after { transform: scaleX(1); }
-    .menu-dot {
-      width: 34px;
-      height: 34px;
-      border: 1px solid var(--outline);
-      display: grid;
-      place-items: center;
-      color: var(--primary);
-      background: var(--surface-lowest);
-    }
-
-    .sidenav {
-      position: fixed;
-      z-index: 40;
-      top: 68px;
-      left: 0;
-      bottom: 0;
-      width: var(--side);
-      border-right: 1px solid var(--outline);
-      background: var(--surface-low);
-      padding: 30px 0;
-      display: flex;
-      flex-direction: column;
-    }
-    .profile {
-      padding: 0 24px 30px;
-      border-bottom: 1px solid var(--outline);
-      margin-bottom: 16px;
-    }
-    .profile__name { font-size: 24px; font-weight: 700; color: var(--primary); line-height: 1.1; }
-    .profile__meta { margin-top: 8px; color: var(--secondary); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
-    .sideitem {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      padding: 14px 24px;
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      transition: .25s ease;
-      border-left: 4px solid transparent;
-    }
-    .sideitem:hover, .sideitem.active {
-      color: var(--primary);
-      background: var(--surface-high);
-      border-left-color: var(--primary);
-    }
-    .sideitem span:first-child {
-      width: 20px;
-      font-size: 17px;
-      text-align: center;
-    }
-
-    main { margin-left: var(--side); padding-top: 68px; }
-    .section {
-      padding: clamp(58px, 8vw, 104px) var(--gutter);
-    }
-    .container { width: min(var(--max), 100%); margin: 0 auto; }
-    .label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--secondary);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-    }
-    .label::before {
-      content: "";
-      width: 36px;
-      height: 2px;
-      background: var(--secondary);
-    }
-    h1, h2, h3, p { margin-top: 0; }
-    h1 {
-      max-width: 900px;
-      margin: 18px 0 26px;
-      font-size: clamp(42px, 7vw, 88px);
-      line-height: .98;
-      letter-spacing: -.055em;
-    }
-    h2 {
-      font-size: clamp(32px, 4.6vw, 58px);
-      line-height: 1.05;
-      letter-spacing: -.035em;
-      color: var(--primary);
-      margin-bottom: 18px;
-    }
-    h3 {
-      font-size: clamp(22px, 2.4vw, 31px);
-      line-height: 1.18;
-      letter-spacing: -.02em;
-      margin-bottom: 14px;
-    }
-    .lead {
-      max-width: 680px;
-      color: var(--muted);
-      font-size: clamp(17px, 2vw, 21px);
-    }
-    .muted { color: var(--muted); }
-
-    .hero {
-      min-height: calc(100vh - 68px);
-      display: grid;
-      align-items: center;
-      border-bottom: 1px solid var(--outline);
-    }
-    .hero__grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1.28fr) minmax(310px, .72fr);
-      gap: clamp(38px, 7vw, 86px);
-      align-items: center;
-    }
-    .actions { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 34px; }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      min-height: 48px;
-      padding: 13px 20px;
-      border-radius: 4px;
-      border: 1px solid var(--primary);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: .11em;
-      text-transform: uppercase;
-      transition: .22s ease;
-      box-shadow: 4px 4px 0 rgba(0,0,0,.08);
-    }
-    .btn:hover { transform: translate(3px, 3px); box-shadow: 1px 1px 0 rgba(0,0,0,.12); }
-    .btn--primary { color: white; background: var(--primary); }
-    .btn--secondary { color: var(--secondary); background: var(--secondary-soft); border-color: var(--secondary); }
-
-    .portrait-card {
-      position: relative;
-      isolation: isolate;
-      aspect-ratio: 1 / 1.08;
-      background: var(--surface-highest);
-      border: 1px solid var(--outline);
-      padding: 16px;
-      box-shadow: var(--shadow);
-      animation: floatCard 7s ease-in-out infinite;
-    }
-    .portrait-card::before, .portrait-card::after {
-      content: "";
-      position: absolute;
-      z-index: -1;
-      width: 88px;
-      height: 88px;
-      border: 2px solid var(--secondary);
-      opacity: .45;
-    }
-    .portrait-card::before { top: -14px; right: -14px; border-left: 0; border-bottom: 0; }
-    .portrait-card::after { bottom: -14px; left: -14px; border-right: 0; border-top: 0; border-color: var(--primary); }
-    .abstract {
-      height: 100%;
-      width: 100%;
-      border: 1px solid var(--outline-strong);
-      background:
-        radial-gradient(circle at 74% 29%, rgba(255,255,255,.9) 0 6%, transparent 6.2%),
-        radial-gradient(circle at 28% 66%, rgba(0,67,73,.22) 0 10%, transparent 10.3%),
-        linear-gradient(135deg, rgba(0,67,73,.15), transparent 35%),
-        repeating-linear-gradient(90deg, rgba(0,67,73,.12) 0 1px, transparent 1px 13px),
-        linear-gradient(180deg, #c8cecd, #eef0ef);
-      overflow: hidden;
-      position: relative;
-    }
-    .abstract .orb {
-      position: absolute;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #ffffff, #8f9797);
-      box-shadow: inset -20px -24px 32px rgba(0,0,0,.16);
-    }
-    .orb.one { width: 100px; height: 100px; right: 19%; top: 16%; }
-    .orb.two { width: 64px; height: 64px; left: 14%; bottom: 25%; }
-    .orb.three { width: 38px; height: 38px; right: 47%; bottom: 17%; }
-    .stairs {
-      position: absolute;
-      left: 20%;
-      right: 15%;
-      bottom: 15%;
-      height: 120px;
-      background: repeating-linear-gradient(90deg, rgba(0,0,0,.32) 0 7px, rgba(255,255,255,.35) 7px 14px);
-      clip-path: polygon(0 100%, 78% 18%, 100% 18%, 100% 100%);
-      opacity: .55;
-    }
-    .filetag {
-      position: absolute;
-      right: 16px;
-      bottom: 16px;
-      padding: 6px 10px;
-      background: var(--primary);
-      color: #fff;
-      font-size: 11px;
-      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    }
-
-    .surface-block { background: var(--surface-lowest); border-top: 1px solid var(--outline); border-bottom: 1px solid var(--outline); }
-    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 34px; }
-    .section-head p { max-width: 540px; margin-bottom: 0; color: var(--muted); }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 22px;
-    }
-    .card {
-      border: 1px solid var(--outline);
-      background: var(--surface-lowest);
-      padding: clamp(22px, 3vw, 34px);
-      min-height: 210px;
-      position: relative;
-      transition: .25s ease;
-      overflow: hidden;
-    }
-    .card:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: rgba(0,67,73,.45); }
-    .card--wide { grid-column: span 7; }
-    .card--side { grid-column: span 5; }
-    .card--third { grid-column: span 4; }
-    .card--half { grid-column: span 6; }
-    .card__meta { color: var(--secondary); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 18px; }
-    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
-    .chip { padding: 6px 10px; background: var(--tertiary-soft); color: var(--primary); font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-    .iconbox {
-      width: 82px;
-      height: 82px;
-      border: 1px solid var(--outline);
-      display: grid;
-      place-items: center;
-      background: var(--surface-low);
-      color: var(--secondary);
-      font-size: 34px;
-      margin-bottom: 18px;
-    }
-
-    .poetry {
-      text-align: center;
-    }
-    .poetry-grid {
-      margin: 36px auto 0;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 24px;
-      max-width: 900px;
-      text-align: left;
-    }
-    .poem {
-      background: rgba(242,244,244,.7);
-      border-left: 2px solid var(--primary);
-      padding: clamp(22px, 3vw, 36px);
-      color: var(--text);
-      font-style: italic;
-    }
-    .poem:nth-child(2) { transform: translateY(34px); }
-    .poem small { display: block; margin-top: 22px; color: var(--secondary); font-style: normal; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; }
-
-    .dark-section {
-      background: var(--primary);
-      color: white;
-      position: relative;
-      overflow: hidden;
-    }
-    .dark-section::after {
-      content: "△";
-      position: absolute;
-      right: -8vw;
-      top: -70px;
-      font-size: clamp(280px, 42vw, 620px);
-      line-height: 1;
-      color: rgba(255,255,255,.05);
-      font-weight: 700;
-    }
-    .dark-grid {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: 1fr .85fr;
-      gap: clamp(40px, 6vw, 80px);
-      align-items: center;
-    }
-    .dark-section h2 { color: var(--primary-light); }
-    .dark-section .muted { color: rgba(255,255,255,.75); }
-    .principles {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-      border-top: 1px solid rgba(255,255,255,.2);
-      padding-top: 26px;
-      margin-top: 28px;
-    }
-    .principle strong { display: block; color: var(--secondary-soft); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; }
-    .principle span { color: rgba(255,255,255,.72); font-size: 14px; }
-    .meditation-visual {
-      aspect-ratio: 1 / .85;
-      border: 1px solid rgba(255,255,255,.22);
-      background:
-        radial-gradient(circle at center, rgba(143,209,217,.38), transparent 42%),
-        repeating-linear-gradient(90deg, rgba(171,238,246,.16) 0 1px, transparent 1px 9px),
-        rgba(13,92,99,.72);
-      display: grid;
-      place-items: center;
-      position: relative;
-    }
-    .meditation-visual::before {
-      content: "";
-      width: 38%;
-      height: 52%;
-      border: 2px solid rgba(171,238,246,.55);
-      border-radius: 48% 48% 40% 40%;
-      box-shadow: 0 0 50px rgba(171,238,246,.32);
-      animation: breathe 4s ease-in-out infinite;
-    }
-
-    .lab-grid {
-      display: grid;
-      grid-template-columns: 1.15fr .85fr;
-      gap: 24px;
-      align-items: stretch;
-    }
-    .feature-print {
-      min-height: 520px;
-      border: 1px solid var(--outline);
-      background:
-        radial-gradient(circle at 18% 78%, rgba(0,67,73,.18) 0 11%, transparent 11.5%),
-        radial-gradient(circle at 73% 32%, rgba(165,60,24,.16) 0 9%, transparent 9.3%),
-        repeating-linear-gradient(135deg, rgba(0,67,73,.12) 0 1px, transparent 1px 15px),
-        linear-gradient(160deg, #f6f7f6, #dfe4e2);
-      position: relative;
-      overflow: hidden;
-    }
-    .feature-print::before {
-      content: "";
-      position: absolute;
-      left: 14%;
-      bottom: 18%;
-      width: 70%;
-      height: 45%;
-      background: repeating-linear-gradient(90deg, rgba(0,67,73,.32) 0 8px, rgba(255,255,255,.4) 8px 16px);
-      clip-path: polygon(0 100%, 17% 35%, 32% 78%, 48% 22%, 67% 70%, 83% 12%, 100% 100%);
-      opacity: .58;
-    }
-    .print-caption {
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: min(88%, 520px);
-      background: rgba(255,255,255,.92);
-      border-top: 1px solid var(--outline);
-      border-right: 1px solid var(--outline);
-      padding: 26px;
-      backdrop-filter: blur(10px);
-    }
-    .mini-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0,1fr));
-      gap: 20px;
-    }
-    .mini-card {
-      background: var(--surface-lowest);
-      border: 1px solid var(--outline);
-      padding: 18px;
-      min-height: 210px;
-    }
-    .mini-visual {
-      height: 122px;
-      background:
-        radial-gradient(circle at 50% 50%, rgba(0,67,73,.2), transparent 42%),
-        repeating-conic-gradient(from 0deg, rgba(0,67,73,.25) 0 6deg, transparent 6deg 18deg),
-        var(--surface-high);
-      border: 1px solid var(--outline);
-      margin-bottom: 14px;
-    }
-    .mini-card:nth-child(2) .mini-visual {
-      background:
-        linear-gradient(135deg, transparent 45%, rgba(0,67,73,.36) 45% 55%, transparent 55%),
-        repeating-linear-gradient(90deg, rgba(0,67,73,.24) 0 8px, transparent 8px 16px),
-        var(--surface-high);
-      clip-path: polygon(5% 92%, 55% 18%, 92% 92%);
-    }
-    .mini-card:nth-child(3) .mini-visual {
-      background:
-        radial-gradient(circle, transparent 0 28%, rgba(165,60,24,.3) 28% 34%, transparent 34% 45%, rgba(0,67,73,.28) 45% 55%, transparent 55%),
-        var(--surface-high);
-    }
-    .mini-card:nth-child(4) .mini-visual {
-      background:
-        linear-gradient(90deg, rgba(0,67,73,.2), transparent),
-        repeating-linear-gradient(0deg, rgba(0,0,0,.15) 0 1px, transparent 1px 11px),
-        var(--surface-high);
-    }
-
-    .contact {
-      border-top: 1px solid var(--outline);
-      background: var(--surface-lowest);
-    }
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 28px;
-      align-items: center;
-    }
-    .contact-card {
-      border: 1px solid var(--outline);
-      background: var(--surface-low);
-      padding: clamp(24px, 4vw, 42px);
-    }
-    .contact-list { display: grid; gap: 13px; color: var(--muted); }
-    .contact-list a { color: var(--primary); font-weight: 700; }
-
-    footer {
-      margin-left: var(--side);
-      border-top: 1px solid var(--outline);
-      background: var(--surface-lowest);
-      padding: 30px var(--gutter);
-      color: var(--muted);
-      font-size: 13px;
-    }
-    .footer-inner {
-      width: min(var(--max), 100%);
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      gap: 18px;
-      flex-wrap: wrap;
-    }
-
-    .reveal { opacity: 0; transform: translateY(18px); animation: reveal .75s ease forwards; }
-    .reveal.delay-1 { animation-delay: .12s; }
-    .reveal.delay-2 { animation-delay: .24s; }
-    .reveal.delay-3 { animation-delay: .36s; }
-
-    .fab {
-      position: fixed;
-      right: 24px;
-      bottom: 24px;
-      z-index: 60;
-      width: 58px;
-      height: 58px;
-      border: 0;
-      background: var(--secondary);
-      color: white;
-      box-shadow: 5px 5px 0 rgba(58,11,0,.28);
-      display: grid;
-      place-items: center;
-      cursor: pointer;
-      transition: .2s ease;
-      font-size: 23px;
-    }
-    .fab:hover { transform: rotate(-4deg) scale(1.05); }
-
-    @keyframes reveal { to { opacity: 1; transform: translateY(0); } }
-    @keyframes floatCard { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-    @keyframes breathe { 0%,100% { transform: scale(.95); opacity: .62; } 50% { transform: scale(1.03); opacity: 1; } }
-
-    @media (max-width: 1100px) {
-      :root { --side: 0px; }
-      .sidenav { display: none; }
-      main, footer { margin-left: 0; }
-      .hero__grid, .dark-grid, .lab-grid, .contact-grid { grid-template-columns: 1fr; }
-      .portrait-card { max-width: 520px; margin: 0 auto; }
-      .card--wide, .card--side, .card--third, .card--half { grid-column: span 6; }
-    }
-
-    @media (max-width: 760px) {
-      .topnav { display: none; }
-      .section { padding-top: 56px; padding-bottom: 56px; }
-      h1 { font-size: clamp(40px, 13vw, 64px); }
-      .hero { min-height: auto; }
-      .hero__grid { gap: 44px; }
-      .cards { grid-template-columns: 1fr; }
-      .card--wide, .card--side, .card--third, .card--half { grid-column: auto; }
-      .poetry-grid { grid-template-columns: 1fr; }
-      .poem:nth-child(2) { transform: none; }
-      .principles { grid-template-columns: 1fr; }
-      .mini-grid { grid-template-columns: 1fr; }
-      .feature-print { min-height: 450px; }
-      .print-caption { width: 100%; }
-      .section-head { display: block; }
-      .fab { width: 52px; height: 52px; right: 16px; bottom: 16px; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
-      .reveal { opacity: 1; transform: none; }
-    }
-  </style>
+<html class="light" lang="cs"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta name="description" content="Vítejte v digitálním klášteře Vládi, kde se technologie setkává s dharmou. Jsem vývojář, designér a básník, který staví digitální produkty s respektem k detailu, eleganci a smyslu. Prozkoumejte mé projekty v softwaru, webdesignu, poezii a cestě dharmy." />     
+<meta name="keywords" content="software, webdesign, verše, dharma, vývojář, designér, básník, digitální klášter" />  
+<title>VLKRASNY</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;family=JetBrains+Mono:wght@100..800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-primary-fixed-variant": "#910616",
+                      "on-error-container": "#93000a",
+                      "surface-container-low": "#f5f3ee",
+                      "on-secondary-fixed-variant": "#5d4200",
+                      "surface-container-high": "#eae8e3",
+                      "on-tertiary-fixed": "#1e1b18",
+                      "tertiary-fixed-dim": "#cdc5c0",
+                      "inverse-surface": "#30312e",
+                      "outline": "#8e706e",
+                      "primary": "#840011",
+                      "on-primary-fixed": "#410004",
+                      "secondary-fixed": "#ffdea3",
+                      "on-error": "#ffffff",
+                      "surface-tint": "#b4262a",
+                      "secondary-fixed-dim": "#fdbc13",
+                      "primary-container": "#a81d23",
+                      "error": "#ba1a1a",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary": "#ffffff",
+                      "tertiary-fixed": "#e9e1dc",
+                      "surface-bright": "#fbf9f4",
+                      "secondary": "#7a5900",
+                      "inverse-on-surface": "#f2f1ec",
+                      "on-background": "#1b1c19",
+                      "inverse-primary": "#ffb3ae",
+                      "on-secondary-fixed": "#261900",
+                      "outline-variant": "#e2bebb",
+                      "on-surface": "#1b1c19",
+                      "secondary-container": "#fdbc13",
+                      "error-container": "#ffdad6",
+                      "background": "#fbf9f4",
+                      "on-primary-container": "#ffbbb6",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container": "#f0eee9",
+                      "surface": "#fbf9f4",
+                      "on-primary": "#ffffff",
+                      "primary-fixed": "#ffdad7",
+                      "tertiary": "#433e3b",
+                      "on-tertiary-fixed-variant": "#4b4642",
+                      "tertiary-container": "#5a5551",
+                      "surface-variant": "#e4e2dd",
+                      "surface-dim": "#dbdad5",
+                      "on-surface-variant": "#5a403e",
+                      "primary-fixed-dim": "#ffb3ae",
+                      "on-tertiary-container": "#d2cac5",
+                      "on-secondary-container": "#6b4d00",
+                      "surface-container-highest": "#e4e2dd"
+              },
+              "borderRadius": {
+                      "DEFAULT": "1rem",
+                      "lg": "2rem",
+                      "xl": "3rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "unit": "8px",
+                      "section-gap": "12rem",
+                      "gutter": "3rem",
+                      "container-padding-desktop": "5rem",
+                      "container-padding-mobile": "2rem"
+              },
+              "fontFamily": {
+                      "display-lg": ["Space Grotesk"],
+                      "display-lg-mobile": ["Space Grotesk"],
+                      "body-md": ["Plus Jakarta Sans"],
+                      "headline-sm": ["Space Grotesk"],
+                      "headline-md": ["Space Grotesk"],
+                      "body-lg": ["Plus Jakarta Sans"],
+                      "label-mono": ["JetBrains Mono"]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #fbf9f4;
+            scroll-behavior: smooth;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+        @media (min-width: 768px) {
+            .bento-grid {
+                grid-template-columns: repeat(12, 1fr);
+                gap: 3rem;
+            }
+        }
+        /* Make images fluid and predictable */
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+        .soft-glow {
+            box-shadow: 0 10px 30px -10px rgba(168, 29, 35, 0.08);
+        }
+        .soft-glow:hover {
+            box-shadow: 0 20px 40px -15px rgba(168, 29, 35, 0.12);
+        }
+    </style>
 </head>
-<body>
-  <header class="topbar">
-    <div class="topbar__inner">
-      <a class="brand" href="#top">Studio Krásný</a>
-      <nav class="topnav" aria-label="Hlavní navigace">
-        <a href="#analyza">Analýza</a>
-        <a href="#poezie">Poezie</a>
-        <a href="#praxe">Praxe</a>
-        <a href="#tisk">3D tisk</a>
-        <a href="#kontakt">Kontakt</a>
-      </nav>
-      <a class="menu-dot" href="#kontakt" aria-label="Kontakt">✉</a>
+<body class="font-body-md text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-40 flex justify-between items-center px-container-mobile md:px-container-desktop h-20 bg-surface/80 dark:bg-surface/80 backdrop-blur-md">
+<nav class="hidden md:flex gap-10 items-center">
+<a class="text-primary dark:text-primary-fixed font-bold border-b-2 border-secondary font-body-md py-1" href="#software">Software</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant/80 font-body-md hover:text-primary transition-colors duration-300" href="#design">Webdesign</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant/80 font-body-md hover:text-primary transition-colors duration-300" href="#verse">Verse</a>
+</nav>
+</div>
+<div class="flex gap-6 items-center">
+    <button id="mobile-menu-toggle" class="material-symbols-outlined text-primary md:hidden scale-100 active:scale-90 transition-transform">menu</button>
+</div>
+</header>
+<!-- Mobile navigation (toggle) -->
+<nav id="mobile-nav" class="md:hidden hidden fixed top-20 left-0 w-full bg-surface/95 backdrop-blur-md z-40 p-6">
+    <div class="flex flex-col gap-4">
+        <a class="font-body-md text-primary font-bold" href="#software">Software</a>
+        <a class="font-body-md text-on-surface-variant" href="#design">Webdesign</a>
+        <a class="font-body-md text-on-surface-variant" href="#verse">Verše</a>
+        <a class="font-body-md text-on-surface-variant" href="#dharma">Dharma</a>
     </div>
-  </header>
+</nav>
+<!-- SideNavBar (Desktop Only) -->
+<aside class="hidden lg:flex flex-col fixed left-0 top-0 h-full py-12 gap-unit bg-surface-container-low h-screen w-80 rounded-r-xl border-r border-outline-variant/30 shadow-sm z-50">
+<div class="px-10 mb-12 flex flex-col items-center">
+<div class="w-28 h-28 rounded-full overflow-hidden mb-6 border-4 border-secondary-container">
+<img alt="Portrait" class="w-full h-full object-cover" data-alt="A warm, professional portrait of a person with a serene expression, wearing a minimalist crimson robe-like jacket. The lighting is soft and natural, coming from a large window. The background is a blurred, high-end architectural studio with wooden textures and books. The overall aesthetic is calm, clear, and deeply human." src="vlkrasny.png"/>
+</div>
+<h2 class="font-display-lg text-headline-sm text-primary">VLKRASNY</h2>
+<p class="font-body-md text-on-surface-variant text-sm">
+    <!-- Desktop: inline list with separators -->
+    <span class="hidden sm:inline">Software</span>
+    <span class="hidden sm:inline">&nbsp;•&nbsp;</span>
+    <span class="hidden sm:inline">Webdesign</span>
+    <span class="hidden sm:inline">&nbsp;•&nbsp;</span>
+    <span class="hidden sm:inline">Verše</span>
+    <span class="hidden sm:inline">&nbsp;•&nbsp;</span>
+    <span class="hidden sm:inline">Dharma</span>
 
-  <aside class="sidenav" aria-label="Boční navigace">
-    <div class="profile">
-      <div class="profile__name">Studio Krásný</div>
-      <div class="profile__meta">SQL · Dharma · Verš</div>
+    <!-- Mobile: stacked pills -->
+    <span class="flex sm:hidden gap-2 flex-wrap">
+        <span class="px-3 py-1 bg-surface-container-high rounded-full text-xs">Software</span>
+        <span class="px-3 py-1 bg-surface-container-high rounded-full text-xs">Webdesign</span>
+        <span class="px-3 py-1 bg-surface-container-high rounded-full text-xs">Verše</span>
+        <span class="px-3 py-1 bg-surface-container-high rounded-full text-xs">Dharma</span>
+    </span>
+</p>
+</div>
+<nav class="flex flex-col gap-3">
+<a class="bg-secondary-container text-on-secondary-container rounded-full mx-6 px-5 pl-8 py-4 font-semibold flex items-center gap-4 active:scale-98 transition-all" href="#software">
+<span class="material-symbols-outlined">code</span> Software
+            </a>
+<a class="text-on-surface-variant hover:bg-surface-container-high rounded-full mx-6 px-5 pl-8 py-4 transition-all flex items-center gap-4" href="#design">
+<span class="material-symbols-outlined">palette</span> Webdesign
+            </a>
+<a class="text-on-surface-variant hover:bg-surface-container-high rounded-full mx-6 px-5 pl-8 py-4 transition-all flex items-center gap-4" href="#verse">
+<span class="material-symbols-outlined">auto_stories</span> Verše
+            </a>
+<a class="text-on-surface-variant hover:bg-surface-container-high rounded-full mx-6 px-5 pl-8 py-4 transition-all flex items-center gap-4" href="#dharma">
+<span class="material-symbols-outlined">brightness_7</span> Dharma
+            </a>
+</nav>
+<div class="mt-auto px-6 flex flex-col gap-6">
+    <a href="mailto:vlkrasny@gmail.com" aria-label="Pošlete e-mail Vláďovi" class="bg-primary text-on-primary font-bold py-5 rounded-full w-full flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-95 transition-all">
+        <span class="material-symbols-outlined">mail</span>
+        <span>E-mail</span>
+    </a>
+    <div class="flex justify-around py-6 border-t border-outline-variant/10">
     </div>
-    <a class="sideitem active" href="#top"><span>⌂</span><span>Domů</span></a>
-    <a class="sideitem" href="#analyza"><span>{ }</span><span>IT analýza</span></a>
-    <a class="sideitem" href="#poezie"><span>¶</span><span>Poezie</span></a>
-    <a class="sideitem" href="#praxe"><span>◉</span><span>Praxe</span></a>
-    <a class="sideitem" href="#tisk"><span>△</span><span>3D tisk</span></a>
-  </aside>
-
-  <main id="top">
-    <section class="section hero">
-      <div class="container hero__grid">
-        <div>
-          <div class="label reveal">[ IT · databáze · návrh řešení ]</div>
-          <h1 class="reveal delay-1">Přeměním složité požadavky na řešení, kterým rozumí vývojáři i zákazníci.</h1>
-          <p class="lead reveal delay-2">
-            Jsem Vladislav Krásný. Pracuji jako IT analytik a vývojář se zaměřením na databáze, SQL, integrační logiku a srozumitelný návrh řešení. Vedle práce píšu poezii, zajímám se o buddhismus diamantové cesty a rád převádím nápady do fyzické podoby pomocí 3D tisku.
-          </p>
-          <div class="actions reveal delay-3">
-            <a class="btn btn--primary" href="#analyza">Moje práce</a>
-            <a class="btn btn--secondary" href="#kontakt">Ozvat se</a>
-          </div>
-        </div>
-        <div class="portrait-card reveal delay-2" aria-label="Abstraktní geometrická ilustrace">
-          <div class="abstract">
-            <span class="orb one"></span>
-            <span class="orb two"></span>
-            <span class="orb three"></span>
-            <span class="stairs"></span>
-            <span class="filetag">Laborator.STL</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section surface-block" id="analyza">
-      <div class="container">
-        <div class="section-head">
-          <div>
-            <div class="label">IT analýza</div>
-            <h2>Digitální řemeslo</h2>
-          </div>
-          <p>Dobré řešení začíná dobrým zadáním. Pomáhám týmům ujasnit si, co vlastně chtějí – a pak to zapsat tak, aby to šlo skutečně realizovat.</p>
-        </div>
-
-        <div class="cards">
-          <article class="card card--wide">
-            <div class="card__meta">Analýza · návrh · dokumentace</div>
-            <h3>Vývojové analýzy a návrh řešení</h3>
-            <p class="muted">Rozložím požadavek na části: upřesním zadání, zmapuji dopady, pojmenuji rizika a navrhnu postup realizace včetně testování. Výstup je čitelný pro vývojáře, testery i zákazníka.</p>
-            <div class="chips">
-              <span class="chip">Procesy</span>
-              <span class="chip">Rizika</span>
-              <span class="chip">Dopady</span>
-              <span class="chip">Testování</span>
-            </div>
-          </article>
-
-          <article class="card card--side">
-            <div class="iconbox">DB</div>
-            <h3>SQL a databázová logika</h3>
-            <p class="muted">Stored procedury, datové kontroly, integrační dotazy. Píšu SQL tak, aby bylo čitelné nejen teď, ale i za rok, až se na to někdo podívá poprvé.</p>
-            <div class="chips">
-              <span class="chip">MS SQL</span>
-              <span class="chip">Oracle</span>
-              <span class="chip">Integrace</span>
-            </div>
-          </article>
-
-          <article class="card card--third">
-            <div class="card__meta">Systémy</div>
-            <h3>Integrace a datové toky</h3>
-            <p class="muted">Mapuju rozhraní, stavy, výjimky a datové toky mezi systémy. Zaměřuji se na konzistenci a předvídatelné chování – ne na to, aby to nějak „prošlo".</p>
-          </article>
-
-          <article class="card card--third">
-            <div class="card__meta">Komunikace</div>
-            <h3>Srozumitelný překlad techniky</h3>
-            <p class="muted">Technický detail umím popsat tak, aby mu rozuměl analytik, vývojář, tester i zákazník. Každý dostane verzi, která je pro něj užitečná.</p>
-          </article>
-
-          <article class="card card--third">
-            <div class="card__meta">Přístup</div>
-            <h3>Klidná přesnost</h3>
-            <p class="muted">Méně chaosu, více struktury. Raději jednu dobře položenou otázku než deset uspěchaných závěrů.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section poetry" id="poezie">
-      <div class="container">
-        <div class="label" style="justify-content:center">Poezie</div>
-        <h2>Mezi řádky ticha</h2>
-        <p class="lead" style="margin-left:auto;margin-right:auto">Vedle analytické práce píšu. Ne proto, abych byl „zajímavější" – ale protože mě to baví a jazyk mě fascinuje stejně jako databázové schéma. Každé slovo je na místě, nebo ne.</p>
-
-        <div class="poetry-grid">
-          <article class="poem">
-            Večer si tiše sundal svůj plášť,<br>
-            a svět se ztratil v měkkém stínu,<br>
-            já hledal klid — a našel zvlášť<br>
-            jen prázdno skryté v hloubi splínu.<br>
-            <br>
-            Ó prázdno, nejsi chladný hrob,<br>
-            jsi prostor, kde se dech můj ztiší,<br>
-            kde padá z duše všechen shon<br>
-            a srdce konečně se slyší.<br>
-            <small>Phowa a prázdnota</small>
-          </article>
-          <article class="poem">
-            Když večer ztichne v měkkém nachu,<br>
-            tvé hnědé oči vzplanou tmou,<br>
-            a já, jak blázen beze strachu,<br>
-            šel bych i nocí za tebou.<br>
-            <br>
-            Tvůj pohled — víno, med i zrada,<br>
-            v němž srdce ztrácí pevný řád;<br>
-            a kdyby smrt stála mi v zádech,<br>
-            chtěl bych tě ještě milovat.<br>
-            <small>Hnědé oči</small>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <section class="section dark-section" id="praxe">
-      <div class="container dark-grid">
-        <div>
-          <div class="label">Filosofie</div>
-          <h2>Jak přemýšlím o práci</h2>
-          <p class="muted">Buddhistická praxe mě nenaučila utíkat od problémů. Naučila mě na ně koukat klidněji. V IT to znamená: méně reaktivních závěrů, více dobře položených otázek. Méně chaosu v zadání, více prostoru pro dobré řešení.</p>
-          <div class="principles">
-            <div class="principle">
-              <strong>01 · Klid</strong>
-              <span>Ne každý problém potřebuje okamžitou odpověď. Někdy stačí počkat, než se situace vyjasní sama.</span>
-            </div>
-            <div class="principle">
-              <strong>02 · Odpovědnost</strong>
-              <span>Dobré řešení má technickou kvalitu i lidský dopad. Zajímá mě obojí.</span>
-            </div>
-          </div>
-        </div>
-        <div class="meditation-visual" aria-label="Abstraktní vizualizace meditace"></div>
-      </div>
-    </section>
-
-    <section class="section" id="tisk">
-      <div class="container">
-        <div class="section-head">
-          <div>
-            <div class="label">3D tisk</div>
-            <h2>Geometrie v prostoru</h2>
-          </div>
-          <p>3D tisk mě baví ze stejného důvodu jako analýza – začneš s nejasnou představou a skončíš s něčím hmatatelným. Cesta od nápadu k funkčnímu dílu vyžaduje plán, trpělivost a ochotu to znovu změřit.</p>
-        </div>
-
-        <div class="lab-grid">
-          <div class="feature-print">
-            <div class="print-caption">
-              <div class="card__meta">Projekt · prototyp · úpravy</div>
-              <h3>Od nápadu k funkčnímu dílu</h3>
-              <p class="muted">Modelování, kalibrace, volba materiálu, ladění první vrstvy a drobné konstrukční úpravy. Nejlepší výsledek vzniká spojením plánu a ochoty znovu měřit.</p>
-            </div>
-          </div>
-          <div class="mini-grid">
-            <article class="mini-card">
-              <div class="mini-visual"></div>
-              <div class="card__meta">Kalibrace</div>
-              <h3>První vrstva</h3>
-              <p class="muted">Správný z-offset, čistá podložka a klidné tempo rozhodují víc než magie.</p>
-            </article>
-            <article class="mini-card">
-              <div class="mini-visual"></div>
-              <div class="card__meta">Design</div>
-              <h3>Funkční modely</h3>
-              <p class="muted">Držáky, krytky, šablony a díly, které řeší konkrétní problém.</p>
-            </article>
-            <article class="mini-card">
-              <div class="mini-visual"></div>
-              <div class="card__meta">Materiály</div>
-              <h3>PLA a ladění</h3>
-              <p class="muted">Teplota, rychlost, chlazení a přilnavost bez zbytečné alchymie.</p>
-            </article>
-            <article class="mini-card">
-              <div class="mini-visual"></div>
-              <div class="card__meta">Proces</div>
-              <h3>Iterace</h3>
-              <p class="muted">Vytisknout, změřit, upravit. Tichá disciplína malých zlepšení.</p>
-            </article>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="section contact" id="kontakt">
-      <div class="container contact-grid">
-        <div>
-          <div class="label">Kontakt</div>
-          <h2>Chceš něco probrat?</h2>
-          <p class="lead">Máš projekt, u kterého nevíš, jak ho správně uchopit? Nebo potřebuješ analytika, který se v tom rychle zorientuje a nedělá z věcí větší drama, než musí? Napiš mi – rád si to s tebou projdu.</p>
-        </div>
-        <div class="contact-card">
-          <h3>Vladislav Krásný</h3>
-          <div class="contact-list">
-            <div>E-mail: <a href="mailto:vlkrasny@gmail.com">vlkrasny@gmail.com</a></div>
-            <div>Lokalita: Plzeň / Česká republika</div>
-            <div>Zaměření: IT analýza, SQL, databáze, návrh řešení</div>
-            <div>Volný čas: poezie, buddhismus, 3D tisk</div>
-          </div>
-          <div class="actions">
-            <a class="btn btn--primary" href="mailto:vlkrasny@gmail.com">Napsat e-mail</a>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="footer-inner">
-      <div><strong>Studio Krásný</strong> · osobní stránka</div>
-      <div>© 2026 · ❤️ by vlkrasny</div>
-    </div>
-  </footer>
-
-  <a class="fab" href="#kontakt" aria-label="Kontakt">✉</a>
-</body>
-</html>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="lg:ml-80 pt-32 px-container-mobile md:px-container-desktop pb-section-gap">
+<!-- Hero Section: The Welcome -->
+<section class="max-w-4xl mb-section-gap">
+<span class="inline-block bg-secondary-container text-on-secondary-container px-5 py-2 rounded-full font-label-mono text-label-mono mb-8 italic">Tashi Delek</span>
+<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-10 leading-tight">Vítejte v mém digitálním klášteře.</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl leading-relaxed">
+                Jsem Vláďa — vývojář, který staví digitální produkty s respektem k detailu, eleganci a smyslu. Snažím se spojit čistou logiku kódu s jasnou vizuální strukturou, a zároveň dát prostoru na obrazovce místo pro klid a soustředění. Mou inspirací je rovnováha mezi technologií, designem, veršem a dharmou.
+            </p>
+</section>
+<!-- Bento Grid: The Four Pillars -->
+<div class="bento-grid">
+<!-- Software (Code) - Large Card -->
+<div class="col-span-12 md:col-span-8 bg-surface-container-lowest rounded-xl p-12 soft-glow border border-outline-variant/20 group overflow-hidden relative" id="software">
+<div class="relative z-10">
+<span class="font-label-mono text-label-mono text-primary mb-6 block">ARCHITECTURE / LOGIC</span>
+<h3 class="font-headline-md text-headline-md text-primary mb-6">Software: Budování Smyslu</h3>
+<p class="text-body-md text-on-surface-variant mb-10 max-w-md">Vytvářím čisté, škálovatelné systémy postavené na principech funkcionální čistoty a estetické disciplíny.</p>
+<div class="flex gap-4 flex-wrap">
+<span class="px-5 py-2.5 bg-surface-container-high rounded-full text-sm font-medium">C#</span>
+<span class="px-5 py-2.5 bg-surface-container-high rounded-full text-sm font-medium">JavaScript</span>
+<span class="px-5 py-2.5 bg-surface-container-high rounded-full text-sm font-medium">SQL</span>
+</div>
+</div>
+<div class="absolute -right-10 -bottom-10 w-72 h-72 opacity-5 group-hover:opacity-10 transition-opacity">
+<span class="material-symbols-outlined text-[200px] text-primary">code</span>
+</div>
+</div>
+<!-- Dharma (Meditation) - Vertical Card -->
+<div class="col-span-12 md:col-span-4 bg-primary-container text-on-primary-container rounded-xl p-10 soft-glow relative overflow-hidden flex flex-col justify-end" id="dharma">
+<div class="absolute top-10 left-10">
+<span class="material-symbols-outlined text-5xl opacity-50" style='font-variation-settings: "FILL" 1;'>brightness_7</span>
+</div>
+<div class="relative z-10">
+<h3 class="font-headline-md text-headline-sm mb-4">Cesta Dharmy</h3>
+<p class="text-body-md opacity-90 mb-8">Tibetský buddhismus jako kotva v bouři moderního světa.</p>
+<a class="inline-flex items-center gap-3 font-bold hover:underline" href="https://bdc.cz/buddhismus/buddha-a-jeho-uceni/">Vstoupit do ticha <span class="material-symbols-outlined">arrow_forward</span></a>
+</div>
+<div class="absolute inset-0 opacity-20 pointer-events-none">
+<svg height="100%" preserveaspectratio="none" viewbox="0 0 100 100" width="100%" xmlns="http://www.w3.org/2000/svg">
+<circle cx="50" cy="50" fill="none" r="45" stroke="currentColor" stroke-width="0.5"></circle>
+<circle cx="50" cy="50" fill="none" r="35" stroke="currentColor" stroke-width="0.5"></circle>
+<circle cx="50" cy="50" fill="none" r="25" stroke="currentColor" stroke-width="0.5"></circle>
+</svg>
+</div>
+</div>
+<!-- Webdesign (NEW SECTION) -->
+<div class="col-span-12 bg-secondary-fixed text-on-secondary-fixed-variant rounded-xl p-12 soft-glow border border-outline-variant/20 flex flex-col md:flex-row gap-12 items-center" id="design">
+<div class="flex-1 space-y-8">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-3xl">design_services</span>
+<span class="font-label-mono text-label-mono">WEBDESIGN</span>
+</div>
+<h2 class="font-display-lg text-headline-md leading-tight">Digitální prostory s úmyslem</h2>
+<p class="text-body-lg max-w-xl">
+            Věřím, že web by neměl být jen hlukem informací, ale klidným místem pro interakci. Navrhuji rozhraní, která respektují pozornost uživatele a přinášejí jasnost skrze prostor, typografii a tichou hierarchii. Každý pixel má svůj karmický důvod.
+        </p>
+<button class="bg-primary text-on-primary px-8 py-4 rounded-full font-bold hover:scale-105 transition-all self-start">Poznat mou metodu</button>
+</div>
+<div class="w-full md:w-1/3 aspect-[4/3] bg-surface/30 rounded-lg p-6 flex flex-col gap-4 border border-on-secondary-fixed-variant/10">
+<div class="h-4 w-3/4 bg-on-secondary-fixed-variant/20 rounded-full"></div>
+<div class="h-32 w-full bg-on-secondary-fixed-variant/10 rounded-lg"></div>
+<div class="grid grid-cols-3 gap-2">
+<div class="h-12 bg-on-secondary-fixed-variant/15 rounded-md"></div>
+<div class="h-12 bg-on-secondary-fixed-variant/15 rounded-md"></div>
+<div class="h-12 bg-on-secondary-fixed-variant/15 rounded-md"></div>
+</div>
+</div>
+</div>
+<!-- Verse (Poetry) - Square Card -->
+<div class="col-span-12 md:col-span-5 bg-surface-container rounded-xl p-10 soft-glow border border-outline-variant/20 flex flex-col" id="verse">
+<div class="flex justify-between items-start mb-16">
+<span class="material-symbols-outlined text-secondary text-4xl">auto_stories</span>
+<span class="font-label-mono text-label-mono text-secondary">Poezie</span>
+</div>
+<blockquote class="italic text-body-lg text-on-surface-variant mb-10 border-l-4 border-secondary-fixed-dim pl-8 leading-relaxed">
+                    V prázdnotě bliká tichý kód,<br/>
+                    bez chyb, bez cest a bez náhod.<br/>
+                    Na řádku nula spí můj svět,<br/>
+                    čeká, až začne algoritmus kvést.<br/>
+                    <br/>
+                    Kde není vstup a není výstup,<br/>
+                    tam mizí hluk i starý přístup.<br/>
+                    A v tichu dat, kde čas se ztrácí,<br/>
+                    software sní — a znovu se vrací.<br/>
+                </blockquote>
+<p class="text-sm mt-auto text-on-surface-variant/60">— Prázdnota</p>
+</div>
+<!-- Lab (3D Printing) - Horizontal Card -->
+<div class="col-span-12 md:col-span-7 bg-surface-bright rounded-xl p-10 soft-glow border border-outline-variant/20 flex flex-col md:flex-row gap-10 items-center" id="lab">
+<div class="flex-1">
+<h3 class="font-headline-md text-headline-sm text-primary mb-6">Laboratoř: 3D Prostor</h3>
+<p class="text-body-md text-on-surface-variant mb-8">Pomocí 3D tisku převádím nápady do hmatatelné podoby. Zkoumám tvary, materiály a generativní design a rád propojuji moderní technologii s inspirací tibetskou symbolikou.</p>
+<button class="bg-secondary-container text-on-secondary-container px-8 py-4 rounded-full font-bold hover:scale-105 transition-all">Prohlédnout modely</button>
+</div>
+<div class="w-full md:w-56 h-56 rounded-lg overflow-hidden shrink-0">
+<img alt="3D Print" class="w-full h-full object-cover" data-alt="A highly detailed 3D printed geometric lotus flower in a deep crimson filament. The print is resting on a clean, light-colored wooden desk next to a modern drafting pencil. Soft afternoon sunlight highlights the intricate layer lines and organic curves of the model. The atmosphere is studio-like and professional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAOkBHC_OOzR2kz9ptFPMFuJHGVO7MkU1yWFE-xJwNIWmjCZlXa4FZqiPw64UOxmXDhAlSCUq2RdBb2r7ROuCv3NTi63zO1F5qD44ynRmzQ33JfO21I2DVzQZK3jZG7a84vBlLzAcFCHLsnQC2VT2P2iYdnL_o67wKNAf1f2YIbxBGU3PPtKaaJfol-3cXdqPB-tF-tdFRQ9G_n_5oAJSjs3a2sH-oISKF5qqN5mGFxR05XhEgsNk3cFrMLapXczYu5y7iycKtHLM"/>
+</div>
+</div>
+</div>
+<!-- Personal Section: The Human Behind the Screen -->
+<section class="mt-section-gap py-24 bg-surface-container-low rounded-xl px-16 flex flex-col md:flex-row gap-20 items-center">
+<div class="flex-1 space-y-10">
+<h2 class="font-display-lg text-headline-md text-primary">Mimo svět jedniček a nul...</h2>
+<p class="text-body-lg text-on-surface-variant leading-relaxed">
+                    Najdete mě pravděpodobně v horách s batohem na zádech, nebo doma při rituální přípravě čaje. Věřím, že technologie by nás neměla izolovat, ale osvobozovat pro věci, na kterých skutečně záleží. Moje práce je odrazem mé snahy o rovnováhu mezi ambicí a vnitřním klidem.
+                </p>
+<div class="grid grid-cols-2 gap-8">
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-2xl" style='font-variation-settings: "FILL" 1;'>self_improvement</span>
+<span class="font-medium text-lg">Každodenní praxe</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-2xl" style='font-variation-settings: "FILL" 1;'>hiking</span>
+<span class="font-medium text-lg">Hory a cesty</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-2xl" style='font-variation-settings: "FILL" 1;'>coffee_maker</span>
+<span class="font-medium text-lg">Čajový nadšenec</span>
+</div>
+<div class="flex items-center gap-4">
+<span class="material-symbols-outlined text-primary text-2xl" style='font-variation-settings: "FILL" 1;'>family_restroom</span>
+<span class="font-medium text-lg">Rodinný život</span>
+</div>
+</div>
+</div>
+<div class="w-full md:w-2/5 aspect-square rounded-xl overflow-hidden relative rotate-3 hover:rotate-0 transition-transform duration-700 shadow-2xl">
+<img alt="Mountain Meditation" class="w-full h-full object-cover" data-alt="A tranquil scene of a person meditating on a mountain ridge during a soft blue hour. The silhouette is framed against a distant, snow-capped range under a vast, indigo sky. The lighting is ethereal and cool, with a single warm lantern light in the corner of the frame. It conveys a deep sense of peace, spaciousness, and spiritual connection." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0dI0dwhnka7fQ7L6Xb55silVwYaTpU0IHm54eyouRij_vFhYDTks4y7zk31yumTmPsmKdSx3mCV0SR-gGKAaBT9UdSqDsmTwS7n3v2LsM4ThD41YMTMW5g_N5qJJGxTcqHxgc57TJnJyDrXEBah6eDqmaeU70xL7Kr2Vlhjpg8yWk1sefZUK5NWXRJvY8rr9zLZdYSOw50H-jd9J4z37sQLrP3YcuWicg30-NfDaFXusSLSht5WBDWl6OuJ9P4ozYC19nd-bwSGk"/>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-20 px-container-mobile md:px-container-desktop flex flex-col md:flex-row justify-between items-center gap-gutter bg-surface-container-highest rounded-t-lg">
+<div class="flex flex-col gap-6 items-center md:items-start">
+<div class="font-display-lg text-headline-sm text-primary"></div>
+<p class="font-label-mono text-label-mono text-on-surface-variant tracking-widest opacity-60 text-xs"></p>
+</div>
+<div class="flex gap-10">
+<a class="font-label-mono text-label-mono text-on-surface-variant hover:text-primary transition-colors opacity-80 hover:opacity-100" href="https://github.com/vlkrasny">GitHub</a>
+<a class="font-label-mono text-label-mono text-on-surface-variant hover:text-primary transition-colors opacity-80 hover:opacity-100" href="https://www.linkedin.com/in/vlkrasny/">LinkedIn</a>
+</div>
+</footer>
+<script>
+    (function(){
+        const toggle = document.getElementById('mobile-menu-toggle');
+        const nav = document.getElementById('mobile-nav');
+        if(!toggle || !nav) return;
+        toggle.addEventListener('click', function(){
+            nav.classList.toggle('hidden');
+        });
+    })();
+</script>
+</body></html>
