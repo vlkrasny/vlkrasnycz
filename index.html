@@ -1,353 +1,1690 @@
-<!DOCTYPE html>
-<html class="light" lang="cs">
-    <head>
-        <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
-        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-        <link rel="shortcut icon" href="/favicon.ico" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-        <link rel="manifest" href="/site.webmanifest" />
-        <meta charset="utf-8"/>
-        <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-        <meta name="description" content="Vítejte v digitálním klášteře Vládi, kde se technologie setkává s dharmou. Jsem vývojář, designér a básník, který staví digitální produkty s respektem k detailu, eleganci a smyslu. Prozkoumejte mé projekty v softwaru, webdesignu, poezii a cestě dharmy." />     
-        <meta name="keywords" content="software, webdesign, verše, dharma, vývojář, designér, básník, digitální klášter" />  
-        <title>Vítejte v mém digitálním klášteře</title>
-        <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-        <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&amp;family=JetBrains+Mono:wght@100..800&amp;family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-        <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-        <script id="tailwind-config">
-                tailwind.config = {
-                darkMode: "class",
-                theme: {
-                    extend: {
-                    "colors": {
-                            "on-primary-fixed-variant": "#910616",
-                            "on-error-container": "#93000a",
-                            "surface-container-low": "#f5f3ee",
-                            "on-secondary-fixed-variant": "#5d4200",
-                            "surface-container-high": "#eae8e3",
-                            "on-tertiary-fixed": "#1e1b18",
-                            "tertiary-fixed-dim": "#cdc5c0",
-                            "inverse-surface": "#30312e",
-                            "outline": "#8e706e",
-                            "primary": "#840011",
-                            "on-primary-fixed": "#410004",
-                            "secondary-fixed": "#ffdea3",
-                            "on-error": "#ffffff",
-                            "surface-tint": "#b4262a",
-                            "secondary-fixed-dim": "#fdbc13",
-                            "primary-container": "#a81d23",
-                            "error": "#ba1a1a",
-                            "on-secondary": "#ffffff",
-                            "on-tertiary": "#ffffff",
-                            "tertiary-fixed": "#e9e1dc",
-                            "surface-bright": "#fbf9f4",
-                            "secondary": "#7a5900",
-                            "inverse-on-surface": "#f2f1ec",
-                            "on-background": "#1b1c19",
-                            "inverse-primary": "#ffb3ae",
-                            "on-secondary-fixed": "#261900",
-                            "outline-variant": "#e2bebb",
-                            "on-surface": "#1b1c19",
-                            "secondary-container": "#fdbc13",
-                            "error-container": "#ffdad6",
-                            "background": "#fbf9f4",
-                            "on-primary-container": "#ffbbb6",
-                            "surface-container-lowest": "#ffffff",
-                            "surface-container": "#f0eee9",
-                            "surface": "#fbf9f4",
-                            "on-primary": "#ffffff",
-                            "primary-fixed": "#ffdad7",
-                            "tertiary": "#433e3b",
-                            "on-tertiary-fixed-variant": "#4b4642",
-                            "tertiary-container": "#5a5551",
-                            "surface-variant": "#e4e2dd",
-                            "surface-dim": "#dbdad5",
-                            "on-surface-variant": "#5a403e",
-                            "primary-fixed-dim": "#ffb3ae",
-                            "on-tertiary-container": "#d2cac5",
-                            "on-secondary-container": "#6b4d00",
-                            "surface-container-highest": "#e4e2dd"
-                    },
-                    "borderRadius": {
-                            "DEFAULT": "1rem",
-                            "lg": "2rem",
-                            "xl": "3rem",
-                            "full": "9999px"
-                    },
-                    "spacing": {
-                            "unit": "8px",
-                            "section-gap": "12rem",
-                            "gutter": "3rem",
-                            "container-padding-desktop": "5rem",
-                            "container-padding-mobile": "2rem"
-                    },
-                    "fontFamily": {
-                            "display-lg": ["Space Grotesk"],
-                            "display-lg-mobile": ["Space Grotesk"],
-                            "body-md": ["Plus Jakarta Sans"],
-                            "headline-sm": ["Space Grotesk"],
-                            "headline-md": ["Space Grotesk"],
-                            "body-lg": ["Plus Jakarta Sans"],
-                            "label-mono": ["JetBrains Mono"]
-                    }
-                    },
-                },
-                }
-            </script>
-        <style>
-                .material-symbols-outlined {
-                    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-                }
-                body {
-                    background-color: #fbf9f4;
-                    scroll-behavior: smooth;
-                }
-                .bento-grid {
-                    display: grid;
-                    grid-template-columns: 1fr;
-                    gap: 1.5rem;
-                }
-                @media (min-width: 768px) {
-                    .bento-grid {
-                        grid-template-columns: repeat(12, 1fr);
-                        gap: 3rem;
-                    }
-                }
-                /* Make images fluid and predictable */
-                img {
-                    max-width: 100%;
-                    height: auto;
-                    display: block;
-                }
-                .soft-glow {
-                    box-shadow: 0 10px 30px -10px rgba(168, 29, 35, 0.08);
-                }
-                .soft-glow:hover {
-                    box-shadow: 0 20px 40px -15px rgba(168, 29, 35, 0.12);
-                }
-            </style>
-    </head>
-<body class="font-body-md text-on-surface">
-<!-- TopAppBar -->
-<header class="fixed top-0 left-0 w-full z-40 flex justify-between items-center px-container-mobile md:px-container-desktop h-20 bg-surface/80 dark:bg-surface/80 backdrop-blur-md">
-<nav class="hidden md:flex gap-10 items-center">
-<a class="text-primary dark:text-primary-fixed font-bold border-b-2 border-secondary font-body-md py-1" href="#software">Software</a>
-<a class="text-on-surface-variant dark:text-on-surface-variant/80 font-body-md hover:text-primary transition-colors duration-300" href="#design">Webdesign</a>
-<a class="text-on-surface-variant dark:text-on-surface-variant/80 font-body-md hover:text-primary transition-colors duration-300" href="#verse">Verse</a>
-</nav>
-</div>
-<div class="flex gap-6 items-center">
-    <button id="mobile-menu-toggle" class="material-symbols-outlined text-primary md:hidden scale-100 active:scale-90 transition-transform">menu</button>
-</div>
-</header>
-<!-- Mobile navigation (toggle) -->
-<nav id="mobile-nav" class="md:hidden hidden fixed top-20 left-0 w-full bg-surface/95 backdrop-blur-md z-40 p-6">
-    <div class="flex flex-col gap-4">
-        <a class="font-body-md text-primary font-bold" href="#software">Software</a>
-        <a class="font-body-md text-on-surface-variant" href="#design">Webdesign</a>
-        <a class="font-body-md text-on-surface-variant" href="#verse">Verše</a>
-        <a class="font-body-md text-on-surface-variant" href="#dharma">Dharma</a>
-    </div>
-</nav>
-<!-- SideNavBar (Desktop Only) -->
-<aside class="hidden lg:flex flex-col fixed left-0 top-0 h-full py-12 gap-unit bg-surface-container-low h-screen w-80 rounded-r-xl border-r border-outline-variant/30 shadow-sm z-50">
-<div class="px-10 mb-12 flex flex-col items-center">
-<div class="w-28 h-28 rounded-full overflow-hidden mb-6 border-4 border-secondary-container">
-<img alt="Logo" class="w-full h-full object-cover" src="logo.png"/>
-</div>
-<h2 class="font-display-lg text-headline-sm text-primary">VLKRASNY </h2>
-<p class="font-body-md text-on-surface-variant text-sm">
-    <!-- Desktop: inline list with separators -->
-    <span class="hidden sm:inline">Software</span>
-    <span class="hidden sm:inline">&nbsp;•&nbsp;</span>
-    <span class="hidden sm:inline">Webdesign</span>
-    <span class="hidden sm:inline">&nbsp;•&nbsp;</span>
-    <span class="hidden sm:inline">Verše</span>
-    <span class="hidden sm:inline">&nbsp;•&nbsp;</span>
-    <span class="hidden sm:inline">Dharma</span>
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-TWSSBGK5');</script>
+<!-- End Google Tag Manager -->
 
-    <!-- Mobile: stacked pills -->
-    <span class="flex sm:hidden gap-2 flex-wrap">
-        <span class="px-3 py-1 bg-surface-container-high rounded-full text-xs">Software</span>
-        <span class="px-3 py-1 bg-surface-container-high rounded-full text-xs">Webdesign</span>
-        <span class="px-3 py-1 bg-surface-container-high rounded-full text-xs">Verše</span>
-        <span class="px-3 py-1 bg-surface-container-high rounded-full text-xs">Dharma</span>
-    </span>
-</p>
-</div>
-<nav class="flex flex-col gap-3">
-<a class="bg-secondary-container text-on-secondary-container rounded-full mx-6 px-5 pl-8 py-4 font-semibold flex items-center gap-4 active:scale-98 transition-all" href="#software">
-<span class="material-symbols-outlined">code</span> Software
+  <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <title>Kytary Štekl | Servis, opravy a prodej hudebních nástrojů v Plzni</title>
+  <meta name="description" content="Kytary Štekl v Plzni nabízí opravy a servis kytar, seřízení dohmatu, výměnu strun, prodej kytar, zakázkovou výrobu a opravy hudebních nástrojů.">
+  <meta name="keywords" content="opravy kytar Plzeň, servis kytar Plzeň, prodej kytar Plzeň, Kytary Štekl, oprava hudebních nástrojů Plzeň, servis hudebních nástrojů Plzeň, zakázková výroba kytar, seřízení kytary, výměna strun, oprava smyčcových nástrojů">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#10100f;
+      --bg-2:#161514;
+      --panel:#1d1b19;
+      --panel-2:#24211e;
+      --text:#f3eee6;
+      --muted:#c9bca9;
+      --soft:#938773;
+      --line:#3b3329;
+      --gold:#e4bd4f;
+      --gold-2:#c9952d;
+      --wood:#7a3f1d;
+      --mahogany:#552815;
+      --green:#6d7a58;
+      --danger:#d36b47;
+      --shadow:0 24px 80px rgba(0,0,0,.45);
+      --radius:22px;
+      --container:1180px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Manrope,system-ui,-apple-system,Segoe UI,sans-serif;
+      background:
+        radial-gradient(circle at 18% 8%, rgba(228,189,79,.12), transparent 28rem),
+        radial-gradient(circle at 90% 18%, rgba(122,63,29,.16), transparent 30rem),
+        linear-gradient(180deg,#0d0d0c 0%, var(--bg) 42%, #0b0b0a 100%);
+      color:var(--text);
+      min-height:100vh;
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .container{width:min(var(--container), calc(100% - 40px));margin-inline:auto}
+    .eyebrow{
+      color:var(--gold);font-size:.76rem;text-transform:uppercase;letter-spacing:.16em;font-weight:800;
+    }
+    .serif{font-family:"Playfair Display",Georgia,serif}
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:.65rem;
+      min-height:48px;padding:0 1.15rem;border-radius:999px;border:1px solid transparent;
+      font-weight:800;transition:.25s ease;cursor:pointer;white-space:nowrap;
+    }
+    .btn-primary{background:var(--gold);color:#261b00;box-shadow:0 14px 36px rgba(228,189,79,.18)}
+    .btn-primary:hover{transform:translateY(-2px);background:#f1cb62}
+    .btn-ghost{border-color:rgba(228,189,79,.45);color:var(--gold);background:rgba(228,189,79,.04)}
+    .btn-ghost:hover{background:rgba(228,189,79,.12);transform:translateY(-2px)}
+
+    header{
+      position:sticky;top:0;z-index:50;background:rgba(13,13,12,.82);backdrop-filter:blur(18px);
+      border-bottom:1px solid rgba(228,189,79,.12);
+    }
+    .nav{height:78px;display:flex;align-items:center;justify-content:space-between;gap:1.25rem}
+    .brand{display:flex;align-items:center;gap:.85rem;min-width:max-content}
+    .mark{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--gold),var(--wood));display:grid;place-items:center;color:#120d06;font-weight:900;box-shadow:0 8px 24px rgba(228,189,79,.17)}
+    .brand strong{font-family:"Playfair Display",Georgia,serif;font-size:1.35rem;line-height:1;color:var(--gold)}
+    .brand span{display:block;color:var(--muted);font-size:.72rem;margin-top:.2rem;letter-spacing:.08em;text-transform:uppercase}
+    .links{display:flex;align-items:center;gap:1.35rem;color:var(--muted);font-size:.94rem}
+    .links a{position:relative;transition:.2s ease}
+    .links a:hover{color:var(--gold)}
+    .links a::after{content:"";position:absolute;left:0;right:0;bottom:-10px;height:2px;background:var(--gold);transform:scaleX(0);transition:.2s ease;transform-origin:left}
+    .links a:hover::after{transform:scaleX(1)}
+    .menu-toggle{display:none;background:transparent;border:1px solid var(--line);color:var(--text);border-radius:12px;padding:.7rem}
+
+    .hero{padding:86px 0 64px}
+    .hero-grid{display:grid;grid-template-columns:1.06fr .94fr;gap:48px;align-items:center}
+    h1{font-family:"Playfair Display",Georgia,serif;font-size:clamp(2.7rem,7vw,6.2rem);line-height:.98;margin:.7rem 0 1.2rem;letter-spacing:-.05em}
+    .lead{color:var(--muted);font-size:clamp(1.05rem,1.7vw,1.26rem);line-height:1.75;max-width:670px}
+    .hero-actions{display:flex;gap:1rem;flex-wrap:wrap;margin-top:2rem}
+    .trust{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:2.5rem;max-width:720px}
+    .trust-card{background:rgba(29,27,25,.74);border:1px solid rgba(228,189,79,.12);border-radius:18px;padding:1rem;box-shadow:0 14px 42px rgba(0,0,0,.22)}
+    .trust-card b{display:block;font-size:1.35rem;color:var(--gold);font-family:"Playfair Display",Georgia,serif}
+    .trust-card span{color:var(--muted);font-size:.9rem}
+    .hero-visual{position:relative;min-height:560px}
+    .photo-stack{position:absolute;inset:0;border-radius:var(--radius);overflow:hidden;background:linear-gradient(135deg,#2a1710,#0d0d0c);box-shadow:var(--shadow);border:1px solid rgba(228,189,79,.16)}
+    .photo-stack::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.04),rgba(0,0,0,.78));z-index:1}
+    .photo-stack img{width:100%;height:100%;object-fit:cover;filter:saturate(.9) contrast(1.07)}
+    .floating-card{position:absolute;z-index:2;left:-28px;bottom:36px;width:min(330px,80%);background:rgba(24,22,20,.88);backdrop-filter:blur(14px);border:1px solid rgba(228,189,79,.18);border-radius:20px;padding:1.2rem;box-shadow:var(--shadow)}
+    .floating-card h3{margin:.3rem 0 .55rem;font-family:"Playfair Display",Georgia,serif;font-size:1.45rem}
+    .floating-card p{margin:0;color:var(--muted);line-height:1.6;font-size:.96rem}
+    .badge{position:absolute;right:24px;top:24px;z-index:2;background:var(--gold);color:#201600;border-radius:999px;padding:.6rem 1rem;font-weight:900;font-size:.82rem;letter-spacing:.06em;text-transform:uppercase}
+
+    section{padding:72px 0}
+    .section-head{display:flex;align-items:end;justify-content:space-between;gap:2rem;margin-bottom:2rem}
+    h2{font-family:"Playfair Display",Georgia,serif;font-size:clamp(2.1rem,4vw,3.8rem);line-height:1.05;margin:.35rem 0 0;letter-spacing:-.035em}
+    .section-head p{color:var(--muted);line-height:1.7;max-width:470px;margin:0}
+    .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+    .card{background:linear-gradient(180deg,rgba(36,33,30,.98),rgba(26,24,22,.96));border:1px solid rgba(228,189,79,.11);border-radius:var(--radius);padding:1.45rem;box-shadow:0 18px 60px rgba(0,0,0,.28);position:relative;overflow:hidden}
+    .card::after{content:"";position:absolute;right:-80px;top:-80px;width:180px;height:180px;border-radius:50%;background:rgba(228,189,79,.08)}
+    .icon{width:48px;height:48px;border-radius:16px;background:rgba(228,189,79,.11);display:grid;place-items:center;color:var(--gold);font-size:1.4rem;margin-bottom:1rem}
+    .card h3{font-family:"Playfair Display",Georgia,serif;font-size:1.55rem;margin:0 0 .7rem}
+    .card p{color:var(--muted);line-height:1.7;margin:0}
+    .tags{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1rem}
+    .tag{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;color:#f6e2c7;background:rgba(122,63,29,.38);border:1px solid rgba(228,189,79,.12);border-radius:999px;padding:.42rem .62rem;font-weight:800}
+
+    .workshop{display:grid;grid-template-columns:.88fr 1.12fr;gap:28px;align-items:stretch}
+    .workshop .image{border-radius:var(--radius);overflow:hidden;min-height:430px;border:1px solid rgba(228,189,79,.14);box-shadow:var(--shadow)}
+    .workshop .image img{height:100%;width:100%;object-fit:cover}
+    .steps{display:grid;gap:14px}
+    .step{display:grid;grid-template-columns:54px 1fr;gap:16px;align-items:start;background:rgba(29,27,25,.78);border:1px solid rgba(228,189,79,.11);border-radius:18px;padding:1.05rem}
+    .num{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--gold),var(--wood));color:#1b1105;display:grid;place-items:center;font-weight:900}
+    .step h3{margin:0 0 .25rem;font-size:1.05rem}
+    .step p{margin:0;color:var(--muted);line-height:1.6}
+
+    .price-wrap{background:linear-gradient(135deg,rgba(85,40,21,.32),rgba(22,21,20,.9));border:1px solid rgba(228,189,79,.14);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+    .price-grid{display:grid;grid-template-columns:1fr 1fr}
+    .price-item{display:flex;justify-content:space-between;gap:1rem;padding:1.05rem 1.25rem;border-bottom:1px solid rgba(228,189,79,.1);border-right:1px solid rgba(228,189,79,.1)}
+    .price-item:nth-child(2n){border-right:0}
+    .price-item span{color:var(--muted)}
+    .price-item strong{color:var(--gold);white-space:nowrap}
+    .note{padding:1.1rem 1.25rem;color:var(--muted);font-size:.95rem;background:rgba(0,0,0,.18)}
+
+    .contact{display:grid;grid-template-columns:.9fr 1.1fr;gap:28px}
+    .contact-card{background:linear-gradient(180deg,rgba(36,33,30,.96),rgba(17,16,15,.96));border:1px solid rgba(228,189,79,.14);border-radius:var(--radius);padding:1.6rem;box-shadow:var(--shadow)}
+    .contact-list{display:grid;gap:1rem;margin:1.25rem 0 0}
+    .contact-row{display:flex;gap:1rem;align-items:flex-start;padding:1rem;border:1px solid rgba(228,189,79,.1);border-radius:16px;background:rgba(255,255,255,.02)}
+    .contact-row b{display:block;margin-bottom:.15rem}
+    .contact-row span,.contact-row a{color:var(--muted)}
+    form{display:grid;gap:1rem}
+    label{display:grid;gap:.45rem;color:var(--muted);font-weight:700;font-size:.9rem}
+    input,textarea,select{width:100%;background:#0b0b0a;border:1px solid var(--line);border-radius:14px;color:var(--text);padding:.95rem 1rem;font:inherit;outline:none;transition:.2s ease}
+    textarea{min-height:135px;resize:vertical}
+    input:focus,textarea:focus,select:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(228,189,79,.1)}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+
+    footer{padding:42px 0;border-top:1px solid rgba(228,189,79,.12);background:#0b0b0a;color:var(--muted)}
+    .foot{display:flex;justify-content:space-between;gap:2rem;align-items:center}
+    .foot strong{color:var(--gold);font-family:"Playfair Display",Georgia,serif;font-size:1.35rem}
+    .source{font-size:.8rem;color:var(--soft);margin-top:.65rem}
+
+
+
+    /* Jemné prémiové animace */
+    @keyframes stringPulse{
+      0%,100%{transform:scaleX(.82);opacity:.30;filter:blur(0)}
+      45%{transform:scaleX(1);opacity:.78;filter:blur(.2px)}
+      65%{transform:scaleX(.93);opacity:.48}
+    }
+    @keyframes noteFloat{
+      0%{transform:translateY(18px) rotate(-8deg);opacity:0}
+      18%{opacity:.9}
+      100%{transform:translateY(-105px) rotate(10deg);opacity:0}
+    }
+    @keyframes shimmer{
+      0%{transform:translateX(-120%) rotate(12deg)}
+      100%{transform:translateX(160%) rotate(12deg)}
+    }
+    @keyframes slowPan{
+      0%,100%{transform:scale(1.04) translate3d(0,0,0)}
+      50%{transform:scale(1.09) translate3d(-10px,8px,0)}
+    }
+    .photo-stack img{animation:slowPan 16s ease-in-out infinite;transform-origin:center}
+    .photo-stack::after{
+      content:"";position:absolute;inset:-20% 45% -20% -35%;z-index:3;
+      background:linear-gradient(90deg,transparent,rgba(255,226,150,.16),transparent);
+      animation:shimmer 7s ease-in-out infinite;pointer-events:none;
+    }
+    .string-animation{position:absolute;z-index:4;left:8%;right:8%;top:17%;height:54%;pointer-events:none;opacity:.95}
+    .string-animation span{
+      position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(228,189,79,.75),rgba(255,245,210,.95),rgba(228,189,79,.55),transparent);
+      transform-origin:center;animation:stringPulse 2.9s ease-in-out infinite;box-shadow:0 0 16px rgba(228,189,79,.18)
+    }
+    .string-animation span:nth-child(1){top:9%;animation-delay:0s}
+    .string-animation span:nth-child(2){top:24%;animation-delay:.18s}
+    .string-animation span:nth-child(3){top:39%;animation-delay:.36s}
+    .string-animation span:nth-child(4){top:54%;animation-delay:.54s}
+    .string-animation span:nth-child(5){top:69%;animation-delay:.72s}
+    .string-animation span:nth-child(6){top:84%;animation-delay:.9s}
+    .music-notes{position:absolute;z-index:5;inset:0;pointer-events:none;overflow:hidden;border-radius:var(--radius)}
+    .music-notes span{
+      position:absolute;bottom:12%;color:rgba(228,189,79,.72);font-family:"Playfair Display",Georgia,serif;font-size:clamp(1.15rem,2vw,2rem);
+      text-shadow:0 0 24px rgba(228,189,79,.22);animation:noteFloat 5.6s ease-in-out infinite;
+    }
+    .music-notes span:nth-child(1){left:18%;animation-delay:.2s}
+    .music-notes span:nth-child(2){left:49%;animation-delay:1.55s;font-size:1.45rem}
+    .music-notes span:nth-child(3){left:74%;animation-delay:3.05s}
+    .reveal{opacity:0;transform:translateY(24px);transition:opacity .75s ease, transform .75s ease}
+    .reveal.in-view{opacity:1;transform:translateY(0)}
+    .card.reveal:nth-child(2), .step.reveal:nth-child(2){transition-delay:.08s}
+    .card.reveal:nth-child(3), .step.reveal:nth-child(3){transition-delay:.16s}
+    .price-item.reveal:nth-child(2n){transition-delay:.05s}
+
+
+          html {
+            scroll-behavior: smooth;
+          }
+
+          body {
+            margin: 0;
+            font-family: Manrope, system-ui, -apple-system, Segoe UI, sans-serif;
+            background: radial-gradient(circle at 18% 8%, rgba(228, 189, 79, 0.12), transparent 28rem),
+              radial-gradient(circle at 90% 18%, rgba(122, 63, 29, 0.16), transparent 30rem),
+              linear-gradient(180deg, #0d0d0c 0%, var(--bg) 42%, #0b0b0a 100%);
+            color: var(--text);
+            min-height: 100vh;
+          }
+
+          a {
+            color: inherit;
+            text-decoration: none;
+          }
+
+          img {
+            max-width: 100%;
+            display: block;
+          }
+
+          .container {
+            width: min(var(--container), calc(100% - 40px));
+            margin-inline: auto;
+          }
+
+          .eyebrow {
+            color: var(--gold);
+            font-size: 0.76rem;
+            text-transform: uppercase;
+            letter-spacing: 0.16em;
+            font-weight: 800;
+          }
+
+          .serif {
+            font-family: "Playfair Display", Georgia, serif;
+          }
+
+          .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.65rem;
+            min-height: 48px;
+            padding: 0 1.15rem;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            font-weight: 800;
+            transition: 0.25s ease;
+            cursor: pointer;
+            white-space: nowrap;
+          }
+
+          .btn-primary {
+            background: var(--gold);
+            color: #261b00;
+            box-shadow: 0 14px 36px rgba(228, 189, 79, 0.18);
+          }
+
+          .btn-primary:hover {
+            transform: translateY(-2px);
+            background: #f1cb62;
+          }
+
+          .btn-ghost {
+            border-color: rgba(228, 189, 79, 0.45);
+            color: var(--gold);
+            background: rgba(228, 189, 79, 0.04);
+          }
+
+          .btn-ghost:hover {
+            background: rgba(228, 189, 79, 0.12);
+            transform: translateY(-2px);
+          }
+
+          header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            background: rgba(13, 13, 12, 0.82);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(228, 189, 79, 0.12);
+          }
+
+          .nav {
+            height: 78px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1.25rem;
+          }
+
+          .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            min-width: max-content;
+          }
+
+          .mark {
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--gold), var(--wood));
+            display: grid;
+            place-items: center;
+            color: #120d06;
+            font-weight: 900;
+            box-shadow: 0 8px 24px rgba(228, 189, 79, 0.17);
+          }
+
+          .brand strong {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 1.35rem;
+            line-height: 1;
+            color: var(--gold);
+          }
+
+          .brand span {
+            display: block;
+            color: var(--muted);
+            font-size: 0.72rem;
+            margin-top: 0.2rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+          }
+
+          .links {
+            display: flex;
+            align-items: center;
+            gap: 1.35rem;
+            color: var(--muted);
+            font-size: 0.94rem;
+          }
+
+          .links a {
+            position: relative;
+            transition: 0.2s ease;
+          }
+
+          .links a:hover {
+            color: var(--gold);
+          }
+
+          .links a::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: -10px;
+            height: 2px;
+            background: var(--gold);
+            transform: scaleX(0);
+            transition: 0.2s ease;
+            transform-origin: left;
+          }
+
+          .links a:hover::after {
+            transform: scaleX(1);
+          }
+
+          .menu-toggle {
+            display: none;
+            background: transparent;
+            border: 1px solid var(--line);
+            color: var(--text);
+            border-radius: 12px;
+            padding: 0.7rem;
+          }
+
+          .hero {
+            padding: 86px 0 64px;
+          }
+
+          .hero-grid {
+            display: grid;
+            grid-template-columns: 1.06fr 0.94fr;
+            gap: 48px;
+            align-items: center;
+          }
+
+          h1 {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: clamp(2.7rem, 7vw, 6.2rem);
+            line-height: 0.98;
+            margin: 0.7rem 0 1.2rem;
+            letter-spacing: -0.05em;
+          }
+
+          .lead {
+            color: var(--muted);
+            font-size: clamp(1.05rem, 1.7vw, 1.26rem);
+            line-height: 1.75;
+            max-width: 670px;
+          }
+
+          .hero-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+          }
+
+          .trust {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-top: 2.5rem;
+            max-width: 720px;
+          }
+
+          .trust-card {
+            background: rgba(29, 27, 25, 0.74);
+            border: 1px solid rgba(228, 189, 79, 0.12);
+            border-radius: 18px;
+            padding: 1rem;
+            box-shadow: 0 14px 42px rgba(0, 0, 0, 0.22);
+          }
+
+          .trust-card b {
+            display: block;
+            font-size: 1.35rem;
+            color: var(--gold);
+            font-family: "Playfair Display", Georgia, serif;
+          }
+
+          .trust-card span {
+            color: var(--muted);
+            font-size: 0.9rem;
+          }
+
+          .hero-visual {
+            position: relative;
+            min-height: 560px;
+          }
+
+          .photo-stack {
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: linear-gradient(135deg, #2a1710, #0d0d0c);
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(228, 189, 79, 0.16);
+          }
+
+          .photo-stack::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.04), rgba(0, 0, 0, 0.78));
+            z-index: 1;
+          }
+
+          .photo-stack img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: saturate(0.9) contrast(1.07);
+          }
+
+          .floating-card {
+            position: absolute;
+            z-index: 2;
+            left: -28px;
+            bottom: 36px;
+            width: min(330px, 80%);
+            background: rgba(24, 22, 20, 0.88);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(228, 189, 79, 0.18);
+            border-radius: 20px;
+            padding: 1.2rem;
+            box-shadow: var(--shadow);
+          }
+
+          .floating-card h3 {
+            margin: 0.3rem 0 0.55rem;
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 1.45rem;
+          }
+
+          .floating-card p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.6;
+            font-size: 0.96rem;
+          }
+
+          .badge {
+            position: absolute;
+            right: 24px;
+            top: 24px;
+            z-index: 2;
+            background: var(--gold);
+            color: #201600;
+            border-radius: 999px;
+            padding: 0.6rem 1rem;
+            font-weight: 900;
+            font-size: 0.82rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+          }
+
+          section {
+            padding: 72px 0;
+          }
+
+          .section-head {
+            display: flex;
+            align-items: end;
+            justify-content: space-between;
+            gap: 2rem;
+            margin-bottom: 2rem;
+          }
+
+          h2 {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: clamp(2.1rem, 4vw, 3.8rem);
+            line-height: 1.05;
+            margin: 0.35rem 0 0;
+            letter-spacing: -0.035em;
+          }
+
+          .section-head p {
+            color: var(--muted);
+            line-height: 1.7;
+            max-width: 470px;
+            margin: 0;
+          }
+
+          .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+          }
+
+          .card {
+            background: linear-gradient(180deg, rgba(36, 33, 30, 0.98), rgba(26, 24, 22, 0.96));
+            border: 1px solid rgba(228, 189, 79, 0.11);
+            border-radius: var(--radius);
+            padding: 1.45rem;
+            box-shadow: 0 18px 60px rgba(0, 0, 0, 0.28);
+            position: relative;
+            overflow: hidden;
+          }
+
+          .card::after {
+            content: "";
+            position: absolute;
+            right: -80px;
+            top: -80px;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: rgba(228, 189, 79, 0.08);
+          }
+
+          .icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            background: rgba(228, 189, 79, 0.11);
+            display: grid;
+            place-items: center;
+            color: var(--gold);
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+          }
+
+          .card h3 {
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 1.55rem;
+            margin: 0 0 0.7rem;
+          }
+
+          .card p {
+            color: var(--muted);
+            line-height: 1.7;
+            margin: 0;
+          }
+
+          .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+            margin-top: 1rem;
+          }
+
+          .tag {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #f6e2c7;
+            background: rgba(122, 63, 29, 0.38);
+            border: 1px solid rgba(228, 189, 79, 0.12);
+            border-radius: 999px;
+            padding: 0.42rem 0.62rem;
+            font-weight: 800;
+          }
+
+          .workshop {
+            display: grid;
+            grid-template-columns: 0.88fr 1.12fr;
+            gap: 28px;
+            align-items: stretch;
+          }
+
+          .workshop .image {
+            border-radius: var(--radius);
+            overflow: hidden;
+            min-height: 430px;
+            border: 1px solid rgba(228, 189, 79, 0.14);
+            box-shadow: var(--shadow);
+          }
+
+          .workshop .image img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+          }
+
+          .steps {
+            display: grid;
+            gap: 14px;
+          }
+
+          .step {
+            display: grid;
+            grid-template-columns: 54px 1fr;
+            gap: 16px;
+            align-items: start;
+            background: rgba(29, 27, 25, 0.78);
+            border: 1px solid rgba(228, 189, 79, 0.11);
+            border-radius: 18px;
+            padding: 1.05rem;
+          }
+
+          .num {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--gold), var(--wood));
+            color: #1b1105;
+            display: grid;
+            place-items: center;
+            font-weight: 900;
+          }
+
+          .step h3 {
+            margin: 0 0 0.25rem;
+            font-size: 1.05rem;
+          }
+
+          .step p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.6;
+          }
+
+          .price-wrap {
+            background: linear-gradient(135deg, rgba(85, 40, 21, 0.32), rgba(22, 21, 20, 0.9));
+            border: 1px solid rgba(228, 189, 79, 0.14);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+          }
+
+          .price-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+          }
+
+          .price-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1.05rem 1.25rem;
+            border-bottom: 1px solid rgba(228, 189, 79, 0.1);
+            border-right: 1px solid rgba(228, 189, 79, 0.1);
+          }
+
+          .price-item:nth-child(2n) {
+            border-right: 0;
+          }
+
+          .price-item span {
+            color: var(--muted);
+          }
+
+          .price-item strong {
+            color: var(--gold);
+            white-space: nowrap;
+          }
+
+          .note {
+            padding: 1.1rem 1.25rem;
+            color: var(--muted);
+            font-size: 0.95rem;
+            background: rgba(0, 0, 0, 0.18);
+          }
+
+          .contact {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 28px;
+          }
+
+          .contact-card {
+            background: linear-gradient(180deg, rgba(36, 33, 30, 0.96), rgba(17, 16, 15, 0.96));
+            border: 1px solid rgba(228, 189, 79, 0.14);
+            border-radius: var(--radius);
+            padding: 1.6rem;
+            box-shadow: var(--shadow);
+          }
+
+          .contact-list {
+            display: grid;
+            gap: 1rem;
+            margin: 1.25rem 0 0;
+          }
+
+          .contact-row {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            padding: 1rem;
+            border: 1px solid rgba(228, 189, 79, 0.1);
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.02);
+          }
+
+          .contact-row b {
+            display: block;
+            margin-bottom: 0.15rem;
+          }
+
+          .contact-row span,
+          .contact-row a {
+            color: var(--muted);
+          }
+
+          form {
+            display: grid;
+            gap: 1rem;
+          }
+
+          label {
+            display: grid;
+            gap: 0.45rem;
+            color: var(--muted);
+            font-weight: 700;
+            font-size: 0.9rem;
+          }
+
+          input,
+          textarea,
+          select {
+            width: 100%;
+            background: #0b0b0a;
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            color: var(--text);
+            padding: 0.95rem 1rem;
+            font: inherit;
+            outline: none;
+            transition: 0.2s ease;
+          }
+
+          textarea {
+            min-height: 135px;
+            resize: vertical;
+          }
+
+          input:focus,
+          textarea:focus,
+          select:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 4px rgba(228, 189, 79, 0.1);
+          }
+
+          .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+          }
+
+          footer {
+            padding: 42px 0;
+            border-top: 1px solid rgba(228, 189, 79, 0.12);
+            background: #0b0b0a;
+            color: var(--muted);
+          }
+
+          .foot {
+            display: flex;
+            justify-content: space-between;
+            gap: 2rem;
+            align-items: center;
+          }
+
+          .foot strong {
+            color: var(--gold);
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: 1.35rem;
+          }
+
+          .source {
+            font-size: 0.8rem;
+            color: var(--soft);
+            margin-top: 0.65rem;
+          }
+
+          /* Jemné prémiové animace */
+          @keyframes stringPulse {
+            0%, 100% {
+              transform: scaleX(0.82);
+              opacity: 0.3;
+              filter: blur(0);
+            }
+
+            45% {
+              transform: scaleX(1);
+              opacity: 0.78;
+              filter: blur(0.2px);
+            }
+
+            65% {
+              transform: scaleX(0.93);
+              opacity: 0.48;
+            }
+          }
+
+          @keyframes noteFloat {
+            0% {
+              transform: translateY(18px) rotate(-8deg);
+              opacity: 0;
+            }
+
+            18% {
+              opacity: 0.9;
+            }
+
+            100% {
+              transform: translateY(-105px) rotate(10deg);
+              opacity: 0;
+            }
+          }
+
+          @keyframes shimmer {
+            0% {
+              transform: translateX(-120%) rotate(12deg);
+            }
+
+            100% {
+              transform: translateX(160%) rotate(12deg);
+            }
+          }
+
+          @keyframes slowPan {
+            0%, 100% {
+              transform: scale(1.04) translate3d(0, 0, 0);
+            }
+
+            50% {
+              transform: scale(1.09) translate3d(-10px, 8px, 0);
+            }
+          }
+
+          .photo-stack img {
+            animation: slowPan 16s ease-in-out infinite;
+            transform-origin: center;
+          }
+
+          .photo-stack::after {
+            content: "";
+            position: absolute;
+            inset: -20% 45% -20% -35%;
+            z-index: 3;
+            background: linear-gradient(90deg, transparent, rgba(255, 226, 150, 0.16), transparent);
+            animation: shimmer 7s ease-in-out infinite;
+            pointer-events: none;
+          }
+
+          .string-animation {
+            position: absolute;
+            z-index: 4;
+            left: 8%;
+            right: 8%;
+            top: 17%;
+            height: 54%;
+            pointer-events: none;
+            opacity: 0.95;
+          }
+
+          .string-animation span {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(228, 189, 79, 0.75), rgba(255, 245, 210, 0.95), rgba(228, 189, 79, 0.55), transparent);
+            transform-origin: center;
+            animation: stringPulse 2.9s ease-in-out infinite;
+            box-shadow: 0 0 16px rgba(228, 189, 79, 0.18);
+          }
+
+          .string-animation span:nth-child(1) {
+            top: 9%;
+            animation-delay: 0s;
+          }
+
+          .string-animation span:nth-child(2) {
+            top: 24%;
+            animation-delay: 0.18s;
+          }
+
+          .string-animation span:nth-child(3) {
+            top: 39%;
+            animation-delay: 0.36s;
+          }
+
+          .string-animation span:nth-child(4) {
+            top: 54%;
+            animation-delay: 0.54s;
+          }
+
+          .string-animation span:nth-child(5) {
+            top: 69%;
+            animation-delay: 0.72s;
+          }
+
+          .string-animation span:nth-child(6) {
+            top: 84%;
+            animation-delay: 0.9s;
+          }
+
+          .music-notes {
+            position: absolute;
+            z-index: 5;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            border-radius: var(--radius);
+          }
+
+          .music-notes span {
+            position: absolute;
+            bottom: 12%;
+            color: rgba(228, 189, 79, 0.72);
+            font-family: "Playfair Display", Georgia, serif;
+            font-size: clamp(1.15rem, 2vw, 2rem);
+            text-shadow: 0 0 24px rgba(228, 189, 79, 0.22);
+            animation: noteFloat 5.6s ease-in-out infinite;
+          }
+
+          .music-notes span:nth-child(1) {
+            left: 18%;
+            animation-delay: 0.2s;
+          }
+
+          .music-notes span:nth-child(2) {
+            left: 49%;
+            animation-delay: 1.55s;
+            font-size: 1.45rem;
+          }
+
+          .music-notes span:nth-child(3) {
+            left: 74%;
+            animation-delay: 3.05s;
+          }
+
+          .reveal {
+            opacity: 0;
+            transform: translateY(24px);
+            transition: opacity 0.75s ease, transform 0.75s ease;
+          }
+
+          .reveal.in-view {
+            opacity: 1;
+            transform: translateY(0);
+          }
+
+          .card.reveal:nth-child(2),
+          .step.reveal:nth-child(2) {
+            transition-delay: 0.08s;
+          }
+
+          .card.reveal:nth-child(3),
+          .step.reveal:nth-child(3) {
+            transition-delay: 0.16s;
+          }
+
+          .price-item.reveal:nth-child(2n) {
+            transition-delay: 0.05s;
+          }
+
+          @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+              animation: none !important;
+              transition: none !important;
+              scroll-behavior: auto !important;
+            }
+
+            .reveal {
+              opacity: 1;
+              transform: none;
+            }
+          }
+
+          @media (max-width: 980px) {
+            .links {
+              display: none;
+              position: absolute;
+              left: 20px;
+              right: 20px;
+              top: 86px;
+              flex-direction: column;
+              align-items: flex-start;
+              background: rgba(21, 20, 18, 0.98);
+              border: 1px solid rgba(228, 189, 79, 0.16);
+              border-radius: 18px;
+              padding: 1rem;
+              box-shadow: var(--shadow);
+            }
+
+            .links.open {
+              display: flex;
+            }
+
+            .menu-toggle {
+              display: inline-grid;
+              place-items: center;
+            }
+
+            .nav .btn-primary {
+              display: none;
+            }
+
+            .hero-grid,
+            .workshop,
+            .contact {
+              grid-template-columns: 1fr;
+            }
+
+            .hero {
+              padding-top: 54px;
+            }
+
+            .hero-visual {
+              min-height: 430px;
+            }
+
+            .floating-card {
+              left: 18px;
+              bottom: 18px;
+            }
+
+            .cards {
+              grid-template-columns: 1fr 1fr;
+            }
+
+            .section-head {
+              display: block;
+            }
+
+            .section-head p {
+              margin-top: 1rem;
+            }
+          }
+
+          @media (max-width: 680px) {
+            .container {
+              width: min(100% - 28px, var(--container));
+            }
+
+            .nav {
+              height: 70px;
+            }
+
+            .brand strong {
+              font-size: 1.08rem;
+            }
+
+            .brand span {
+              font-size: 0.62rem;
+            }
+
+            .mark {
+              width: 38px;
+              height: 38px;
+              border-radius: 13px;
+            }
+
+            .hero {
+              padding: 42px 0 42px;
+            }
+
+            .lead {
+              font-size: 1rem;
+            }
+
+            .trust {
+              grid-template-columns: 1fr;
+            }
+
+            .hero-visual {
+              min-height: 390px;
+            }
+
+            .badge {
+              top: 14px;
+              right: 14px;
+              font-size: 0.72rem;
+            }
+
+            section {
+              padding: 52px 0;
+            }
+
+            .cards {
+              grid-template-columns: 1fr;
+            }
+
+            .price-grid {
+              grid-template-columns: 1fr;
+            }
+
+            .price-item {
+              border-right: 0;
+            }
+
+            .form-grid {
+              grid-template-columns: 1fr;
+            }
+
+            .foot {
+              display: block;
+            }
+
+            .foot p {
+              margin-top: 1rem;
+            }
+          }
+
+          .gdpr-consent {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin: 16px 0 20px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: rgba(255, 255, 255, 0.8);
+          }
+
+          .gdpr-consent input {
+            margin-top: 3px;
+            width: auto;
+            min-width: 16px;
+          }
+
+          .cookie-notice {
+            position: fixed;
+            left: 50%;
+            bottom: 12px;
+            z-index: 80;
+            display: none;
+            width: min(720px, calc(100% - 24px));
+            transform: translateX(-50%);
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 10px 12px 10px 16px;
+            border: 1px solid rgba(228, 189, 79, 0.14);
+            border-radius: 14px;
+            background: rgba(13, 13, 12, 0.88);
+            color: var(--muted);
+            box-shadow: 0 10px 34px rgba(0, 0, 0, 0.28);
+            backdrop-filter: blur(14px);
+          }
+
+          .cookie-notice.is-visible {
+            display: flex;
+          }
+
+          .cookie-notice p {
+            margin: 0;
+            font-size: 0.78rem;
+            line-height: 1.45;
+          }
+
+          .cookie-notice button {
+            flex: 0 0 auto;
+            min-height: 34px;
+            padding: 0 0.8rem;
+            border: 1px solid rgba(228, 189, 79, 0.25);
+            border-radius: 999px;
+            background: rgba(228, 189, 79, 0.08);
+            color: var(--gold);
+            font: inherit;
+            font-size: 0.78rem;
+            font-weight: 800;
+            cursor: pointer;
+          }
+
+          .cookie-notice button:hover {
+            background: rgba(228, 189, 79, 0.14);
+          }
+
+          @media (max-width: 640px) {
+            .cookie-notice {
+              align-items: flex-start;
+              bottom: 8px;
+              padding: 10px;
+            }
+          }
+        </style>
+      </head>
+
+      <body>
+        <!-- Google Tag Manager (noscript) -->
+        <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TWSSBGK5"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+        <!-- End Google Tag Manager (noscript) -->
+        <header>
+          <div class="container nav">
+            <a class="brand" href="#top" aria-label="Kytary Štekl úvod">
+              <div class="mark">Š</div>
+              <div>
+                <strong>Kytary Štekl</strong>
+                <span>servis · prodej · zakázky</span>
+              </div>
             </a>
-<a class="text-on-surface-variant hover:bg-surface-container-high rounded-full mx-6 px-5 pl-8 py-4 transition-all flex items-center gap-4" href="#design">
-<span class="material-symbols-outlined">palette</span> Webdesign
-            </a>
-<a class="text-on-surface-variant hover:bg-surface-container-high rounded-full mx-6 px-5 pl-8 py-4 transition-all flex items-center gap-4" href="#verse">
-<span class="material-symbols-outlined">auto_stories</span> Verše
-            </a>
-<a class="text-on-surface-variant hover:bg-surface-container-high rounded-full mx-6 px-5 pl-8 py-4 transition-all flex items-center gap-4" href="#dharma">
-<span class="material-symbols-outlined">brightness_7</span> Dharma
-            </a>
-</nav>
-<div class="mt-auto px-6 flex flex-col gap-6">
-    <a href="mailto:vlkrasny@gmail.com" aria-label="Pošlete e-mail Vláďovi" class="bg-primary text-on-primary font-bold py-5 rounded-full w-full flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-95 transition-all">
-        <span class="material-symbols-outlined">mail</span>
-        <span>E-mail</span>
-    </a>
-    <div class="flex justify-around py-6 border-t border-outline-variant/10">
-    </div>
-</div>
-</aside>
-<!-- Main Content Canvas -->
-<main class="lg:ml-[24rem] pt-32 px-container-mobile md:px-container-desktop pb-section-gap">
-<!-- Hero Section: The Welcome -->
-<section class="max-w-4xl mb-section-gap">
-<span class="inline-block bg-secondary-container text-on-secondary-container px-5 py-2 rounded-full font-label-mono text-label-mono mb-8 italic">Tashi Delek</span>
-<h1 class="font-display-lg text-display-lg-mobile md:text-display-lg text-primary mb-10 leading-tight">Vítejte v mém digitálním klášteře.</h1>
-<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl leading-relaxed">
-                Jsem Vláďa — vývojář, který staví digitální produkty s respektem k detailu, eleganci a smyslu. Snažím se spojit čistou logiku kódu s jasnou vizuální strukturou, a zároveň dát prostoru na obrazovce místo pro klid a soustředění. Mou inspirací je rovnováha mezi technologií, designem, veršem a dharmou.
-            </p>
-</section>
-<!-- Bento Grid: The Four Pillars -->
-<div class="bento-grid">
-<!-- Software (Code) - Large Card -->
-<div class="col-span-12 md:col-span-8 bg-surface-container-lowest rounded-xl p-12 soft-glow border border-outline-variant/20 group overflow-hidden relative" id="software">
-<div class="relative z-10">
-<span class="font-label-mono text-label-mono text-primary mb-6 block"></span>
-<h3 class="font-headline-md text-headline-md text-primary mb-6">Software: Budování Smyslu</h3>
-<p class="text-body-md text-on-surface-variant mb-10 max-w-md">Vytvářím čisté, škálovatelné systémy postavené na principech funkcionální čistoty a estetické disciplíny.</p>
-<div class="flex gap-4 flex-wrap">
-<span class="px-5 py-2.5 bg-surface-container-high rounded-full text-sm font-medium">C#</span>
-<span class="px-5 py-2.5 bg-surface-container-high rounded-full text-sm font-medium">JavaScript</span>
-<span class="px-5 py-2.5 bg-surface-container-high rounded-full text-sm font-medium">SQL</span>
-</div>
-</div>
-<div class="absolute -right-10 -bottom-10 w-72 h-72 opacity-5 group-hover:opacity-10 transition-opacity">
-<span class="material-symbols-outlined text-[200px] text-primary">code</span>
-</div>
-</div>
-<!-- Dharma (Meditation) - Vertical Card -->
-<div class="col-span-12 md:col-span-4 bg-primary-container text-on-primary-container rounded-xl p-10 soft-glow relative overflow-hidden flex flex-col justify-end" id="dharma">
-<div class="absolute top-10 left-10">
-<span class="material-symbols-outlined text-5xl opacity-50" style='font-variation-settings: "FILL" 1;'>brightness_7</span>
-</div>
-<div class="relative z-10">
-<h3 class="font-headline-md text-headline-sm mb-4">Cesta Dharmy</h3>
-<p class="text-body-md opacity-90 mb-8">Tibetský buddhismus jako kotva v bouři moderního světa.</p>
-<a class="inline-flex items-center gap-3 font-bold hover:underline" href="https://bdc.cz/buddhismus/buddha-a-jeho-uceni/">Vstoupit do ticha <span class="material-symbols-outlined">arrow_forward</span></a>
-</div>
-<div class="absolute inset-0 opacity-20 pointer-events-none">
-<svg height="100%" preserveaspectratio="none" viewbox="0 0 100 100" width="100%" xmlns="http://www.w3.org/2000/svg">
-<circle cx="50" cy="50" fill="none" r="45" stroke="currentColor" stroke-width="0.5"></circle>
-<circle cx="50" cy="50" fill="none" r="35" stroke="currentColor" stroke-width="0.5"></circle>
-<circle cx="50" cy="50" fill="none" r="25" stroke="currentColor" stroke-width="0.5"></circle>
-</svg>
-</div>
-</div>
-<!-- Webdesign (NEW SECTION) -->
-<div class="col-span-12 bg-secondary-fixed text-on-secondary-fixed-variant rounded-xl p-12 soft-glow border border-outline-variant/20 flex flex-col md:flex-row gap-12 items-center" id="design">
-<div class="flex-1 space-y-8">
-<div class="flex items-center gap-4">
-<span class="material-symbols-outlined text-3xl">design_services</span>
-<span class="font-label-mono text-label-mono">WEBDESIGN</span>
-</div>
-<h2 class="font-display-lg text-headline-md leading-tight">Digitální prostory s úmyslem</h2>
-<p class="text-body-lg max-w-xl">
-            Věřím, že web by neměl být jen hlukem informací, ale klidným místem pro interakci. Navrhuji rozhraní, která respektují pozornost uživatele a přinášejí jasnost skrze prostor, typografii a tichou hierarchii. Každý pixel má svůj karmický důvod.
-        </p>
-<button class="bg-primary text-on-primary px-8 py-4 rounded-full font-bold hover:scale-105 transition-all self-start">Poznat mou metodu</button>
-</div>
-<div class="w-full md:w-1/3 aspect-[4/3] bg-surface/30 rounded-lg p-6 flex flex-col gap-4 border border-on-secondary-fixed-variant/10">
-<div class="h-4 w-3/4 bg-on-secondary-fixed-variant/20 rounded-full"></div>
-<div class="h-32 w-full bg-on-secondary-fixed-variant/10 rounded-lg"></div>
-<div class="grid grid-cols-3 gap-2">
-<div class="h-12 bg-on-secondary-fixed-variant/15 rounded-md"></div>
-<div class="h-12 bg-on-secondary-fixed-variant/15 rounded-md"></div>
-<div class="h-12 bg-on-secondary-fixed-variant/15 rounded-md"></div>
-</div>
-</div>
-</div>
-<!-- Verse (Poetry) - Square Card -->
-<div class="col-span-12 md:col-span-5 bg-surface-container rounded-xl p-10 soft-glow border border-outline-variant/20 flex flex-col" id="verse">
-<div class="flex justify-between items-start mb-16">
-<span class="material-symbols-outlined text-secondary text-4xl">auto_stories</span>
-<span class="font-label-mono text-label-mono text-secondary">Poezie</span>
-</div>
-<blockquote class="italic text-body-lg text-on-surface-variant mb-10 border-l-4 border-secondary-fixed-dim pl-8 leading-relaxed">
-                    V prázdnotě bliká tichý kód,<br/>
-                    bez chyb, bez cest a bez náhod.<br/>
-                    Na řádku nula spí můj svět,<br/>
-                    čeká, až začne algoritmus kvést.<br/>
-                    <br/>
-                    Kde není vstup a není výstup,<br/>
-                    tam mizí hluk i starý přístup.<br/>
-                    A v tichu dat, kde čas se ztrácí,<br/>
-                    software sní — a znovu se vrací.<br/>
-                </blockquote>
-<p class="text-sm mt-auto text-on-surface-variant/60">— Prázdnota</p>
-</div>
-<!-- Lab (3D Printing) - Horizontal Card -->
-<div class="col-span-12 md:col-span-7 bg-surface-bright rounded-xl p-10 soft-glow border border-outline-variant/20 flex flex-col md:flex-row gap-10 items-center" id="lab">
-<div class="flex-1">
-<h3 class="font-headline-md text-headline-sm text-primary mb-6">Laboratoř: 3D Prostor</h3>
-<p class="text-body-md text-on-surface-variant mb-8">Pomocí 3D tisku převádím nápady do hmatatelné podoby. Zkoumám tvary, materiály a generativní design a rád propojuji moderní technologii s inspirací tibetskou symbolikou.</p>
-<button class="bg-secondary-container text-on-secondary-container px-8 py-4 rounded-full font-bold hover:scale-105 transition-all">Prohlédnout modely</button>
-</div>
-<div class="w-full md:w-56 h-56 rounded-lg overflow-hidden shrink-0">
-<img alt="3D Print" class="w-full h-full object-cover" data-alt="A highly detailed 3D printed geometric lotus flower in a deep crimson filament. The print is resting on a clean, light-colored wooden desk next to a modern drafting pencil. Soft afternoon sunlight highlights the intricate layer lines and organic curves of the model. The atmosphere is studio-like and professional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAAOkBHC_OOzR2kz9ptFPMFuJHGVO7MkU1yWFE-xJwNIWmjCZlXa4FZqiPw64UOxmXDhAlSCUq2RdBb2r7ROuCv3NTi63zO1F5qD44ynRmzQ33JfO21I2DVzQZK3jZG7a84vBlLzAcFCHLsnQC2VT2P2iYdnL_o67wKNAf1f2YIbxBGU3PPtKaaJfol-3cXdqPB-tF-tdFRQ9G_n_5oAJSjs3a2sH-oISKF5qqN5mGFxR05XhEgsNk3cFrMLapXczYu5y7iycKtHLM"/>
-</div>
-</div>
-</div>
-<!-- Personal Section: The Human Behind the Screen -->
-<section class="mt-section-gap py-24 bg-surface-container-low rounded-xl px-16 flex flex-col md:flex-row gap-20 items-center">
-<div class="flex-1 space-y-10">
-<h2 class="font-display-lg text-headline-md text-primary">Mimo svět jedniček a nul...</h2>
-<p class="text-body-lg text-on-surface-variant leading-relaxed">
-                    Najdete mě mezi řádky kódu, vrstvami 3D tisku a slovy, která se teprve skládají do básně. Technologie pro mě nejsou únikem od světa, ale způsobem, jak mu lépe rozumět a tvořit v něm něco hmatatelného. Hledám rovnováhu mezi přesností, tvořivostí a vnitřním klidem — mezi tím, co funguje, a tím, co má smysl.
+
+            <nav class="links" id="menu" aria-label="Hlavní navigace">
+              <a href="#sluzby">Služby</a>
+              <a href="#zakazky">Zakázková výroba</a>
+              <a href="#cenik">Ceník</a>
+              <a href="#kontakt">Kontakt</a>
+            </nav>
+
+            <a class="btn btn-primary" href="tel:+420603962629">Zavolat</a>
+            <button class="menu-toggle" id="toggle" aria-label="Otevřít menu">☰</button>
+          </div>
+        </header>
+
+        <main id="top">
+          <section class="hero">
+            <div class="container hero-grid">
+              <div>
+                <div class="eyebrow">Opravy a prodej hudebních nástrojů · Plzeň</div>
+                <h1>Poctivý servis pro nástroje, které mají hrát.</h1>
+                <p class="lead">Specializujeme se na opravy, servis a prodej hudebních nástrojů v celém Plzeňském kraji. Nabízíme odborné poradenství, zakázkovou stavbu nástrojů i rychlé opravy do 2–3 dnů. U zakoupených nástrojů poskytujeme dvouletou záruku, servis a bezplatnou garanční prohlídku.</p>
+
+                <div class="hero-actions">
+                  <a class="btn btn-primary" href="#kontakt">Domluvit opravu</a>
+                  <a class="btn btn-ghost" href="#prodej">Chci koupit kytaru</a>
+                  <a class="btn btn-ghost" href="tel:+420603962629">Zavolat</a>
+                </div>
+
+                <div class="trust" role="region" aria-label="Hlavní výhody">
+                  <div class="trust-card reveal">
+                    <b>2–3 dny</b>
+                    <span>běžné opravy dle informací webu</span>
+                  </div>
+
+                  <div class="trust-card reveal">
+                    <b>2 roky</b>
+                    <span>záruka k opravě nebo prodeji</span>
+                  </div>
+
+                  <div class="trust-card reveal">
+                    <b>Plzeň</b>
+                    <span>Martinská 10/1, Jižní Předměstí</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="hero-visual" aria-hidden="true">
+                <div class="photo-stack">
+                  <img src="https://images.unsplash.com/photo-1525201548942-d8732f6617a0?auto=format&fit=crop&w=1200&q=85" alt="Detail akustické kytary v dílně">
+
+                  <div class="string-animation" aria-hidden="true">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </div>
+
+                  <div class="music-notes" aria-hidden="true">
+                    <span>♪</span>
+                    <span>♩</span>
+                    <span>♫</span>
+                  </div>
+                </div>
+
+                <div class="badge">ruční práce</div>
+
+                <div class="floating-card reveal">
+                  <div class="eyebrow">dílna a obchod</div>
+                  <h2>Nástroj není jen zboží</h2>
+                  <p>Každý nástroj bereme individuálně — podle stavu, hráče i toho, jak má znít.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="sluzby">
+            <div class="container">
+              <div class="section-head reveal">
+                <div>
+                  <div class="eyebrow">Co děláme</div>
+                  <h2>Servis, opravy a prodej bez zbytečných řečí.</h2>
+                </div>
+
+                <p>Poskytujeme komplexní servis, poradenství a individuální přístup.</p>
+              </div>
+
+              <div class="cards">
+                <article class="card reveal">
+                  <div class="icon">♬</div>
+                  <h3>Servis nástrojů</h3>
+                  <p>Opravy všech druhů kytar, mandolín, louten, houslí, smyčců, viol, violoncell a kontrabasů.</p>
+                  <div class="tags">
+                    <span class="tag">kytary</span>
+                    <span class="tag">smyčce</span>
+                    <span class="tag">historické nástroje</span>
+                  </div>
+                </article>
+
+                <article class="card reveal">
+                  <div class="icon">◒</div>
+                  <h3>Seřízení a ladění</h3>
+                  <p>Seřízení dohmatu, ladění kobylky, výměny strun, mechaniky, pražců a další běžné opravy.</p>
+                  <div class="tags">
+                    <span class="tag">dohmat</span>
+                    <span class="tag">kobylka</span>
+                    <span class="tag">pražce</span>
+                  </div>
+                </article>
+
+                <article class="card reveal">
+                  <div class="icon">◆</div>
+                  <h3>Prodej nástrojů</h3>
+                  <p>Školní, koncertní i mistrovské nástroje. Důraz na praktickou volbu podle hráče, rozpočtu a účelu.</p>
+                  <div class="tags">
+                    <span class="tag">školní</span>
+                    <span class="tag">koncertní</span>
+                    <span class="tag">mistrovské</span>
+                  </div>
+                </article>
+              </div>
+            </div>
+          </section>
+
+          <section id="prodej">
+            <div class="container">
+              <div class="section-head reveal">
+                <div>
+                  <div class="eyebrow">Prodej kytar a nástrojů</div>
+                  <h2>Vybereme nástroj, který bude sedět do ruky i do rozpočtu.</h2>
+                </div>
+
+                <p>
+                  Pomůžeme s výběrem kytary pro začátečníky, děti, pokročilé hráče i náročnější muzikanty.
+                  Důraz klademe na pohodlný dohmat, dobrý zvuk a smysluplný poměr ceny a kvality.
                 </p>
-<div class="grid grid-cols-2 gap-8">
-<div class="flex items-center gap-4">
-<span class="material-symbols-outlined text-primary text-2xl" style='font-variation-settings: "FILL" 1;'>self_improvement</span>
-<span class="font-medium text-lg">Každodenní praxe</span>
-</div>
-<div class="flex items-center gap-4">
-<span class="material-symbols-outlined text-primary text-2xl" style='font-variation-settings: "FILL" 1;'>hiking</span>
-<span class="font-medium text-lg">Hory a cesty</span>
-</div>
-<div class="flex items-center gap-4">
-<span class="material-symbols-outlined text-primary text-2xl" style='font-variation-settings: "FILL" 1;'>coffee_maker</span>
-<span class="font-medium text-lg">Kávový nadšenec</span>
-</div>
-<div class="flex items-center gap-4">
-<span class="material-symbols-outlined text-primary text-2xl" style='font-variation-settings: "FILL" 1;'>family_restroom</span>
-<span class="font-medium text-lg">Rodinný život</span>
-</div>
-</div>
-</div>
-<div class="w-full md:w-2/5 aspect-square rounded-xl overflow-hidden relative rotate-3 hover:rotate-0 transition-transform duration-700 shadow-2xl">
-<img alt="Mountain Meditation" class="w-full h-full object-cover" data-alt="A tranquil scene of a person meditating on a mountain ridge during a soft blue hour. The silhouette is framed against a distant, snow-capped range under a vast, indigo sky. The lighting is ethereal and cool, with a single warm lantern light in the corner of the frame. It conveys a deep sense of peace, spaciousness, and spiritual connection." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0dI0dwhnka7fQ7L6Xb55silVwYaTpU0IHm54eyouRij_vFhYDTks4y7zk31yumTmPsmKdSx3mCV0SR-gGKAaBT9UdSqDsmTwS7n3v2LsM4ThD41YMTMW5g_N5qJJGxTcqHxgc57TJnJyDrXEBah6eDqmaeU70xL7Kr2Vlhjpg8yWk1sefZUK5NWXRJvY8rr9zLZdYSOw50H-jd9J4z37sQLrP3YcuWicg30-NfDaFXusSLSht5WBDWl6OuJ9P4ozYC19nd-bwSGk"/>
-</div>
-</section>
-</main>
-<!-- Footer -->
-<footer class="w-full py-20 px-container-mobile md:px-container-desktop flex flex-col md:flex-row justify-between items-center gap-gutter bg-surface-container-highest rounded-t-lg">
-<div class="flex flex-col gap-6 items-center md:items-start">
-<div class="font-display-lg text-headline-sm text-primary"></div>
-<p class="font-label-mono text-label-mono text-on-surface-variant tracking-widest opacity-60 text-xs"></p>
-</div>
-<div class="flex gap-10">
-<a class="font-label-mono text-label-mono text-on-surface-variant hover:text-primary transition-colors opacity-80 hover:opacity-100" href="https://github.com/vlkrasny">GitHub</a>
-<a class="font-label-mono text-label-mono text-on-surface-variant hover:text-primary transition-colors opacity-80 hover:opacity-100" href="https://www.linkedin.com/in/vlkrasny/">LinkedIn</a>
-</div>
-</footer>
-<script>
-    (function(){
-        const toggle = document.getElementById('mobile-menu-toggle');
-        const nav = document.getElementById('mobile-nav');
-        if(!toggle || !nav) return;
-        toggle.addEventListener('click', function(){
-            nav.classList.toggle('hidden');
-        });
-    })();
-</script>
-</body></html>
+              </div>
+
+              <div class="cards">
+                <article class="card reveal">
+                  <div class="icon">◎</div>
+                  <h3>Kytara pro začátečníka</h3>
+                  <p>
+                    Poradíme s výběrem vhodné velikosti, typu nástroje a základního vybavení.
+                    Ideální pro děti, studenty hudebních škol i dospělé, kteří s hraním začínají.
+                  </p>
+                  <div class="tags">
+                    <span class="tag">začátečníci</span>
+                    <span class="tag">děti</span>
+                    <span class="tag">hudební škola</span>
+                  </div>
+                </article>
+
+                <article class="card reveal">
+                  <div class="icon">♬</div>
+                  <h3>Kvalitnější nástroje</h3>
+                  <p>
+                    Pro pokročilejší hráče pomůžeme vybrat nástroj s lepším zvukem,
+                    pohodlnějším hraním a kvalitnějším zpracováním podle stylu hry.
+                  </p>
+                  <div class="tags">
+                    <span class="tag">koncertní</span>
+                    <span class="tag">folk</span>
+                    <span class="tag">klasika</span>
+                  </div>
+                </article>
+
+                <article class="card reveal">
+                  <div class="icon">◆</div>
+                  <h3>Objednání nástroje</h3>
+                  <p>
+                    Pokud konkrétní nástroj není skladem, je možné jej po domluvě objednat.
+                    Součástí prodeje je poradenství, záruka a následná servisní péče.
+                  </p>
+                  <div class="tags">
+                    <span class="tag">objednávka</span>
+                    <span class="tag">záruka</span>
+                    <span class="tag">servis</span>
+                  </div>
+                </article>
+              </div>
+
+              <div class="contact-card reveal" style="margin-top:22px; display:flex; gap:1.5rem; align-items:center; justify-content:space-between; flex-wrap:wrap">
+                <div>
+                  <div class="eyebrow">Nejste si jistí výběrem?</div>
+                  <h3 class="serif" style="font-size:1.8rem; margin:.35rem 0 .45rem">Přineste představu, rozpočet nebo jen otázku.</h3>
+                  <p style="color:var(--muted); line-height:1.7; margin:0; max-width:720px">
+                    Společně najdeme nástroj, který nebude jen dobře vypadat, ale hlavně se na něj bude dobře hrát.
+                    U kytary je důležité pohodlí, dohmat, velikost, zvuk i to, komu je nástroj určený.
+                  </p>
+                </div>
+
+                <div style="display:flex; gap:1rem; flex-wrap:wrap">
+                  <a class="btn btn-primary" href="#kontakt">Poradit s výběrem</a>
+                  <a class="btn btn-ghost" href="tel:+420603962629">Zavolat</a>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="zakazky">
+            <div class="container workshop">
+              <div class="image">
+                <img src="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?auto=format&fit=crop&w=1000&q=85" alt="Kytara a pracovní atmosféra dílny">
+              </div>
+
+              <div>
+                <div class="eyebrow">Zhotovení na zakázku</div>
+                <h2>Nástroj podle ruky, zvuku a stylu hráče.</h2>
+                <p class="lead" style="font-size:1rem; margin-bottom:1.25rem">Zakázková výroba může být na stránce prezentována jako klidný proces: od konzultace přes volbu typu nástroje až po předání a následný servis.</p>
+
+                <div class="steps">
+                  <div class="step reveal">
+                    <div class="num">01</div>
+                    <div>
+                      <h3>Konzultace a účel nástroje</h3>
+                      <p>Styl hraní, cílový zvuk, pohodlí, rozpočet a termín.</p>
+                    </div>
+                  </div>
+
+                  <div class="step reveal">
+                    <div class="num">02</div>
+                    <div>
+                      <h3>Výběr typu</h3>
+                      <p>Klasické španělské kytary, folk, bluegrass, country kytary, mandolíny a historické nástroje.</p>
+                    </div>
+                  </div>
+
+                  <div class="step reveal">
+                    <div class="num">03</div>
+                    <div>
+                      <h3>Práce a servis po předání</h3>
+                      <p>U složitějších oprav a lakování se termín řeší individuálně podle dohody se zákazníkem.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section id="cenik">
+            <div class="container">
+              <div class="section-head reveal">
+                <div>
+                  <div class="eyebrow">Orientační ceník</div>
+                  <h2>Nejčastější úkony jasně a bez hledání.</h2>
+                </div>
+
+                <p>U oprav laku a složitějších zásahů zůstává domluva individuální.</p>
+              </div>
+
+              <div class="price-wrap">
+                <div class="price-grid">
+                  <div class="price-item reveal"><span>Výměna strun</span><strong>120 Kč</strong></div>
+                  <div class="price-item reveal"><span>Výměna mechaniky</span><strong>150 Kč</strong></div>
+                  <div class="price-item reveal"><span>Ladění kobylky a seřízení dohmatu</span><strong>350 Kč</strong></div>
+                  <div class="price-item reveal"><span>Výměna pražců včetně materiálu</span><strong>980 Kč</strong></div>
+                  <div class="price-item reveal"><span>Výměna celého krku včetně materiálu</span><strong>980 Kč</strong></div>
+                  <div class="price-item reveal"><span>Srovnání hmatníku</span><strong>280 Kč</strong></div>
+                  <div class="price-item reveal"><span>Ladění nástroje</span><strong>60 Kč</strong></div>
+                  <div class="price-item reveal"><span>Opravy laku</span><strong>dle dohody</strong></div>
+                </div>
+
+                <div class="note">Ceny jsou orientační. Přesná cena závisí na stavu nástroje a rozsahu opravy.</div>
+              </div>
+            </div>
+          </section>
+
+          <section id="kontakt">
+            <div class="container contact">
+              <div class="contact-card reveal">
+                <div class="eyebrow">Kontakt</div>
+                <h2>Domluvte si návštěvu dílny.</h2>
+
+                <div class="contact-list">
+                  <div class="contact-row">
+                    <div class="icon" style="margin:0">⌖</div>
+                    <div>
+                      <b>Adresa</b>
+                      <span>Martinská 10/1, 301 00 Plzeň – Jižní Předměstí</span>
+                    </div>
+                  </div>
+
+                  <div class="contact-row">
+                    <div class="icon" style="margin:0">☎</div>
+                    <div>
+                      <b>Telefon</b>
+                      <a href="tel:+420603962629">+420 603 962 629</a>
+                    </div>
+                  </div>
+
+                  <div class="contact-row">
+                    <div class="icon" style="margin:0">✉</div>
+                    <div>
+                      <b>E-mail</b>
+                      <a href="mailto:karelstekl@outlook.cz">karelstekl@outlook.cz</a>
+                    </div>
+                  </div>
+
+                  <div class="contact-row">
+                    <div class="icon" style="margin:0">◷</div>
+                    <div>
+                      <b>Otevírací doba</b>
+                      <span>Návštěvu dílny doporučujeme domluvit předem telefonicky, aby byl na váš nástroj dostatek času.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="contact-card reveal">
+                <div class="eyebrow">Rychlá poptávka</div>
+                <h2 style="font-size:clamp(1.9rem,3vw,2.8rem)">Co s nástrojem řešíte?</h2>
+
+                <form action="https://formspree.io/f/mbdwbaww" method="POST">
+                  <div class="form-grid">
+                    <label>
+                      Jméno
+                      <input name="jmeno" required placeholder="Jméno a příjmení">
+                    </label>
+
+                    <label>
+                      Telefon / e-mail
+                      <input name="kontakt" required placeholder="Telefon či email.">
+                    </label>
+                  </div>
+
+                  <label>
+                    Co potřebujete?
+                    <select name="typ_poptavky">
+                      <option>Oprava / servis kytary</option>
+                      <option>Koupě kytary / výběr nástroje</option>
+                      <option>Zakázková výroba</option>
+                      <option>Jiný dotaz</option>
+                    </select>
+                  </label>
+
+                  <label>
+                    Typ nástroje
+                    <select name="typ_nastroje">
+                      <option>Kytara</option>
+                      <option>Mandolína / loutna</option>
+                      <option>Smyčcový nástroj</option>
+                      <option>Jiný nástroj</option>
+                    </select>
+                  </label>
+
+                  <label>
+                    Popis problému
+                    <textarea name="zprava" placeholder="Napište, co řešíte – opravu, výběr kytary, rozpočet, typ nástroje nebo jiný dotaz."></textarea>
+                  </label>
+
+                  <input type="hidden" name="_gotcha">
+
+                  <label class="gdpr-consent">
+                    <input type="checkbox" name="gdpr" value="ano" required>
+                    Souhlasím se zpracováním osobních údajů za účelem vyřízení poptávky.
+                  </label>
+
+                  <button class="btn btn-primary" type="submit">Odeslat poptávku</button>
+                </form>
+              </div>
+            </div>
+          </section>
+        </main>
+
+        <footer>
+          <div class="container foot">
+            <div>
+              <strong>Kytary Štekl</strong>
+              <div class="source"> – servis, prodej a zakázková výroba hudebních nástrojů.</div>
+            </div>
+
+            <p>© 2026 · ❤️ by vlkrasny</p>
+          </div>
+        </footer>
+
+        <div class="cookie-notice" id="cookieNotice" role="status" aria-live="polite">
+          <p>Tento web používá cookies pro správné fungování a měření návštěvnosti.</p>
+          <button type="button" id="cookieNoticeClose">Rozumím</button>
+        </div>
+
+        <script>
+          const toggle = document.getElementById("toggle");
+          const menu = document.getElementById("menu");
+
+          if (toggle && menu) {
+            toggle.setAttribute("aria-expanded", "false");
+            toggle.addEventListener("click", () => {
+              const open = menu.classList.toggle("open");
+              toggle.setAttribute("aria-expanded", open ? "true" : "false");
+            });
+
+            menu.querySelectorAll("a").forEach((a) =>
+              a.addEventListener("click", () => {
+                menu.classList.remove("open");
+                toggle.setAttribute("aria-expanded", "false");
+              })
+            );
+          }
+
+          const revealItems = document.querySelectorAll(".reveal");
+
+          if ("IntersectionObserver" in window && revealItems.length) {
+            const revealObserver = new IntersectionObserver(
+              (entries) => {
+                entries.forEach((entry) => {
+                  if (entry.isIntersecting) {
+                    entry.target.classList.add("in-view");
+                    revealObserver.unobserve(entry.target);
+                  }
+                });
+              },
+              { threshold: 0.14 }
+            );
+
+            revealItems.forEach((item) => revealObserver.observe(item));
+          } else {
+            revealItems.forEach((item) => item.classList.add("in-view"));
+          }
+
+          const cookieNotice = document.getElementById("cookieNotice");
+          const cookieNoticeClose = document.getElementById("cookieNoticeClose");
+          const cookieNoticeStorageKey = "kytary-stekl-cookie-notice-hidden";
+
+          if (cookieNotice && cookieNoticeClose) {
+            let cookieNoticeHidden = false;
+
+            try {
+              cookieNoticeHidden = localStorage.getItem(cookieNoticeStorageKey) === "true";
+            } catch (error) {
+              cookieNoticeHidden = false;
+            }
+
+            if (!cookieNoticeHidden) {
+              cookieNotice.classList.add("is-visible");
+            }
+
+            cookieNoticeClose.addEventListener("click", () => {
+              try {
+                localStorage.setItem(cookieNoticeStorageKey, "true");
+              } catch (error) {}
+
+              cookieNotice.classList.remove("is-visible");
+            });
+          }
+        </script>
+      </body>
+    </html>
