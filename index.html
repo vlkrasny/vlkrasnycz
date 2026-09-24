@@ -129,11 +129,11 @@
     </head>
 <body class="font-body-md text-on-surface">
 <!-- TopAppBar -->
-<header class="fixed top-0 left-0 w-full z-40 flex justify-between items-center px-container-mobile md:px-container-desktop h-20 bg-surface/80 dark:bg-surface/80 backdrop-blur-md lg:hidden">
-<nav class="hidden md:flex lg:hidden gap-10 items-center">
+<header class="fixed top-0 left-0 w-full z-40 flex justify-between items-center px-container-mobile md:px-container-desktop h-20 bg-surface/80 dark:bg-surface/80 backdrop-blur-md">
+<nav class="hidden md:flex gap-10 items-center">
 <a class="text-primary dark:text-primary-fixed font-bold border-b-2 border-secondary font-body-md py-1" href="#software">Software</a>
-<a class="text-on-surface-variant dark:text-on-surface-variant/80 font-body-md hover:text-primary transition-colors duration-300" href="#design">Webdesign</a>
 <a class="text-on-surface-variant dark:text-on-surface-variant/80 font-body-md hover:text-primary transition-colors duration-300" href="projekty.html">Projekty</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant/80 font-body-md hover:text-primary transition-colors duration-300" href="webdesign.html">Webdesign</a>
 <a class="text-on-surface-variant dark:text-on-surface-variant/80 font-body-md hover:text-primary transition-colors duration-300" href="#konzultace">Konzultace</a>
 <a class="text-on-surface-variant dark:text-on-surface-variant/80 font-body-md hover:text-primary transition-colors duration-300" href="#verse">Verse</a>
 </nav>
@@ -146,8 +146,8 @@
 <nav id="mobile-nav" class="md:hidden hidden fixed top-20 left-0 w-full bg-surface/95 backdrop-blur-md z-40 p-6">
     <div class="flex flex-col gap-4">
         <a class="font-body-md text-primary font-bold" href="#software">Software</a>
-        <a class="font-body-md text-on-surface-variant" href="#design">Webdesign</a>
         <a class="font-body-md text-on-surface-variant" href="projekty.html">Projekty</a>
+        <a class="font-body-md text-on-surface-variant" href="webdesign.html">Webdesign</a>
         <a class="font-body-md text-on-surface-variant" href="#konzultace">Konzultace</a>
         <a class="font-body-md text-on-surface-variant" href="#verse">Verše</a>
         <a class="font-body-md text-on-surface-variant" href="#dharma">Dharma</a>
@@ -183,11 +183,11 @@
 <a class="bg-secondary-container text-on-secondary-container rounded-full mx-6 px-5 pl-8 py-4 font-semibold flex items-center gap-4 active:scale-98 transition-all" href="#software">
 <span class="material-symbols-outlined">code</span> Software
             </a>
-<a class="text-on-surface-variant hover:bg-surface-container-high rounded-full mx-6 px-5 pl-8 py-4 transition-all flex items-center gap-4" href="#design">
-<span class="material-symbols-outlined">palette</span> Webdesign
-            </a>
 <a class="text-on-surface-variant hover:bg-surface-container-high rounded-full mx-6 px-5 pl-8 py-4 transition-all flex items-center gap-4" href="projekty.html">
-<span class="material-symbols-outlined">view_quilt</span> Projekty
+<span class="material-symbols-outlined">folder_open</span> Projekty
+            </a>
+<a class="text-on-surface-variant hover:bg-surface-container-high rounded-full mx-6 px-5 pl-8 py-4 transition-all flex items-center gap-4" href="webdesign.html">
+<span class="material-symbols-outlined">palette</span> Webdesign
             </a>
 <a class="text-on-surface-variant hover:bg-surface-container-high rounded-full mx-6 px-5 pl-8 py-4 transition-all flex items-center gap-4" href="#konzultace">
 <span class="material-symbols-outlined">forum</span> Konzultace
@@ -231,6 +231,10 @@
 <span class="px-5 py-2.5 bg-surface-container-high rounded-full text-sm font-medium">JavaScript</span>
 <span class="px-5 py-2.5 bg-surface-container-high rounded-full text-sm font-medium">SQL</span>
 </div>
+<a class="inline-flex items-center gap-3 mt-8 bg-primary text-on-primary px-8 py-4 rounded-full font-bold hover:scale-105 active:scale-95 transition-all" href="projekty.html">
+<span class="material-symbols-outlined">folder_open</span>
+Otevřít projekty
+</a>
 </div>
 <div class="absolute -right-10 -bottom-10 w-72 h-72 opacity-5 group-hover:opacity-10 transition-opacity">
 <span class="material-symbols-outlined text-[200px] text-primary">code</span>
@@ -265,7 +269,7 @@
 <p class="text-body-lg max-w-xl">
             Věřím, že web by neměl být jen hlukem informací, ale klidným místem pro interakci. Navrhuji rozhraní, která respektují pozornost uživatele a přinášejí jasnost skrze prostor, typografii a tichou hierarchii. Každý pixel má svůj karmický důvod.
         </p>
-<button class="bg-primary text-on-primary px-8 py-4 rounded-full font-bold hover:scale-105 transition-all self-start">Poznat mou metodu</button>
+<a href="webdesign.html" class="inline-flex bg-primary text-on-primary px-8 py-4 rounded-full font-bold hover:scale-105 transition-all self-start">Prohlédnout webové projekty</a>
 </div>
 <div class="w-full md:w-1/3 aspect-[4/3] bg-surface/30 rounded-lg p-6 flex flex-col gap-4 border border-on-secondary-fixed-variant/10">
 <div class="h-4 w-3/4 bg-on-secondary-fixed-variant/20 rounded-full"></div>
