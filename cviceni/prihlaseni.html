@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fyzikální kvíz</title>
+<style>
+  body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 0 16px; background:#f4f6f8; }
+  .card { background:#fff; border-radius:10px; padding:24px; box-shadow:0 2px 8px rgba(0,0,0,0.08); margin-bottom:16px; }
+  h1 { text-align:center; color:#2b3a67; }
+  input, select, button { width:100%; padding:10px; margin:6px 0; border-radius:6px; border:1px solid #ccc; font-size:16px; box-sizing:border-box; }
+  button { background:#2b6cb0; color:#fff; border:none; cursor:pointer; font-weight:bold; }
+  button:hover { background:#1e4e8c; }
+  .answer-btn { background:#edf2f7; color:#2b3a67; text-align:left; }
+  .answer-btn.correct { background:#38a169; color:#fff; }
+  .answer-btn.wrong { background:#e53e3e; color:#fff; }
+  #userbar { display:flex; justify-content:space-between; align-items:center; font-size:14px; color:#555; }
+  .hidden { display:none; }
+  #explanation { font-size:14px; color:#555; margin-top:10px; }
+  .score { font-size:22px; text-align:center; font-weight:bold; color:#2b3a67; }
+</style>
+</head>
+<body>
+
+<h1>⚡ Fyzikální kvíz</h1>
+
+<!-- PŘIHLÁŠENÍ -->
+<div class="card" id="auth-card">
+  <h3>Přihlášení</h3>
+  <input type="email" id="email" placeholder="Email">
+  <input type="password" id="password" placeholder="Heslo">
+  <button onclick="signIn()">Přihlásit se</button>
+  <button onclick="signUp()" style="background:#718096;">Vytvořit účet</button>
+  <p id="auth-msg" style="color:red;"></p>
+</div>
+
+<!-- KVÍZ -->
+<div class="card hidden" id="quiz-card">
+  <div id="userbar">
+    <span id="welcome"></span>
+    <button style="width:auto;background:#a0aec0;" onclick="signOut()">Odhlásit</button>
+  </div>
+  <hr>
+  <div id="topic-select">
+    <label>Vyber téma:</label>
+    <select id="topic">
+      <option value="mechanika">Mechanika</option>
+      <option value="elektrina">Elektřina</option>
+      <option value="optika">Optika</option>
+    </select>
+    <button onclick="startQuiz()">Spustit kvíz</button>
+  </div>
+
+  <div id="question-area" class="hidden">
+    <p id="progress"></p>
+    <h3 id="question-text"></h3>
+    <div id="answers"></div>
+    <div id="explanation" class="hidden"></div>
+    <button id="next-btn" class="hidden" onclick="nextQuestion()">Další otázka</button>
+  </div>
+
+  <div id="result-area" class="hidden">
+    <p class="score" id="final-score"></p>
+    <button onclick="startQuiz()">Zkusit znovu</button>
+  </div>
+</div>
+
+<!-- HISTORIE -->
+<div class="card hidden" id="history-card">
+  <h3>Moje výsledky</h3>
+  <div id="history-list"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ============================================
+// KONFIGURACE SUPABASE - verejny publishable klic pro prohlizec
+// ============================================
+const SUPABASE_URL = 'https://zodzxytxavymxgkyngcx.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_5D78wHGFUAZT3X71ug72bQ_F_6fxCvf';
+
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let currentUser = null;
+let questions = [];
+let currentIndex = 0;
+let score = 0;
+let selectedTopic = '';
+
+// ---------- AUTENTIZACE ----------
+async function signUp() {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const { data, error } = await supabase.auth.signUp({
+    email, password,
+    options: { data: { display_name: email.split('@')[0] } }
+  });
+  if (error) { showAuthMsg(error.message); return; }
+  showAuthMsg('Účet vytvořen! Nyní se přihlas.');
+}
+
+async function signIn() {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) { showAuthMsg(error.message); return; }
+  currentUser = data.user;
+  showQuizUI();
+}
+
+async function signOut() {
+  await supabase.auth.signOut();
+  currentUser = null;
+  document.getElementById('auth-card').classList.remove('hidden');
+  document.getElementById('quiz-card').classList.add('hidden');
+  document.getElementById('history-card').classList.add('hidden');
+}
+
+function showAuthMsg(msg) {
+  document.getElementById('auth-msg').innerText = msg;
+}
+
+async function showQuizUI() {
+  document.getElementById('auth-card').classList.add('hidden');
+  document.getElementById('quiz-card').classList.remove('hidden');
+  document.getElementById('history-card').classList.remove('hidden');
+  document.getElementById('welcome').innerText = 'Přihlášen jako: ' + currentUser.email;
+  loadHistory();
+}
+
+// Při načtení stránky zkontroluj, jestli už je uživatel přihlášen
+async function checkSession() {
+  const { data } = await supabase.auth.getSession();
+  if (data.session) {
+    currentUser = data.session.user;
+    showQuizUI();
+  }
+}
+checkSession();
+
+// ---------- KVÍZ ----------
+async function startQuiz() {
+  selectedTopic = document.getElementById('topic').value;
+  const { data, error } = await supabase
+    .from('questions')
+    .select('*')
+    .eq('topic', selectedTopic);
+
+  if (error || !data || data.length === 0) {
+    alert('Nepodařilo se načíst otázky pro toto téma.');
+    return;
+  }
+
+  questions = shuffle(data);
+  currentIndex = 0;
+  score = 0;
+  document.getElementById('question-area').classList.remove('hidden');
+  document.getElementById('result-area').classList.add('hidden');
+  renderQuestion();
+}
+
+function shuffle(arr) {
+  return arr.sort(() => Math.random() - 0.5);
+}
+
+function renderQuestion() {
+  const q = questions[currentIndex];
+  document.getElementById('progress').innerText = `Otázka ${currentIndex + 1} z ${questions.length}`;
+  document.getElementById('question-text').innerText = q.question;
+  document.getElementById('explanation').classList.add('hidden');
+  document.getElementById('next-btn').classList.add('hidden');
+
+  const options = shuffle([
+    q.correct_answer, q.wrong_answer_1, q.wrong_answer_2, q.wrong_answer_3
+  ]);
+
+  const answersDiv = document.getElementById('answers');
+  answersDiv.innerHTML = '';
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'answer-btn';
+    btn.innerText = opt;
+    btn.onclick = () => selectAnswer(opt, q);
+    answersDiv.appendChild(btn);
+  });
+}
+
+async function selectAnswer(chosen, question) {
+  const isCorrect = chosen === question.correct_answer;
+  if (isCorrect) score++;
+
+  document.querySelectorAll('.answer-btn').forEach(btn => {
+    btn.disabled = true;
+    if (btn.innerText === question.correct_answer) btn.classList.add('correct');
+    else if (btn.innerText === chosen) btn.classList.add('wrong');
+  });
+
+  if (question.explanation) {
+    const exp = document.getElementById('explanation');
+    exp.innerText = '💡 ' + question.explanation;
+    exp.classList.remove('hidden');
+  }
+  document.getElementById('next-btn').classList.remove('hidden');
+
+  // Uložení odpovědi do Supabase (volitelná tabulka answers, zapíšeme po dokončení kvízu)
+  question._chosen = chosen;
+  question._isCorrect = isCorrect;
+}
+
+async function nextQuestion() {
+  currentIndex++;
+  if (currentIndex < questions.length) {
+    renderQuestion();
+  } else {
+    finishQuiz();
+  }
+}
+
+async function finishQuiz() {
+  document.getElementById('question-area').classList.add('hidden');
+  document.getElementById('result-area').classList.remove('hidden');
+  document.getElementById('final-score').innerText = `Výsledek: ${score} / ${questions.length}`;
+
+  const { data: attempt, error } = await supabase
+    .from('attempts')
+    .insert({
+      user_id: currentUser.id,
+      topic: selectedTopic,
+      score: score,
+      max_score: questions.length
+    })
+    .select()
+    .single();
+
+  if (!error && attempt) {
+    const answerRows = questions
+      .filter(q => q._chosen !== undefined)
+      .map(q => ({
+        attempt_id: attempt.id,
+        question_id: q.id,
+        user_id: currentUser.id,
+        chosen_answer: q._chosen,
+        is_correct: q._isCorrect
+      }));
+    if (answerRows.length > 0) {
+      await supabase.from('answers').insert(answerRows);
+    }
+  }
+
+  loadHistory();
+}
+
+// ---------- HISTORIE ----------
+async function loadHistory() {
+  const { data, error } = await supabase
+    .from('attempts')
+    .select('*')
+    .order('completed_at', { ascending: false })
+    .limit(10);
+
+  const list = document.getElementById('history-list');
+  if (error || !data || data.length === 0) {
+    list.innerHTML = '<p>Zatím žádné výsledky.</p>';
+    return;
+  }
+
+  list.innerHTML = data.map(a => {
+    const date = new Date(a.completed_at).toLocaleString('cs-CZ');
+    return `<p>${date} — <b>${a.topic}</b>: ${a.score}/${a.max_score}</p>`;
+  }).join('');
+}
+</script>
+</body>
+</html>
