@@ -1,0 +1,55 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {PGlite} from '@electric-sql/pglite';
+const sql=file=>readFileSync(new URL('../'+file,import.meta.url),'utf8');
+const student='10000000-0000-4000-8000-000000000001',teacher='10000000-0000-4000-8000-000000000002',admin='10000000-0000-4000-8000-000000000003',newUser='10000000-0000-4000-8000-000000000004';
+const question={topic:'kinematika',difficulty:'stredni',question:'Jakou rychlostí se pohybuje těleso, které urazí 10 m za 2 s?',correct_answer:'5 m/s',wrong_answer_1:'2 m/s',wrong_answer_2:'10 m/s',wrong_answer_3:'20 m/s',explanation:'v = s/t = 10/2 = 5 m/s.'};
+test('role: existující identity, více práv, hledání podle e-mailu a autorství chráněné databází',async()=>{
+ const db=new PGlite();try{
+ await db.exec(`create role anon;create role authenticated;create schema auth;
+ create table auth.users(id uuid primary key,email text,raw_user_meta_data jsonb);
+ create function auth.uid() returns uuid language sql stable as $$ select nullif(current_setting('request.jwt.claim.sub',true),'')::uuid $$;
+ grant usage on schema public,auth to authenticated;grant execute on function auth.uid() to authenticated;`);
+ await db.exec(sql('schema.sql'));await db.exec(sql('migrations/002_app_support.sql'));await db.exec(sql('migrations/003_starter_questions.sql'));
+ await db.exec(`insert into auth.users values ('${student}','student@example.test','{}'),('${teacher}','teacher@example.test','{}'),('${admin}','vlkrasny@gmail.com','{}');grant select,insert,update,delete on public.questions,public.profiles,public.attempts,public.answers to authenticated;`);
+ await db.exec(sql('migrations/004_user_roles.sql'));await db.exec(sql('migrations/004_user_roles.sql'));
+ assert.equal((await db.query("select * from user_roles where role='student'")).rows.length,3);
+ await db.exec(sql('scripts/first_admin.sql'));await db.exec(sql('scripts/first_admin.sql'));
+ await db.exec(`insert into auth.users values ('${newUser}','new@example.test','{"role":"admin","roles":["teacher","admin"]}')`);
+ const login=async id=>{await db.exec('reset role');await db.query("select set_config('request.jwt.claim.sub',$1,false)",[id]);await db.exec('set role authenticated');};
+ const roles=async()=> (await db.query('select role from user_roles order by role')).rows.map(r=>r.role);
+ const find=email=>db.query('select * from admin_find_user($1)',[email]);
+ const grant=(email,role,id)=>db.query('select admin_grant_role($1,$2,$3)',[email,role,id]);
+ const create=(id,q=question)=>db.query('select create_question($1,$2::jsonb)',[id,JSON.stringify(q)]);
+ await login(newUser);assert.deepEqual(await roles(),['student']);
+ await assert.rejects(find('teacher@example.test'));await assert.rejects(grant('new@example.test','admin',newUser));
+ await assert.rejects(db.exec(`insert into user_roles(user_id,role) values ('${newUser}','teacher')`));
+ await assert.rejects(db.exec("update user_roles set role='admin'"));await assert.rejects(db.exec('delete from user_roles'));
+ await assert.rejects(create('20000000-0000-4000-8000-000000000001'));
+ await db.exec(`update profiles set display_name='Administrátor' where id='${newUser}'`);assert.deepEqual(await roles(),['student']);
+ await login(admin);assert.deepEqual(await roles(),['admin','student']);
+ let found=(await find('  TEACHER@EXAMPLE.TEST ')).rows;assert.equal(found.length,1);assert.equal(found[0].user_id,teacher);assert.deepEqual(found[0].roles,['student']);
+ assert.equal((await find('missing@example.test')).rows.length,0);
+ await assert.rejects(grant('missing@example.test','teacher',teacher));await assert.rejects(grant('teacher@example.test','superadmin',teacher));await assert.rejects(grant('teacher@example.test','teacher',student));
+ await grant('TEACHER@example.test','teacher',teacher);await grant('teacher@example.test','teacher',teacher);
+ assert.deepEqual((await find('teacher@example.test')).rows[0].roles,['student','teacher']);
+ await assert.rejects(create('20000000-0000-4000-8000-000000000001')); // admin neni automaticky ucitel
+ await login(teacher);assert.deepEqual(await roles(),['student','teacher']);
+ await assert.rejects(find('student@example.test'));await assert.rejects(grant('teacher@example.test','admin',teacher));
+ const qid='20000000-0000-4000-8000-000000000001';await create(qid);await create(qid);
+ const saved=(await db.query('select * from questions where id=$1',[qid])).rows;assert.equal(saved.length,1);assert.equal(saved[0].created_by,teacher);
+ await assert.rejects(create(qid,{...question,question:'Jiné zadání'}));
+ for(const q of [{...question,correct_answer:'  '},{...question,wrong_answer_1:'  5 M/S  '},{...question,difficulty:'jina'},{...question,topic:'elektrina'}])await assert.rejects(create('20000000-0000-4000-8000-000000000002',q));
+ await assert.rejects(db.query('insert into questions(topic,difficulty,question,correct_answer,wrong_answer_1,wrong_answer_2,wrong_answer_3,created_by) values ($1,$2,$3,$4,$5,$6,$7,$8)',[...['topic','difficulty','question','correct_answer','wrong_answer_1','wrong_answer_2','wrong_answer_3'].map(k=>question[k]),student]));
+ await db.exec("update questions set question='Neoprávněná změna' where id='"+qid+"'");assert.equal((await db.query('select question from questions where id=$1',[qid])).rows[0].question,question.question);
+ await login(student);assert.equal((await db.query('select * from questions where id=$1',[qid])).rows.length,1);await assert.rejects(create('20000000-0000-4000-8000-000000000002'));
+ const qs=(await db.query("select id,correct_answer from questions where topic='si' and difficulty='zakladni'")).rows;
+ await db.query('select save_attempt($1,$2,$3::jsonb)',['30000000-0000-4000-8000-000000000001','si',JSON.stringify(qs.map(q=>({question_id:q.id,chosen_answer:q.correct_answer})))]);
+ await db.exec('reset role');await db.exec(`update auth.users set email='changed@example.test' where id='${teacher}';delete from user_roles where user_id='${teacher}' and role='student';`);
+ await login(teacher);assert.deepEqual(await roles(),['teacher']);await assert.rejects(db.query("insert into attempts(user_id,topic,score,max_score) values($1,'si',4,4)",[teacher]));
+ await login(admin);assert.equal((await find('teacher@example.test')).rows.length,0);found=(await find('CHANGED@example.test')).rows;assert.equal(found[0].user_id,teacher);assert.deepEqual(found[0].roles,['teacher']);
+ await grant('changed@example.test','admin',teacher);assert.deepEqual((await find('changed@example.test')).rows[0].roles,['admin','teacher']);
+ await db.exec('reset role');await db.exec('set role anon');await assert.rejects(find('student@example.test'));await assert.rejects(create(qid));
+ }finally{await db.close();}
+});
