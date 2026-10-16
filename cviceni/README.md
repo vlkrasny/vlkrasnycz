@@ -1,72 +1,79 @@
-# Fyzikální kvíz — Supabase + GitHub Pages
+# FyzikaLab — rodinné procvičování fyziky
 
-## Co je v balíčku
-- `schema.sql` — kompletní databázové schéma pro Supabase (tabulky, RLS politiky, ukázkové otázky)
-- `migrations/001_question_difficulty.sql` — zavedení tří povinných úrovní do existující databáze
-- `prihlaseni.html` — výchozí aplikace (přihlášení, kvíz, historie výsledků); `index.html` zatím chybí
+Funkční statická aplikace je v `index.html`, styly a logika v `assets/`. Přihlášení, otázky, profil a výsledky používají Supabase projekt `zodzxytxavymxgkyngcx`. Soubor `assets/config.js` obsahuje veřejnou URL a publishable klíč, nikoli administrátorský klíč.
 
-## Postup nasazení (cca 15-20 minut)
+## Dokončení databáze
 
-### 1. Vytvoř Supabase projekt
-1. Jdi na supabase.com, přihlas se (přes GitHub je nejrychlejší) a klikni na "New Project".
-2. Zvol název, heslo k databázi a region (nejblíž Evropě, např. Frankfurt).
-3. Po vytvoření projektu (chvíli to trvá) otevři sekci "SQL Editor".
+Pokud už proběhly `schema.sql` a `migrations/001_question_difficulty.sql`, spusť v Supabase SQL Editoru postupně:
 
-### 2. Nastav databázi
-1. V SQL Editoru vlož celý obsah souboru `schema.sql` a spusť (Run).
-2. Tím se vytvoří tabulky questions, profiles, attempts, answers + zabezpečení (RLS) + pár ukázkových otázek z mechaniky a elektřiny.
+1. `migrations/002_app_support.sql` — atomické ukládání sad a odpovědí, snímky zadání, oprava vlastnictví odpovědí a rodičovská oprávnění.
+2. `migrations/003_starter_questions.sql` — 96 početních úloh, osm okruhů × tři obtížnosti × čtyři číselné varianty.
 
-`schema.sql` je určen pro novou databázi, nespouštěj jej znovu nad existujícími tabulkami. Pro existující databázi spusť pouze `migrations/001_question_difficulty.sql`. Migrace zachovává otázky a lze ji opakovat. Pokud najde neznámou nebo chybějící obtížnost, skončí chybou bez změn. Problematické řádky vyhledej následujícím dotazem, ručně jim přiřaď správnou úroveň a migraci zopakuj:
+Pro novou databázi nejprve spusť `schema.sql`, poté migrace 001, 002 a 003. Samotný `schema.sql` se nad existujícími tabulkami znovu nespouští. Migrace 002 a 003 lze opakovat; 003 nepřepisuje již vložené otázky. Původní demonstrační obsah z mechaniky a elektřiny zůstává uložený, ale nová aplikace ho nenabízí.
 
-```sql
-select id, question, difficulty
-from public.questions
-where difficulty is null
-   or difficulty not in ('zakladni', 'stredni', 'tezke');
+Veřejný klíč nemůže provádět změny schématu. Při chybějící migraci 002 se uložení označí jako neúspěšné a lze ho na stejné stránce zopakovat po doplnění migrace. Stránku do té doby neopouštěj. Bez banky 003 se mohou zobrazit prázdné okruhy.
+
+## Spuštění a nasazení
+
+Pro místní náhled je potřeba Node.js:
+
+```sh
+npm start
 ```
 
-Každá úloha či příklad v `questions` má právě jednu úroveň: `zakladni` (základní), `stredni` (střední), `tezke` (těžká). Vynechaná hodnota při vložení znamená `zakladni`; explicitní NULL, prázdný řetězec a jiné hodnoty databáze odmítne. Nabídka filtru v rozhraní zůstává návrhem podle PRD.
+Otevři `http://127.0.0.1:4173`. Aplikaci otevírej přes HTTP, ne přímo jako soubor: používá JavaScript moduly.
 
-### 3. Zapni email autentizaci
-1. V Supabase dashboardu: Authentication → Providers → Email → ujisti se, že je zapnuté.
-2. Authentication → Settings → pro jednoduchost (rodinné použití) můžeš vypnout "Confirm email", aby se uživatelé nemuseli potvrzovat přes email.
+Pro GitHub Pages publikuj `index.html` a celý adresář `assets/` ze stejného adresáře. V nastavení Pages vyber příslušnou větev a kořen. V Supabase Auth nastav skutečnou URL publikované aplikace jako Site URL a povolenou návratovou URL pro potvrzení e-mailu. Zda je nutné potvrzení e-mailu, určuje nastavení projektu. Aplikace po registraci bez relace zobrazí pokyn ke kontrole schránky.
 
-### 4. Zkopíruj přístupové údaje
-Aktuální připojení je nastavené v `prihlaseni.html` na projekt `zodzxytxavymxgkyngcx` pomocí dodaného veřejného publishable klíče. Historický název konstanty `SUPABASE_ANON_KEY` je zachován. Nastavení připojení samo nevytváří databázové tabulky.
+Node.js ani testovací balíčky nejsou potřeba na hostingu. Původní soubory `knihovna_uloh.html`, `uloha.html`, `priklad.html`, `dashboard_a_v_sledky.html` a PNG jsou zachované vizuální podklady. Původní prototyp v `cviceni/` je archivní; nová aplikace začíná v kořenovém `index.html`.
 
-1. Settings → API.
-2. Zkopíruj "Project URL" a "anon public" klíč.
-3. Při změně projektu v souboru `prihlaseni.html` najdi řádky:
-   ```
-   const SUPABASE_URL = 'https://TVUJ-PROJEKT.supabase.co';
-   const SUPABASE_ANON_KEY = 'TVUJ-ANON-PUBLIC-KLIC';
-   ```
-   a nahraď je svými hodnotami.
+## Co stránky umí
 
-### 5. Nahraj na GitHub Pages
-1. Vytvoř nový repozitář na GitHubu (např. `fyzika-kviz`).
-2. Nahraj do něj upravený `index.html`.
-3. Settings → Pages → Source: zvol branch `main`, root `/`.
-4. Po chvíli běží appka na `https://tvoje-jmeno.github.io/fyzika-kviz/`.
+- Registrace, přihlášení, obnovení relace, odhlášení a úprava zobrazovaného jména.
+- Knihovna s hledáním, osmi okruhy a obtížnostmi `zakladni`, `stredni`, `tezke`.
+- Náhodné sady 4–6 otázek bez opakování, promíchané odpovědi a okamžité vysvětlení. Nedostupné délky jsou zakázané. Startovací banka má čtyři otázky pro každou kombinaci tématu a úrovně; sady pěti a šesti otázek lze spouštět při volbě všech úrovní.
+- Vzorové řešení jednotlivé úlohy, výsledek sady, historie, detail odpovědí a statistiky z uložených dat.
+- Rodičovský výběr člena rodiny se zobrazí jen tehdy, pokud databáze zpřístupní další profily.
+- Mobilní rozložení a ovládání klávesnicí. Rozpracovaná sada se neukládá; opuštění neuloženého výsledku vyžaduje potvrzení.
 
-### 6. Vytvoř účty pro rodinu (3-5 uživatelů)
-Každý uživatel (syn, ty, případně další) si na stránce klikne na "Vytvořit účet" a zadá email + heslo.
-Volný tier Supabase zvládne až 50 000 aktivních uživatelů měsíčně, takže pro pár rodinných účtů
-je to zcela bez omezení.
+Pokus a odpovědi se ukládají jedním voláním `save_attempt`. Databáze ověřuje otázky, téma a možnosti, počítá skóre a ukládá snímek zadání. Opakování používá stejné UUID a nevytváří další pokus. V rámci relace se výsledek při chybě uchovává v paměti stránky, nikoli po zavření prohlížeče. Správné odpovědi jsou dostupné přihlášenému klientovi; jde o rodinné procvičování.
 
-## Jak přidat další otázky
-V Supabase dashboardu, v Table Editoru, otevři tabulku `questions` a přidávej řádky přímo tam,
-nebo spusť další INSERT příkazy v SQL Editoru podle vzoru ze `schema.sql`.
+## Rodičovský přístup
 
-Pole `topic` musí odpovídat hodnotám v `<select>` v `index.html` (mechanika, elektrina, optika) —
-pokud chceš nové téma, přidej i novou `<option>` do HTML.
+Nejprve vytvoř běžné účty. Jejich UUID najdeš v Supabase Authentication → Users. Správce v SQL Editoru přidělí rodiči konkrétní dítě:
 
-## Bezpečnostní poznámka
-Klíč SUPABASE_ANON_KEY je bezpečný zveřejnit v prohlížeči — je to veřejný klíč omezený
-Row Level Security politikami (RLS), které jsme nastavili ve schema.sql. Nikdy nepoužívej
-"service_role" klíč v klientském kódu.
+```sql
+insert into public.parent_access (parent_id, child_id)
+values ('UUID-RODICE', 'UUID-DITETE')
+on conflict do nothing;
+```
 
-## Poznámka k neaktivitě
-Pokud appku nikdo nepoužije 7 dní, Supabase projekt se automaticky "uspí" (pauza).
-Data zůstanou zachována, jen je potřeba projekt v dashboardu manuálně znovu aktivovat
-(jedno kliknutí na "Restore project").
+Rodič potom obnoví přehled a vybere člena rodiny nad historií výsledků. Horní statistiky stále zobrazují vlastní výsledky rodiče. Přístup se uděluje jednotlivě pro každého člena; běžný uživatel do `parent_access` nesmí zapisovat. Odebrání přístupu provede správce smazáním příslušného řádku.
+
+## Správa obsahu
+
+Tabulka `questions` má identifikátory témat:
+
+| `topic` | Téma |
+| --- | --- |
+| `si` | Soustava SI a převody jednotek |
+| `vektory` | Skalární a vektorové veličiny |
+| `kinematika` | Kinematika |
+| `dynamika` | Dynamika |
+| `energie` | Mechanická práce a energie |
+| `gravitace` | Gravitační pole |
+| `tuhe_teleso` | Mechanika tuhého tělesa |
+| `tekutiny` | Mechanika tekutin |
+
+Každá otázka má právě čtyři odlišné možnosti. Pro šest otázek v jedné konkrétní úrovni je potřeba banku dané kombinace rozšířit alespoň na šest. Startovací banka obsahuje početní varianty 24 typů úloh; nepokrývá vyčerpávajícím způsobem celou látku. Zdroj generátoru je `scripts/generate-seed.mjs`; ruční obsah spravuj přes Supabase Table Editor nebo další migraci. Změna generátoru sama neaktualizuje už vložené řádky.
+
+## Ověření
+
+```sh
+npm ci
+npm test
+npx playwright install chromium
+npx playwright test
+```
+
+Před prohlížečovými testy spusť `npm start` v jiném terminálu. Testy SQL běží v PGlite (PostgreSQL), vytvářejí izolované účty a kontrolují RLS, rodičovská oprávnění, transakce a opakování zápisu. Prohlížečové testy používají simulované API; nevytvářejí účty ve skutečném Supabase projektu. Skutečný průchod s účtem je potřeba ověřit po spuštění migrací a přihlášení. Screenshoty testů se ukládají do ignorované složky `test-results/`.
